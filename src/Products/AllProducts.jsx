@@ -1,10 +1,23 @@
 import React from "react";
 
+
+import Battery from "./Battery";
+import Chargers from "./Charger";
+import Headphone from "./Headphone";
+import AllMobile from "./Mobile/AllMobile";
+
+
 export default function AllProducts() {
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">All Products</h2>
-      <p>This is the All Products page.</p>
-    </div>
+   <>
+  
+    <AllMobile />
+    <Battery />
+    
+    <Chargers />
+    <Headphone />
+
+    </>
+    
   );
 }

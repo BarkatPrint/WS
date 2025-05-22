@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AllProducts from "../Products/AllProducts";
 
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth < 768);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div className="w-full">
-      {/* Banner Image */}
-      <div className="w-full bg-gray-100">
-        <img
-          src="/image/Contact.jpg"
-          alt="Contact"
-          className="w-full h-auto max-h-[400px] object-contain"
-        />
-      </div>
+    <div className="w-full h-full overflow-hidden">
+            <img
+        src={`${process.env.PUBLIC_URL}/Home.jpg`}
+        alt="Home banner"
+        className="w-full h-full"
+        style={{
+          objectFit: isMobile ? "contain" : "cover",
+        }}
+      />
+
 
       {/* Content */}
       <div className="mt-6 px-4 text-center">

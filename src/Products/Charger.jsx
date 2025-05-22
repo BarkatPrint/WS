@@ -1,88 +1,95 @@
 import React, { useState } from "react";
 
+
+
 export default function Chargers() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [currentImages, setCurrentImages] = useState({});
   const [chargerType, setChargerType] = useState("Type-C");
   const [selectedBrand, setSelectedBrand] = useState("Vivo");
 
-  const products = [
-    {
-      id: 1,
-      name: "Travel Charger",
-      model: "MD-TYPEC",
-      amp: "1.5 Amp",
-      quality: "100% Better Than Original Charger",
-      price: "₹60",
-      discountedPrice: "₹45",
-      images: [
-        "/image/Charger/1.5A/1.jpg",
-        "/image/Charger/1.5A/2.jpg",
-        "/image/Charger/1.5A/3.jpg",
-      ],
-      description: "Fast charging, durable build with premium gold plating.",
-    },
-    {
-      id: 2,
-      name: "Fast Charger",
-      model: "FD-TYPEC",
-      amp: "2.0 Amp",
-      quality: "Original Quality",
-      price: "₹80",
-      discountedPrice: "₹60",
-      images: [
-        "/image/Charger/Fast/1.jpg",
-        "/image/Charger/Fast/2.jpg",
-        "/image/Charger/Fast/3.jpg",
-      ],
-      description: "Quick charge with high-speed output.",
-    },
-    {
-      id: 3,
-      name: "Super Charger",
-      model: "SC-USB",
-      amp: "2.4 Amp",
-      quality: "Premium Quality",
-      price: "₹100",
-      discountedPrice: "₹75",
-      images: [
-        "/image/Charger/Super/1.jpg",
-        "/image/Charger/Super/2.jpg",
-        "/image/Charger/Super/3.jpg",
-      ],
-      description: "Durable with surge protection.",
-    },
-    {
-      id: 4,
-      name: "Mini Charger",
-      model: "MC-TYPEB",
-      amp: "65W Amp",
-      quality: "Compact and Reliable",
-      price: "₹50",
-      discountedPrice: "₹35",
-      images: [
-        "/image/Charger/65W/1.jpg",
-        "/image/Charger/65W/2.jpg",
-        "/image/Charger/65W/3.jpg",
-      ],
-      description: "Portable for daily use.",
-    },
-    {
-      id: 5,
-      name: "Heavy Charger",
-      model: "HC-PRO",
-      amp: "85 Amp",
-      quality: "High performance and safe",
-      price: "₹150",
-      discountedPrice: "₹110",
-      images: [
-        "/image/Charger/85W/1.jpg",
-        "/image/Charger/85W/2.jpg",
-        "/image/Charger/85W/3.jpg",
-      ],
-      description: "Ideal for power-hungry devices.",
-    },
-  ];
+ const products = [
+   {
+   id: 1,
+    name: "Travel Charger",
+    model: "MD-TYPEC, Micro USB (V8), Lightning, Realme, Oppo, MI, etc.",
+    amp: "1.5 Amp",
+    quality: "100% Better Than Original Charger",
+    price: "₹60",
+    discountedPrice: "₹45",
+    images: [
+      `${process.env.PUBLIC_URL}/image/Charger/1.5A/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/1.5A/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/1.5A/3.jpg`
+    ],
+    description: "Fast charging, durable build with premium gold plating."
+  },
+  {
+    id: 2,
+    name: "Fast Charger",
+    model: "FD-TYPEC, SAMSUNG 40W, FAST CHARGER, 100% Charge 67, SUPER FAST POWER ADAPTER, USB TO TYPE-C, QC 3.0, VOOC, etc.",
+    amp: "40W",
+    quality: "Original Quality",
+    price: "₹80",
+    discountedPrice: "₹60",
+    images: [
+      `${process.env.PUBLIC_URL}/image/Charger/40W/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/40W/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/40W/3.jpg`
+    ],
+    description: "Quick charge with high-speed output and Samsung 40W support."
+  },
+  {
+    id: 3,
+    name: "Super Charger",
+    model: "SC-USB, SuperVOOC, SUPERDART, Realme, OnePlus DASH, Samsung 25W/33W, etc.",
+    amp: "45W",
+    quality: "Premium Quality",
+    price: "₹100",
+    discountedPrice: "₹75",
+    images: [
+      `${process.env.PUBLIC_URL}/image/Charger/45W/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/45W/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/45W/3.jpg`
+    ],
+    description: "Durable with surge protection and super-fast charging support."
+  },
+  {
+    id: 4,
+    name: "Mini Charger",
+    model: "MC-TYPEB, 65W VIVO SUPER CHARGING, Power Adapter, Type-C, VOOC, SUPERDART, USB to Type-C, Lightning, Realme, Oppo, Samsung 25W/40W, etc.",
+    amp: "65W",
+    quality: "Compact and Reliable",
+    price: "₹50",
+    discountedPrice: "₹35",
+    images: [
+      `${process.env.PUBLIC_URL}/image/Charger/65W/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/65W/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/65W/3.jpg`
+    ],
+    description: "Portable for daily use with support for multiple fast charging technologies."
+  },
+  {
+    id: 5,
+    name: "Multi-Brand Charger",
+    model: "Type-C, Micro USB (V8), Lightning (iPhone), 65W VIVO, VOOC, SUPERDART, QC 3.0, DASH, USB to Type-C, Realme, Oppo, MI Turbo, Samsung 25W/40W, etc.",
+    amp: "85W",
+    quality: "Universal Compatibility",
+    price: "₹120",
+    discountedPrice: "₹90",
+    images: [
+      `${process.env.PUBLIC_URL}/image/Charger/85W/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/85W/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/Charger/85W/3.jpg`
+    ],
+    description: "Compatible with all major mobile brands and fast-charging technologies."
+  
+  
+  },
+  // New 5 products:
+  
+];
+
 
   const handleImageChange = (productId, direction, totalImages) => {
     setCurrentImages((prev) => {
@@ -112,6 +119,7 @@ export default function Chargers() {
 
   return (
     <div className="p-4">
+      <h2 className="text-3xl font-bold mb-4">🔌 Chargers</h2>
       {/* Charger Type Selector */}
       <div className="mb-4">
         <label className="block mb-1 font-semibold text-gray-700">Select Charger Type:</label>
@@ -135,11 +143,21 @@ export default function Chargers() {
           onChange={(e) => setSelectedBrand(e.target.value)}
           className="border px-3 py-2 rounded w-full"
         >
+         <option value="None">None</option>
+          <option value="Normal">Normal</option>
           <option value="Vivo">Vivo</option>
           <option value="MI">MI</option>
           <option value="Oppo">Oppo</option>
           <option value="Realme">Realme</option>
           <option value="Samsung">Samsung</option>
+          <option value="OnePlus">OnePlus</option>
+          <option value="Apple">Apple</option>
+          <option value="Infinix">Infinix</option>
+          <option value="Itel">Itel</option>
+          <option value="Lenovo">Lenovo</option>
+          <option value="Nokia">Nokia</option>
+          <option value="Motorola">Motorola</option>
+
         </select>
       </div>
 
