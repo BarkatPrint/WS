@@ -1,10 +1,11 @@
 import React from "react";
 
 
-import Battery from "./Battery";
-import Chargers from "./Charger";
-import Headphone from "./Headphone";
+import Battery from "./Page/Battery";
+import Chargers from "./Page/Charger";
+import Headphone from "./Page/Headphone";
 import AllMobile from "./Mobile/AllMobile";
+import KeypadMobile from "./Keypad Mobile/KeypadMobile";
 
 
 export default function AllProducts() {
@@ -12,6 +13,7 @@ export default function AllProducts() {
    <>
   
     <AllMobile />
+    <KeypadMobile />
     <Battery />
     
     <Chargers />

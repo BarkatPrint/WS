@@ -4,18 +4,35 @@ import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import AllProducts from "./AllProducts";
 import MobilePhones from "./Mobile/MobilePhones";
 import VivoPhones from "./Mobile/VivoPhones";
-import Battery from "./Battery";
-import Headphone from "./Headphone";
-import Charger from "./Charger";
-import KeypadBatteries from "./KeypadBatteries"; // ✅ Imported
+import Battery from "./Page/Battery";
+import Headphone from "./Page/Headphone";
+import Charger from "./Page/Charger";
+import KeypadBatteries from "./Page/KeypadBatteries";
+
+import ChargingCable from "./Page/ChargingCable";
+import MobileCovers from "./Page/MobileCovers";
+import TemperedGlass from "./Page/TemperedGlass";
+import Display from "./Page/Display";
+import Touch from "./Page/Touch";
+import ScreenCombo from "./Page/ScreenCombo";
+
+import MobilePartsAccessories from "./Page/MobilePartsAccessories"; // <-- Import added
 
 const categories = [
   { name: "All", path: "all" },
+  { name: "Mobile Parts & Accessories", path: "mobile-parts-&-accessories" },
   { name: "Mobile Phones", path: "mobile-phones" },
+  { name: "Keypad Mobile", path: "Keypad-Mobile" },
   { name: "Battery", path: "battery" },
-  { name: "Keypad Battery", path: "keypad-battery" }, // ✅ New tab
+  { name: "Keypad Battery", path: "keypad-battery" },
   { name: "Headphone", path: "headphone" },
   { name: "Charger", path: "charger" },
+  { name: "Charging Cable", path: "charging-cable" },
+  { name: "Mobile Covers", path: "mobile-covers" },
+  { name: "Tempered Glass", path: "tempered-glass" },
+  { name: "Display", path: "display" },
+  { name: "Touch", path: "touch" },
+  { name: "Screen Combo", path: "screen-combo" },
 ];
 
 export default function ProductsRoutes() {
@@ -24,7 +41,7 @@ export default function ProductsRoutes() {
       <h1 className="text-4xl font-bold mb-2">Latest Products</h1>
       <div className="w-full h-1 bg-gray-300 mb-4"></div>
 
-      <nav className="flex gap-6 mb-6 border-b border-gray-200 overflow-x-auto">
+      <nav className="flex gap-12 mb-6 border-b border-gray-200 overflow-x-auto">
         {categories.map(({ name, path }) => (
           <NavLink
             key={path}
@@ -43,12 +60,19 @@ export default function ProductsRoutes() {
       <Routes>
         <Route index element={<Navigate to="all" replace />} />
         <Route path="all" element={<AllProducts />} />
+        <Route path="mobile-parts-&-accessories" element={<MobilePartsAccessories />} />
         <Route path="mobile-phones" element={<MobilePhones />} />
         <Route path="vivophones" element={<VivoPhones />} />
         <Route path="battery" element={<Battery />} />
-        <Route path="keypad-battery" element={<KeypadBatteries />} /> {/* ✅ New route */}
+        <Route path="keypad-battery" element={<KeypadBatteries />} />
         <Route path="headphone" element={<Headphone />} />
         <Route path="charger" element={<Charger />} />
+        <Route path="charging-cable" element={<ChargingCable />} />
+        <Route path="mobile-covers" element={<MobileCovers />} />
+        <Route path="tempered-glass" element={<TemperedGlass />} />
+        <Route path="display" element={<Display />} />
+        <Route path="touch" element={<Touch />} />
+        <Route path="screen-combo" element={<ScreenCombo />} />
       </Routes>
     </div>
   );

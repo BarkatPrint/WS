@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 import AllProducts from "../Products/AllProducts";
+
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -9,43 +11,102 @@ export default function Home() {
     function handleResize() {
       setIsMobile(window.innerWidth < 768);
     }
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
     <div className="w-full h-full overflow-hidden">
-            <img
+      {/* Banner Image */}
+      <img
         src={`${process.env.PUBLIC_URL}/Home.jpg`}
         alt="Home banner"
-        className="w-full h-full"
-        style={{
-          objectFit: isMobile ? "contain" : "cover",
-        }}
+        className="w-full h-auto"
+        style={{ objectFit: isMobile ? "contain" : "cover" }}
       />
 
+      {/* Main Heading - Single line, centered */}
+      <h2
+        className="mt-8 mb-10 font-extrabold text-4xl text-center"
+        style={{ color: "#00292d" }}
+      >
+        Welcome to Our Wholesale
+      </h2>
 
-      {/* Content */}
-      <div className="mt-6 px-4 text-center">
-        <h2 className="text-3xl font-bold mb-4">Welcome to Our Store</h2>
-        <p className="text-gray-700 mb-4">
-          We offer the best mobile accessories at the most affordable prices.
-        </p>
+      {/* Two Column Section */}
+      <div className="px-6 max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
+        {/* Left Column */}
+        <div className="md:w-1/2 flex flex-col items-center md:items-start">
+          <p className="text-gray-800 text-lg mb-4 text-center md:text-left">
+            1 Piece ho ya 100 Piece – Sabko Milega{" "}
+            <strong>Wholesale Rate</strong>!
+          </p>
+          <p className="text-gray-700 mb-4 text-center md:text-left">
+            Shopkeeper ho ya Customer – ab sabko saman milega direct factory
+            price par.
+          </p>
+          <p className="text-gray-700 mb-4 text-center md:text-left">
+            Har tarah ke mobile accessories & parts – ek jagah, ek click mein.
+          </p>
+          <p className="text-gray-700 mb-6 text-center md:text-left">
+            🚚 Ghar baithe order karein aur <strong>Home Delivery</strong> payein
+            poore India mein.
+          </p>
+          <Link
+            to="/products"
+            className="w-full max-w-[300px] text-center bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition duration-200"
+          >
+            View All Products
+          </Link>
+        </div>
 
-        <Link
-          to="/products"
-          className="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
-        >
-          View Full Products Page
-        </Link>
+        {/* Right Column */}
+        <div className="md:w-1/2 flex flex-col items-center md:items-start">
+          <h3
+            className="mb-4 font-bold text-xl"
+            style={{ color: "#00292d" }}
+          >
+            Product Nahi Mila? WhatsApp Par Direct Mangwa Sakte Hain!
+          </h3>
+          <p className="text-gray-700 mb-6 text-center md:text-left">
+            Agar aapko hamari website par koi product nahi mil raha, to niche 
+            diye gaye WhatsApp button par click karke humein seedha message 
+            bhej sakte hain. Aap apni zarurat ka product humse WhatsApp par 
+            mangwa sakte hain. Hum aapki madad karenge aur aapke liye 
+            product arrange karenge.
+          </p>
+          
+          <a
+            href="https://wa.me/917050266383?text=Mujhe%20ek%20product%20chahiye%20jo%20website%20par%20nahi%20mil%20raha%20hai.%20Kripya%20mujhse%20contact%20kijiye."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 transition duration-200 text-white font-semibold px-6 py-3 rounded-lg shadow-md max-w-[300px] w-full"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M20.52 3.48A11.916 11.916 0 0012 0C5.372 0 0 5.372 0 12c0 2.118.555 4.168 1.605 5.962L0 24l6.177-1.6A11.962 11.962 0 0012 24c6.628 0 12-5.372 12-12 0-3.208-1.25-6.214-3.48-8.52zm-1.93 13.73c-.273.764-1.56 1.436-2.43 1.536-.64.074-1.417.105-3.07-1.084-2.43-1.7-4-5.25-4.125-5.5-.13-.25-1.045-1.38-1.045-2.63 0-1.25.74-1.862 1-2.11.273-.25.64-.32.96-.32.312 0 .5 0 .722.024.23.025.337.035.486.55.14.49.48 1.688.52 1.814.04.13.07.25 0 .4-.07.13-.11.32-.18.5-.07.18-.36.47-.57.6-.2.13-.38.28-.52.48-.13.18-.28.45-.12.88.156.42.7 1.1 1.5 1.78 1.03.95 1.88 1.25 2.156 1.39.27.14.42.12.57-.07.15-.18.62-.72.77-.96.15-.25.3-.22.5-.13.2.1 1.25.59 1.46.7.22.12.36.18.41.28.06.11.06.62-.21 1.39z" />
+            </svg>
+            <span className="text-base">WhatsApp Par Message Karein</span>
+          </a>
+
+        </div>
       </div>
 
-      {/* Show some products preview below the button */}
-      <div className="mt-10 px-4">
-        <h3 className="text-2xl font-semibold mb-4 text-center">Featured Products</h3>
+      {/* Featured Products */}
+      <div className="mt-16 px-4">
+        <h3 className="text-2xl font-semibold mb-6 text-center text-gray-800">
+          Featured Products
+        </h3>
         <AllProducts />
+    
       </div>
     </div>
+
+
+
   );
 }
