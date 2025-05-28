@@ -1,9 +1,13 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
 import Header from "./Pages/Header";
 import Footer from "./Pages/Footer";
-
 import LandingPage from "./Pages/LandingPage";
 import Home from "./Pages/Home";
 import SellerPage from "./Pages/SellerPage";
@@ -11,7 +15,7 @@ import About from "./Pages/About";
 import Contact from "./Pages/Contact";
 import ProductsRoutes from "./Products/ProductsRoutes";
 
-// 👇 Wrapper to use hooks outside Router
+// Wrapper to enable useLocation
 function AppWrapper() {
   return (
     <Router>
