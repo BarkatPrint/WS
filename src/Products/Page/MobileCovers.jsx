@@ -11,46 +11,79 @@ export default function MobileCovers() {
   const products = [
     {
       id: 1,
-      name: "Silicone Back Cover",
-      model: "Soft, Matte Finish",
-      quality: "Shockproof, Slim Fit",
-      price: "₹150",
-      discountedPrice: "₹99",
-      images: [
-        `${process.env.PUBLIC_URL}/image/MobileCovers/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileCovers/2.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileCovers/3.jpg`,
-      ],
-      description: "Flexible silicone case with anti-slip grip.",
-    },
-    {
-      id: 2,
-      name: "Transparent Cover",
-      model: "Clear TPU",
-      quality: "Slim and Flexible",
-      price: "₹120",
-      discountedPrice: "₹85",
-      images: [
-        `${process.env.PUBLIC_URL}/image/MobileCovers/4.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileCovers/5.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileCovers/6.jpg`,
-      ],
-      description: "Crystal-clear protection with flexible edges.",
-    },
-    {
-      id: 3,
-      name: "iPhone Hard Cover",
-      model: "Premium Polycarbonate",
-      quality: "Rigid & Stylish",
-      price: "₹250",
-      discountedPrice: "₹180",
-      images: [
-        `${process.env.PUBLIC_URL}/image/MobileCovers/7.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileCovers/8.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileCovers/9.jpg`,
-      ],
-      description: "Premium hard shell case designed for iPhones.",
-    },
+    name: "Silicone Back Cover",
+    model: "Soft, Matte Finish",
+    quality: "Shockproof, Slim Fit",
+    price: "₹150",
+    discountedPrice: "₹99",
+    images: [
+      `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/3.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/4.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/5.jpg`,
+    ],
+    description: "Flexible silicone case with anti-slip grip.",
+  },
+  {
+    id: 2,
+    name: "Transparent Cover",
+    model: "Clear TPU",
+    quality: "Slim and Flexible",
+    price: "₹120",
+    discountedPrice: "₹85",
+    images: [
+      `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/3.jpg`,
+    ],
+    description: "Crystal-clear protection with flexible edges.",
+  },
+  {
+    id: 3,
+    name: "Girls Mobile Cover",
+    model: "Printed Soft Cover",
+    quality: "Trendy, Flexible Grip",
+    price: "₹180",
+    discountedPrice: "₹129",
+    images: [
+      `${process.env.PUBLIC_URL}/image/MobileCovers/GirlsMobileCover/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/GirlsMobileCover/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/GirlsMobileCover/3.jpg`,
+    ],
+    description: "Colorful and stylish cover designed for girls.",
+  },
+  {
+    id: 4,
+    name: "iPhone Cover",
+    model: "Premium Polycarbonate",
+    quality: "Rigid & Stylish",
+    price: "₹250",
+    discountedPrice: "₹180",
+    images: [
+      `${process.env.PUBLIC_URL}/image/MobileCovers/iPhoneCover/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/iPhoneCover/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/MobileCovers/iPhoneCover/3.jpg`,
+    ],
+    description: "Premium hard shell cover designed exclusively for iPhones.",
+  },
+
+  {
+  id: 5,
+  name: "Leather Flip Cover",
+  model: "Magnetic Closure",
+  quality: "Premium PU Leather, Card Slots",
+  price: "₹300",
+  discountedPrice: "₹199",
+  images: [
+    `${process.env.PUBLIC_URL}/image/MobileCovers/LeatherFlipCover/1.jpg`,
+    `${process.env.PUBLIC_URL}/image/MobileCovers/LeatherFlipCover/2.jpg`,
+    `${process.env.PUBLIC_URL}/image/MobileCovers/LeatherFlipCover/3.jpg`,
+  ],
+  description: "Elegant leather flip cover with magnetic lock and storage for cards.",
+}
+
+  
   ];
 
   const handleImageChange = (productId, direction, totalImages) => {
@@ -83,67 +116,85 @@ export default function MobileCovers() {
 
   return (
     <div className="p-4">
-      <h2 className="text-3xl font-bold mb-4">📱 Mobile Covers</h2>
+  <h2 className="text-3xl font-bold mb-4">📱 Mobile Covers</h2>
+<p className="text-green-700 font-medium text-sm mb-4">
+  All types of mobile covers available — Back, Flip, Transparent, iPhone, Girls Covers & more!
+</p>
 
-      {/* Cover Type Selector */}
-      <div className="mb-4">
-        <label className="block mb-1 font-semibold text-gray-700">Select Cover Type:</label>
-        <select
-          value={coverType}
-          onChange={(e) => setCoverType(e.target.value)}
-          className="border px-3 py-2 rounded w-full"
-        >
-          <option value="Back Cover">Back Cover</option>
-          <option value="Flip Cover">Flip Cover</option>
-          <option value="Transparent">Transparent</option>
-          <option value="Hard Cover">Hard Cover</option>
-          <option value="Other">Other</option>
-        </select>
 
-        {coverType === "Other" && (
-          <input
-            type="text"
-            placeholder="Enter custom cover type"
-            className="mt-2 border px-3 py-2 rounded w-full"
-            value={customCoverType}
-            onChange={(e) => setCustomCoverType(e.target.value)}
-          />
-        )}
-      </div>
+  <div className="flex gap-4 mb-6 flex-wrap">
+    {/* Cover Type Selector */}
+    <div className="flex-1 min-w-[140px]">
+      <label className="block mb-1 font-semibold text-gray-700 text-sm">
+        Select Cover Type:
+      </label>
+      <select
+        value={coverType}
+        onChange={(e) => setCoverType(e.target.value)}
+        className="border px-2 py-1 rounded w-full text-sm"
+      >
+     <option value="">-- Choose Cover Type --</option>
+      <option value="Back Cover">Back Cover</option>
+      <option value="Flip Cover">Flip Cover</option>
+      <option value="Transparent">Transparent</option>
+      <option value="Hard Cover">Hard Cover</option>
+      <option value="Girls Mobile Cover">Girls Mobile Cover</option>
+      <option value="iPhone Cover">iPhone Cover</option>
+      <option value="Leather Flip Cover">Leather Flip Cover</option>
+      <option value="Silicone Cover">Silicone Cover</option>
+      <option value="Designer Cover">Designer Cover</option>
+      <option value="Other">Other</option>
+      </select>
 
-      {/* Brand Selector */}
-      <div className="mb-6">
-        <label className="block mb-1 font-semibold text-gray-700">Select Mobile Brand:</label>
-        <select
-          value={selectedBrand}
-          onChange={(e) => setSelectedBrand(e.target.value)}
-          className="border px-3 py-2 rounded w-full"
-        >
-          <option value="Vivo">Vivo</option>
-          <option value="MI">MI</option>
-          <option value="Oppo">Oppo</option>
-          <option value="Realme">Realme</option>
-          <option value="Samsung">Samsung</option>
-          <option value="OnePlus">OnePlus</option>
-          <option value="Apple">Apple</option>
-          <option value="Infinix">Infinix</option>
-          <option value="Itel">Itel</option>
-          <option value="Lenovo">Lenovo</option>
-          <option value="Nokia">Nokia</option>
-          <option value="Motorola">Motorola</option>
-          <option value="Other">Other</option>
-        </select>
+      {coverType === "Other" && (
+        <input
+          type="text"
+          placeholder="Enter custom cover type"
+          className="mt-2 border px-2 py-1 rounded w-full text-sm"
+          value={customCoverType}
+          onChange={(e) => setCustomCoverType(e.target.value)}
+        />
+      )}
+    </div>
 
-        {selectedBrand === "Other" && (
-          <input
-            type="text"
-            placeholder="Enter custom brand name"
-            className="mt-2 border px-3 py-2 rounded w-full"
-            value={customBrand}
-            onChange={(e) => setCustomBrand(e.target.value)}
-          />
-        )}
-      </div>
+    {/* Brand Selector */}
+    <div className="flex-1 min-w-[140px]">
+      <label className="block mb-1 font-semibold text-gray-700 text-sm">
+        Select Mobile Brand:
+      </label>
+      <select
+        value={selectedBrand}
+        onChange={(e) => setSelectedBrand(e.target.value)}
+        className="border px-2 py-1 rounded w-full text-sm"
+      >
+        <option value="Vivo">Vivo</option>
+        <option value="MI">MI</option>
+        <option value="Oppo">Oppo</option>
+        <option value="Realme">Realme</option>
+        <option value="Samsung">Samsung</option>
+        <option value="OnePlus">OnePlus</option>
+        <option value="Apple">Apple</option>
+        <option value="Infinix">Infinix</option>
+        <option value="Itel">Itel</option>
+        <option value="Lenovo">Lenovo</option>
+        <option value="Nokia">Nokia</option>
+        <option value="Motorola">Motorola</option>
+        <option value="Other">Other</option>
+      </select>
+
+      {selectedBrand === "Other" && (
+        <input
+          type="text"
+          placeholder="Enter custom brand name"
+          className="mt-2 border px-2 py-1 rounded w-full text-sm"
+          value={customBrand}
+          onChange={(e) => setCustomBrand(e.target.value)}
+        />
+      )}
+    </div>
+  </div>
+
+
 
       {/* Payment Method */}
       <div className="mb-6">

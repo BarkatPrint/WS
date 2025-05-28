@@ -8,22 +8,22 @@ export default function Headphones() {
 
   const products = [
     {
-       id: 2,
+      id: 1,
       name: "Stereo Wired Earphones",
       model: "SWE-2025",
       type: "Wired",
       quality: "Clear vocals with balanced bass",
       price: "₹60",
       discountedPrice: "₹50",
-        images: [
-      `${process.env.PUBLIC_URL}/image/Headphone/Local/1.jpg`,
-      `${process.env.PUBLIC_URL}/image/Headphone/Local/2.jpg`,
-      `${process.env.PUBLIC_URL}/image/Headphone/Local/3.jpg`
-    ],
+      images: [
+        `${process.env.PUBLIC_URL}/image/Headphone/Local/1.jpg`,
+        `${process.env.PUBLIC_URL}/image/Headphone/Local/2.jpg`,
+        `${process.env.PUBLIC_URL}/image/Headphone/Local/3.jpg`,
+      ],
       description: "Comfortable in-ear design with mic for calls and music.",
     },
     {
-            id: 2,
+      id: 2,
       name: "Wireless/Neckband Bluetooth",
       model: "WBH-A7",
       type: "Wireless",
@@ -33,32 +33,61 @@ export default function Headphones() {
       images: [
         `${process.env.PUBLIC_URL}/image/Headphone/Bluetooth Hadphone/1.jpg`,
         `${process.env.PUBLIC_URL}/image/Headphone/Bluetooth Hadphone/2.jpg`,
-        `${process.env.PUBLIC_URL}/image/Headphone/Bluetooth Hadphone/3.jpg`
+        `${process.env.PUBLIC_URL}/image/Headphone/Bluetooth Hadphone/3.jpg`,
       ],
-      description: "Wireless freedom with powerful audio."
-
+      description: "Wireless freedom with powerful audio.",
     },
     {
-            id: 3,
+      id: 3,
       name: "Wireless Earbuds",
       model: "GH-500",
-      type: "Wireless", // corrected type from "Wired" to "Wireless"
+      type: "Wireless",
       quality: "High performance for gaming",
       price: "₹300",
       discountedPrice: "₹250",
       images: [
         `${process.env.PUBLIC_URL}/image/Headphone/Ear Bluetooth/1.jpg`,
         `${process.env.PUBLIC_URL}/image/Headphone/Ear Bluetooth/2.jpg`,
-        `${process.env.PUBLIC_URL}/image/Headphone/Ear Bluetooth/3.jpg`
+        `${process.env.PUBLIC_URL}/image/Headphone/Ear Bluetooth/3.jpg`,
       ],
-      description: "Crystal-clear sound with mic for gaming."
-          },
-   
+      description: "Crystal-clear sound with mic for gaming.",
+    },
+    {
+      id: 4,
+      name: "Advanced Wireless Neckband Bluetooth",
+      model: "WBH-ProX9",
+      type: "Wireless",
+      quality: "HD stereo sound with noise cancellation",
+      price: "₹650",
+      discountedPrice: "₹549",
+      images: [
+        `${process.env.PUBLIC_URL}/image/Headphone/AdvancedWirelessNeckbandBluetooth/1.jpg`,
+        `${process.env.PUBLIC_URL}/image/Headphone/AdvancedWirelessNeckbandBluetooth/2.jpg`,
+        `${process.env.PUBLIC_URL}/image/Headphone/AdvancedWirelessNeckbandBluetooth/3.jpg`,
+        `${process.env.PUBLIC_URL}/image/Headphone/AdvancedWirelessNeckbandBluetooth/4.jpg`,
+      ],
+      description: "Premium neckband with magnetic earbuds, deep bass, voice assistant support, and 20-hour battery life."
+    },
+    {
+      id: 5,
+      name: "Pro Wireless Earbuds",
+      model: "GH-ProBudsX",
+      type: "Wireless",
+      quality: "ENC mic with low-latency and rich bass",
+      price: "₹899",
+      discountedPrice: "₹749",
+      images: [
+        `${process.env.PUBLIC_URL}/image/Headphone/ProWirelessEarbuds/1.jpg`,
+        `${process.env.PUBLIC_URL}/image/Headphone/ProWirelessEarbuds/2.jpg`,
+        
+      ],
+      description: "True wireless earbuds with touch control, fast charging, IPX5 water resistance, and up to 30 hours playtime."
+    },
   ];
 
   const handleImageChange = (productId, direction, totalImages) => {
     setCurrentImages((prev) => {
-      const currentIndex = prev[productId] || 0;
+      const currentIndex = prev[productId] ?? 0;
       const newIndex =
         direction === "next"
           ? (currentIndex + 1) % totalImages
@@ -95,24 +124,12 @@ export default function Headphones() {
           onChange={(e) => setSelectedBrand(e.target.value)}
           className="border px-3 py-2 rounded w-full"
         >
-          <option value="None">None</option>
-          <option value="Normal">Normal</option>
-          <option value="Vivo">Vivo</option>
-          <option value="MI">MI</option>
-          <option value="Oppo">Oppo</option>
-          <option value="Realme">Realme</option>
-          <option value="Samsung">Samsung</option>
-          <option value="Boat">Boat</option>
-          <option value="JBL">JBL</option>
-          <option value="Sony">Sony</option>
-          <option value="Skullcandy">Skullcandy</option>
-          <option value="Sennheiser">Sennheiser</option>
-          <option value="Apple">Apple</option>
-          <option value="Bose">Bose</option>
-          <option value="Philips">Philips</option>
-          <option value="Zebronics">Zebronics</option>
-          <option value="Infinity">Infinity</option>
-
+          {[
+            "None", "Normal", "Vivo", "MI", "Oppo", "Realme", "Samsung",
+            "Boat", "JBL", "Sony", "Skullcandy", "Sennheiser", "Apple", "Bose", "Philips", "Zebronics", "Infinity"
+          ].map((brand) => (
+            <option key={brand} value={brand}>{brand}</option>
+          ))}
         </select>
       </div>
 
@@ -147,10 +164,8 @@ export default function Headphones() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {displayedProducts.map((product) => {
           const currentIndex = currentImages[product.id] || 0;
-
           return (
             <div key={product.id} className="border rounded-xl shadow-lg p-4 bg-white flex flex-col">
-              {/* Image Carousel */}
               <div className="relative w-full pb-[100%] mb-4 overflow-hidden rounded bg-gray-100">
                 <img
                   src={product.images[currentIndex]}
@@ -159,19 +174,21 @@ export default function Headphones() {
                 />
                 <button
                   className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                  onClick={() => handleImageChange(product.id, "prev", product.images.length)}
+                  onClick={() =>
+                    handleImageChange(product.id, "prev", product.images.length)
+                  }
                 >
                   ‹
                 </button>
                 <button
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                  onClick={() => handleImageChange(product.id, "next", product.images.length)}
+                  onClick={() =>
+                    handleImageChange(product.id, "next", product.images.length)
+                  }
                 >
                   ›
                 </button>
               </div>
-
-              {/* Info */}
               <h2 className="text-lg font-bold text-gray-800">{product.name}</h2>
               <p className="text-sm text-gray-600 mb-2">{product.description}</p>
               <ul className="text-sm text-gray-700 mb-3 space-y-1">
@@ -179,14 +196,10 @@ export default function Headphones() {
                 <li><strong>Type:</strong> {product.type}</li>
                 <li><strong>Quality:</strong> {product.quality}</li>
               </ul>
-
-              {/* Price */}
               <div className="mb-3">
                 <span className="text-gray-500 line-through text-sm mr-2">{product.price}</span>
                 <span className="text-green-700 font-bold text-lg">{product.discountedPrice}</span>
               </div>
-
-              {/* Buy Button */}
               <button
                 onClick={() => handleBuyNow(product)}
                 className="mt-auto bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"

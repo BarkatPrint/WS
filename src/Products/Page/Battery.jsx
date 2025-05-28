@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import KeypadBatteries from '../Page/KeypadBatteries'
 
 export default function Batteries() {
   const navigate = useNavigate();
@@ -142,52 +143,79 @@ export default function Batteries() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-3xl font-bold mb-4">🔋 Batteries</h2>
+   <div className="p-4">
+  <h2 className="text-3xl font-bold mb-4">🔋 Battery</h2>
 
-      {/* Dropdowns */}
-      <div className="mb-4">
-        <label className="block font-semibold mb-1">Select Battery Type:</label>
-        <select
-          value={batteryType}
-          onChange={(e) => setBatteryType(e.target.value)}
-          className="w-full border px-3 py-2 rounded"
-        >
-          <option>Li-ion</option>
-          <option>Li-Polymer</option>
-          <option>Fast Charge</option>
-          <option>Heavy Duty</option>
-        </select>
-      </div>
+  {/* Battery Type & Brand - side by side */}
+  <div className="flex flex-col md:flex-row gap-4 mb-4">
+    {/* Battery Type */}
+    <div className="w-full md:w-1/2">
+      <label className="block font-semibold mb-1 text-sm">Battery Type</label>
+      <select
+        value={batteryType}
+        onChange={(e) => setBatteryType(e.target.value)}
+        className="w-full border px-3 py-1.5 text-sm rounded"
+      >
+        <option>Li-ion</option>
+        <option>Li-Polymer</option>
+        <option>Fast Charge</option>
+        <option>Heavy Duty</option>
+      </select>
+    </div>
 
-      <div className="mb-4">
-        <label className="block font-semibold mb-1">Select Brand:</label>
-        <select
-          value={selectedBrand}
-          onChange={(e) => setSelectedBrand(e.target.value)}
-          className="w-full border px-3 py-2 rounded"
-        >
-          <option>Vivo</option>
-          <option>MI</option>
-          <option>Oppo</option>
-          <option>Realme</option>
-          <option>Samsung</option>
-        </select>
-      </div>
+    {/* Brand */}
+    <div className="w-full md:w-1/2">
+      <label className="block font-semibold mb-1 text-sm">Brand</label>
+      <select
+        value={selectedBrand}
+        onChange={(e) => setSelectedBrand(e.target.value)}
+        className="w-full border px-3 py-1.5 text-sm rounded"
+      >
+        <option value="None">None</option>
+          <option value="Normal">Normal</option>
+          <option value="Vivo">Vivo</option>
+          <option value="MI">MI</option>
+          <option value="Oppo">Oppo</option>
+          <option value="Realme">Realme</option>
+          <option value="Samsung">Samsung</option>
+          <option value="Boat">Boat</option>
+          <option value="JBL">JBL</option>
+          <option value="Sony">Sony</option>
+          <option value="Skullcandy">Skullcandy</option>
+          <option value="Sennheiser">Sennheiser</option>
+          <option value="Apple">Apple</option>
+          <option value="Bose">Bose</option>
+          <option value="Philips">Philips</option>
+          <option value="Zebronics">Zebronics</option>
+          <option value="Infinity">Infinity</option>
+      </select>
+    </div>
+  </div>
 
-      <div className="mb-6">
-        <label className="block font-semibold mb-1">Payment Method:</label>
-        <div className="flex gap-4">
-          <label>
-            <input type="radio" checked={paymentMethod === "cod"} onChange={() => setPaymentMethod("cod")} className="mr-1" />
-            Cash on Delivery
-          </label>
-          <label>
-            <input type="radio" checked={paymentMethod === "online"} onChange={() => setPaymentMethod("online")} className="mr-1" />
-            Online Payment
-          </label>
-        </div>
-      </div>
+  {/* Payment Method - inline & small */}
+  <div className="mb-4">
+    <label className="block font-semibold mb-1 text-sm">Payment Method</label>
+    <div className="flex gap-4 text-sm">
+      <label className="flex items-center gap-1">
+        <input
+          type="radio"
+          checked={paymentMethod === "cod"}
+          onChange={() => setPaymentMethod("cod")}
+        />
+        Cash on Delivery
+      </label>
+      <label className="flex items-center gap-1">
+        <input
+          type="radio"
+          checked={paymentMethod === "online"}
+          onChange={() => setPaymentMethod("online")}
+        />
+        Online Payment
+      </label>
+    </div>
+  </div>
+
+
 
       {/* Slider */}
       <div className="relative">
@@ -251,6 +279,7 @@ export default function Batteries() {
           See All Batteries
         </button>
       </div>
+      <KeypadBatteries />
     </div>
   );
 }

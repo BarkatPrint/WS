@@ -14,8 +14,9 @@ const keypadBatteries = [
       "/image/Battery/Keypad/Nokia/2.jpg",
       "/image/Battery/Keypad/Nokia/3.jpg",
     ],
-    description: "Compatible battery for Nokia basic models.",
+      description: "Compatible battery for Nokia basic models.",
   },
+
   {
     id: 2,
     name: "Samsung Guru Battery",
@@ -141,8 +142,10 @@ const KeypadBatteries = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Keypad Mobile Batteries</h2>
-
+  <h2 className="text-3xl font-bold mb-1">🔋 Keypad Mobile Batteries</h2>
+  <p className="text-green-700 font-semibold text-sm mb-4">
+    All keypad mobile batteries available – Every model in stock!
+  </p>
       {/* Selection Options */}
       <div className="mb-4 flex flex-wrap gap-4 items-center">
         {/* Brand Dropdown */}

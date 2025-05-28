@@ -3,43 +3,99 @@ import React from "react";
 const accessories = [
   {
     id: 1,
-    name: "Memory Card 64GB",
-    price: "₹450",
-    image: "/images/accessories/memory-card.jpg",
+    name: "Memory Card (8GB)",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/memory-8GB.jpg`,
+    originalPrice: "₹200",
+    price: "₹150",
   },
   {
     id: 2,
-    name: "Pen Drive 32GB",
-    price: "₹350",
-    image: "/images/accessories/pen-drive.jpg",
+    name: "Memory Card (16GB)",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/memory.jpg`,
+    originalPrice: "₹250",
+    price: "₹200",
   },
   {
     id: 3,
-    name: "Mobile Stand",
+    name: "Memory Card (4GB SanDisk)",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/memory-4GB.jpg`,
+    originalPrice: "₹150",
     price: "₹120",
-    image: "/images/accessories/mobile-stand.jpg",
   },
+
   {
     id: 4,
-    name: "Mini Speaker Box",
-    price: "₹550",
-    image: "/images/accessories/speaker-box.jpg",
+    name: "Samsung A06 Board",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/board.jpg`,
+    originalPrice: "₹300",
+    price: "₹250",
   },
   {
     id: 5,
-    name: "Headphone",
-    price: "₹250",
-    image: "/images/accessories/headphone.jpg",
+    name: "Charging Pin Set",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/chargerpin.jpg`,
+    originalPrice: "₹80",
+    price: "₹50",
   },
-  // Add more items as needed
+  {
+    id: 6,
+    name: "Memory Card (128GB)",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/memory-128GB.jpg`,
+    originalPrice: "₹600",
+    price: "₹450",
+  },
+  {
+    id: 7,
+    name: "Mic Piece",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/mic.jpg`,
+    originalPrice: "₹30",
+    price: "₹20",
+  },
+  {
+    id: 8,
+    name: "Patta",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/patta.jpg`,
+    
+    originalPrice: "₹80",
+    price: "₹60",
+  },
+
+  {
+    id: 10,
+    name: "Pendrive 16GB",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/pendrive.jpg`,
+    originalPrice: "₹350",
+    price: "₹250",
+  },
+  {
+    id: 11,
+    name: "SIM Tray",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/simtray.jpg`,
+    originalPrice: "₹50",
+    price: "₹30",
+  },
+  {
+    id: 12,
+    name: "SIM Tray (Type 2)",
+    image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/simtray2.jpg`,
+    originalPrice: "₹60",
+    price: "₹35",
+  },
 ];
 
 const AccessoriesPage = () => {
+  const handleBuyNow = (name, price) => {
+    const message = `Hello, I want to buy ${name} for ${price}.`;
+    const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, "_blank");
+  };
+
   return (
     <div className="px-4 py-10 max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold text-center mb-8 text-[#00292d]">
-        Mobile Accessories & Gadgets
+        Mobile Accessories & Parts
       </h2>
+
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {accessories.map((item) => (
           <div
@@ -52,19 +108,24 @@ const AccessoriesPage = () => {
               className="w-full h-40 object-contain mb-4"
             />
             <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
-            <p className="text-green-600 font-bold mb-2">{item.price}</p>
-            <a
-              href={`https://wa.me/917050266383?text=Hello,%20I%20want%20to%20buy%20${encodeURIComponent(
-                item.name
-              )}%20for%20${encodeURIComponent(item.price)}.`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <div className="mb-2">
+              <span className="text-gray-500 line-through mr-2">{item.originalPrice}</span>
+              <span className="text-green-600 font-bold">{item.price}</span>
+            </div>
+            <button
+              onClick={() => handleBuyNow(item.name, item.price)}
               className="inline-block bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded mt-2 text-sm"
             >
-              Buy Now
-            </a>
+              Buy
+            </button>
           </div>
         ))}
+      </div>
+
+      <div className="mt-10 text-center">
+        <p className="text-lg font-semibold text-gray-600 bg-yellow-100 inline-block px-6 py-3 rounded-lg shadow-sm">
+          🚧 Other mobile parts are coming soon. Stay tuned!
+        </p>
       </div>
     </div>
   );

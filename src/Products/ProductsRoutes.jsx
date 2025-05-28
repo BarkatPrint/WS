@@ -2,12 +2,13 @@ import React from "react";
 import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 
 import AllProducts from "./AllProducts";
+import KeypadMobile from "./KeypadMobile/KeypadMobile";
+
 import MobilePhones from "./Mobile/MobilePhones";
 import VivoPhones from "./Mobile/VivoPhones";
 import Battery from "./Page/Battery";
 import Headphone from "./Page/Headphone";
 import Charger from "./Page/Charger";
-import KeypadBatteries from "./Page/KeypadBatteries";
 
 import ChargingCable from "./Page/ChargingCable";
 import MobileCovers from "./Page/MobileCovers";
@@ -15,16 +16,16 @@ import TemperedGlass from "./Page/TemperedGlass";
 import Display from "./Page/Display";
 import Touch from "./Page/Touch";
 import ScreenCombo from "./Page/ScreenCombo";
+import MobileBody from "./Page/MobileBody";  // Correct import for MobileBody
 
-import MobilePartsAccessories from "./Page/MobilePartsAccessories"; // <-- Import added
+import MobilePartsAccessories from "./Page/MobilePartsAccessories";
 
 const categories = [
   { name: "All", path: "all" },
   { name: "Mobile Parts & Accessories", path: "mobile-parts-&-accessories" },
   { name: "Mobile Phones", path: "mobile-phones" },
-  { name: "Keypad Mobile", path: "Keypad-Mobile" },
+  { name: "Keypad Mobile", path: "keypad-mobile" },  // lowercase for consistency
   { name: "Battery", path: "battery" },
-  { name: "Keypad Battery", path: "keypad-battery" },
   { name: "Headphone", path: "headphone" },
   { name: "Charger", path: "charger" },
   { name: "Charging Cable", path: "charging-cable" },
@@ -33,6 +34,7 @@ const categories = [
   { name: "Display", path: "display" },
   { name: "Touch", path: "touch" },
   { name: "Screen Combo", path: "screen-combo" },
+  { name: "Mobile Body", path: "mobile-body" },   // new path for MobileBody
 ];
 
 export default function ProductsRoutes() {
@@ -61,10 +63,10 @@ export default function ProductsRoutes() {
         <Route index element={<Navigate to="all" replace />} />
         <Route path="all" element={<AllProducts />} />
         <Route path="mobile-parts-&-accessories" element={<MobilePartsAccessories />} />
+        <Route path="keypad-mobile" element={<KeypadMobile />} />
         <Route path="mobile-phones" element={<MobilePhones />} />
         <Route path="vivophones" element={<VivoPhones />} />
         <Route path="battery" element={<Battery />} />
-        <Route path="keypad-battery" element={<KeypadBatteries />} />
         <Route path="headphone" element={<Headphone />} />
         <Route path="charger" element={<Charger />} />
         <Route path="charging-cable" element={<ChargingCable />} />
@@ -73,6 +75,7 @@ export default function ProductsRoutes() {
         <Route path="display" element={<Display />} />
         <Route path="touch" element={<Touch />} />
         <Route path="screen-combo" element={<ScreenCombo />} />
+        <Route path="mobile-body" element={<MobileBody />} />  {/* Correct path */}
       </Routes>
     </div>
   );

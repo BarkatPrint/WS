@@ -24,7 +24,53 @@ export default function Chargers() {
     ],
     description: "Fast charging, durable build with premium gold plating."
   },
+ 
+
   {
+  id: 2,
+  name: "Fast Charger 10W",
+  model: "FD-TYPEC, FAST CHARGER 10W, USB TO TYPE-C, QC 3.0",
+  amp: "10W",
+  quality: "Original Quality",
+  price: "₹50",
+  discountedPrice: "₹40",
+  images: [
+    `${process.env.PUBLIC_URL}/image/Charger/10W/1.jpg`,
+    `${process.env.PUBLIC_URL}/image/Charger/10W/1.jpg`,
+    `${process.env.PUBLIC_URL}/image/Charger/10W/1.jpg`,
+  ],
+  description: "Efficient 10W quick charge with USB Type-C support."
+},
+{
+  id: 3,
+  name: "Fast Charger 20W",
+  model: "FD-TYPEC, FAST CHARGER 20W, USB TO TYPE-C, QC 3.0, VOOC",
+  amp: "20W",
+  quality: "Original Quality",
+  price: "₹65",
+  discountedPrice: "₹55",
+  images: [
+    `${process.env.PUBLIC_URL}/image/Charger/20W/1.jpg`,
+    
+  ],
+  description: "Powerful 20W fast charging compatible with most devices."
+},
+{
+  id: 4,
+  name: "Fast Charger 33W",
+  model: "FD-TYPEC, FAST CHARGER 33W, USB TO TYPE-C, QC 3.0, VOOC, PD",
+  amp: "33W",
+  quality: "Original Quality",
+  price: "₹85",
+  discountedPrice: "₹75",
+  images: [
+    `${process.env.PUBLIC_URL}/image/Charger/33W/1.jpg`,
+    `${process.env.PUBLIC_URL}/image/Charger/33W/1.jpg`,
+    `${process.env.PUBLIC_URL}/image/Charger/33W/1.jpg`
+  ],
+  description: "High-speed 33W charger with Power Delivery and VOOC support."
+},
+ {
     id: 2,
     name: "Fast Charger",
     model: "FD-TYPEC, SAMSUNG 40W, FAST CHARGER, 100% Charge 67, SUPER FAST POWER ADAPTER, USB TO TYPE-C, QC 3.0, VOOC, etc.",
@@ -39,6 +85,22 @@ export default function Chargers() {
     ],
     description: "Quick charge with high-speed output and Samsung 40W support."
   },
+{
+  id: 5,
+  name: "Fast Charger 44W",
+  model: "FD-TYPEC, SAMSUNG 44W, FAST CHARGER, USB TO TYPE-C, QC 3.0, VOOC",
+  amp: "44W",
+  quality: "Original Quality",
+  price: "₹120",
+  discountedPrice: "₹100",
+  images: [
+    `${process.env.PUBLIC_URL}/image/Charger/44W/1.jpg`,
+    `${process.env.PUBLIC_URL}/image/Charger/44W/2.jpg`,
+    `${process.env.PUBLIC_URL}/image/Charger/44W/1.jpg`
+  ],
+  description: "Ultra-fast 44W Samsung charger with quick charge and VOOC technology."
+},
+
   {
     id: 3,
     name: "Super Charger",
@@ -119,47 +181,50 @@ export default function Chargers() {
 
   return (
     <div className="p-4">
-      <h2 className="text-3xl font-bold mb-4">🔌 Chargers</h2>
-      {/* Charger Type Selector */}
-      <div className="mb-4">
-        <label className="block mb-1 font-semibold text-gray-700">Select Charger Type:</label>
-        <select
-          value={chargerType}
-          onChange={(e) => setChargerType(e.target.value)}
-          className="border px-3 py-2 rounded w-full"
-        >
-          <option value="Type-C">Type-C</option>
-          <option value="Thin Pin">Thin Pin</option>
-          <option value="Wide Pin">Wide Pin</option>
-          <option value="Micro USB">Micro USB</option>
-        </select>
-      </div>
+  <h2 className="text-3xl font-bold mb-4">🔌 Chargers</h2>
 
-      {/* Brand Selector */}
-      <div className="mb-6">
-        <label className="block mb-1 font-semibold text-gray-700">Select Mobile Brand:</label>
-        <select
-          value={selectedBrand}
-          onChange={(e) => setSelectedBrand(e.target.value)}
-          className="border px-3 py-2 rounded w-full"
-        >
-         <option value="None">None</option>
-          <option value="Normal">Normal</option>
-          <option value="Vivo">Vivo</option>
-          <option value="MI">MI</option>
-          <option value="Oppo">Oppo</option>
-          <option value="Realme">Realme</option>
-          <option value="Samsung">Samsung</option>
-          <option value="OnePlus">OnePlus</option>
-          <option value="Apple">Apple</option>
-          <option value="Infinix">Infinix</option>
-          <option value="Itel">Itel</option>
-          <option value="Lenovo">Lenovo</option>
-          <option value="Nokia">Nokia</option>
-          <option value="Motorola">Motorola</option>
+  <div className="flex gap-4 mb-6">
+    {/* Charger Type Selector */}
+    <div className="flex-1 min-w-[140px]">
+      <label className="block mb-1 font-semibold text-gray-700 text-sm">Select Charger Type:</label>
+      <select
+        value={chargerType}
+        onChange={(e) => setChargerType(e.target.value)}
+        className="border px-2 py-1 rounded w-full text-sm"
+      >
+        <option value="Type-C">Type-C</option>
+        <option value="Thin Pin">Thin Pin</option>
+        <option value="Wide Pin">Wide Pin</option>
+        <option value="Micro USB">Micro USB</option>
+      </select>
+    </div>
 
-        </select>
-      </div>
+    {/* Brand Selector */}
+    <div className="flex-1 min-w-[140px]">
+      <label className="block mb-1 font-semibold text-gray-700 text-sm">Select Mobile Brand:</label>
+      <select
+        value={selectedBrand}
+        onChange={(e) => setSelectedBrand(e.target.value)}
+        className="border px-2 py-1 rounded w-full text-sm"
+      >
+        <option value="None">None</option>
+        <option value="Normal">Normal</option>
+        <option value="Vivo">Vivo</option>
+        <option value="MI">MI</option>
+        <option value="Oppo">Oppo</option>
+        <option value="Realme">Realme</option>
+        <option value="Samsung">Samsung</option>
+        <option value="OnePlus">OnePlus</option>
+        <option value="Apple">Apple</option>
+        <option value="Infinix">Infinix</option>
+        <option value="Itel">Itel</option>
+        <option value="Lenovo">Lenovo</option>
+        <option value="Nokia">Nokia</option>
+        <option value="Motorola">Motorola</option>
+      </select>
+    </div>
+  </div>
+
 
       {/* Payment Method */}
       <div className="mb-6">
