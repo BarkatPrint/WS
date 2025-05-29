@@ -100,7 +100,7 @@ const AccessoriesPage = () => {
             className="bg-white shadow-md rounded-lg overflow-hidden text-center p-4"
           >
             <img
-              src={`${item.image}`}
+              src={item.image}
               alt={item.name}
               className="w-full h-40 object-contain mb-4"
             />
