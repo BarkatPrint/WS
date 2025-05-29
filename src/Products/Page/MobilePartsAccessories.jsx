@@ -83,7 +83,9 @@ const accessories = [
 const AccessoriesPage = () => {
   const handleBuyNow = (name, price) => {
     const message = `Hello, I want to buy ${name} for ${price}.`;
-    const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
+    const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(
+      message
+    )}`;
     window.open(whatsappURL, "_blank");
   };
 
@@ -93,30 +95,40 @@ const AccessoriesPage = () => {
         Mobile Accessories & Parts
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div
+        className="flex overflow-x-auto space-x-4 pb-4"
+        style={{ scrollSnapType: "x mandatory" }}
+      >
         {accessories.map((item) => (
           <div
             key={item.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden text-center p-2"
+            className="flex-shrink-0 w-80 bg-white shadow-lg rounded-xl flex flex-col"
+            style={{ scrollSnapAlign: "start" }}
           >
-            <div className="h-64 flex items-center justify-center">
+            {/* Image container without left-right padding */}
+            <div className="w-full h-64 overflow-hidden rounded-t-xl bg-gray-50">
               <img
                 src={item.image}
                 alt={item.name}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             </div>
-            <div className="p-2 flex items-center justify-between text-left">
-              <div className="text-xs">
+
+            {/* Text & Button container with padding */}
+            <div className="p-4 flex flex-col sm:flex-row justify-between items-center  text-center sm:text-left">
+              <div className="text-sm sm:text-base mb-4 sm:mb-0 max-w-[60%]">
                 <h3 className="font-semibold text-gray-800">{item.name}</h3>
                 <div>
-                  <span className="text-gray-500 line-through mr-1">{item.originalPrice}</span>
+                  <span className="text-gray-500 line-through mr-2">
+                    {item.originalPrice}
+                  </span>
                   <span className="text-green-600 font-bold">{item.price}</span>
                 </div>
               </div>
+
               <button
                 onClick={() => handleBuyNow(item.name, item.price)}
-                className="bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded text-xs"
+                className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded text-sm sm:text-base whitespace-nowrap"
               >
                 Buy
               </button>
