@@ -93,28 +93,34 @@ const AccessoriesPage = () => {
         Mobile Accessories & Parts
       </h2>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {accessories.map((item) => (
           <div
             key={item.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden text-center p-4"
+            className="bg-white shadow-md rounded-lg overflow-hidden text-center p-2"
           >
-            <img
-              src={`${item.image}`}
-              alt={item.name}
-              className="w-full h-40 object-contain mb-4"
-            />
-            <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
-            <div className="mb-2">
-              <span className="text-gray-500 line-through mr-2">{item.originalPrice}</span>
-              <span className="text-green-600 font-bold">{item.price}</span>
+            <div className="h-64 flex items-center justify-center">
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-full h-full object-contain"
+              />
             </div>
-            <button
-              onClick={() => handleBuyNow(item.name, item.price)}
-              className="inline-block bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded mt-2 text-sm"
-            >
-              Buy
-            </button>
+            <div className="p-2 flex items-center justify-between text-left">
+              <div className="text-xs">
+                <h3 className="font-semibold text-gray-800">{item.name}</h3>
+                <div>
+                  <span className="text-gray-500 line-through mr-1">{item.originalPrice}</span>
+                  <span className="text-green-600 font-bold">{item.price}</span>
+                </div>
+              </div>
+              <button
+                onClick={() => handleBuyNow(item.name, item.price)}
+                className="bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded text-xs"
+              >
+                Buy
+              </button>
+            </div>
           </div>
         ))}
       </div>
