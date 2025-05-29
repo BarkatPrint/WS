@@ -22,7 +22,6 @@ const accessories = [
     originalPrice: "₹150",
     price: "₹120",
   },
-
   {
     id: 4,
     name: "Samsung A06 Board",
@@ -55,11 +54,9 @@ const accessories = [
     id: 8,
     name: "Patta",
     image: `${process.env.PUBLIC_URL}/image/MobilePartsAccessories/patta.jpg`,
-    
     originalPrice: "₹80",
     price: "₹60",
   },
-
   {
     id: 10,
     name: "Pendrive 16GB",
@@ -103,7 +100,7 @@ const AccessoriesPage = () => {
             className="bg-white shadow-md rounded-lg overflow-hidden text-center p-4"
           >
             <img
-              src={item.image}
+              src={`${item.image}`}
               alt={item.name}
               className="w-full h-40 object-contain mb-4"
             />
