@@ -17,9 +17,8 @@ export default function Touch() {
       price: "₹900",
       discountedPrice: "₹799",
       images: [
-        `${process.env.PUBLIC_URL}/image/Touch/OriginalTouch/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/Touch/OriginalTouch/2.jpg`,
-        `${process.env.PUBLIC_URL}/image/Touch/OriginalTouch/3.jpg`,
+        `${process.env.PUBLIC_URL}/image/Touch/Original-Touch-Screen.jpg`,
+    
       ],
       description: "Genuine original touch screen with perfect responsiveness.",
     },
@@ -31,8 +30,8 @@ export default function Touch() {
       price: "₹700",
       discountedPrice: "₹599",
       images: [
-        `${process.env.PUBLIC_URL}/image/Touch/PremiumTouch/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/Touch/PremiumTouch/2.jpg`,
+        `${process.env.PUBLIC_URL}/image/Touch/Premium-Touch-Screen.jpg`,
+    
       ],
       description: "Tempered glass touch screen with high scratch resistance.",
     },
@@ -44,8 +43,8 @@ export default function Touch() {
       price: "₹500",
       discountedPrice: "₹399",
       images: [
-        `${process.env.PUBLIC_URL}/image/Touch/UniversalTouch/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/Touch/UniversalTouch/2.jpg`,
+        `${process.env.PUBLIC_URL}/image/Touch/Universal-Touch-Panel.jpg`,
+   
       ],
       description: "Compatible touch panel for many brands and models.",
     },
@@ -57,8 +56,8 @@ export default function Touch() {
       price: "₹450",
       discountedPrice: "₹350",
       images: [
-        `${process.env.PUBLIC_URL}/image/Touch/DIYTouch/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/Touch/DIYTouch/2.jpg`,
+        `${process.env.PUBLIC_URL}/image/Touch/DIY-Touch-Digitizer.jpg`,
+  
       ],
       description: "Touch digitizer replacement for DIY repair.",
     },

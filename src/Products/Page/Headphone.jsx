@@ -15,7 +15,7 @@ export default function Headphones() {
       type: "Wired",
       quality: "Clear vocals with balanced bass",
       price: "₹60",
-      discountedPrice: "₹50",
+      discountedPrice: "₹40",
       images: [
         `${process.env.PUBLIC_URL}/image/Headphone/Local/1.jpg`,
         `${process.env.PUBLIC_URL}/image/Headphone/Local/2.jpg`,

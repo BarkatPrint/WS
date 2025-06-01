@@ -7,49 +7,91 @@ export default function TemperedGlass() {
   const [customBrand, setCustomBrand] = useState("");
 
   const products = [
-    {
-      id: 1,
-      name: "Full Glue Tempered Glass",
-      model: "9H Hardness",
-      quality: "Edge to Edge, Bubble-Free",
-      price: "₹100",
-      discountedPrice: "₹60",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/2.jpg`,
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/3.jpg`,
-      ],
-      description: "Scratch resistant tempered glass with full glue.",
-    },
-    {
-      id: 2,
-      name: "Privacy Tempered Glass",
-      model: "Anti-Spy",
-      quality: "Screen Visible Only to You",
-      price: "₹150",
-      discountedPrice: "₹99",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/4.jpg`,
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/5.jpg`,
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/6.jpg`,
-      ],
-      description: "Protects screen and your privacy from side views.",
-    },
-    {
-      id: 3,
-      name: "Edge Black Tempered Glass",
-      model: "3D Curved",
-      quality: "Full Coverage, Strong Edge",
-      price: "₹120",
-      discountedPrice: "₹80",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/7.jpg`,
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/8.jpg`,
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/9.jpg`,
-      ],
-      description: "Curved edge black glass for stylish protection.",
-    },
-  ];
+  {
+    id: 1,
+    name: "Full Glue Tempered Glass",
+    model: "9H Hardness",
+    quality: "Edge to Edge, Bubble-Free",
+    price: "₹100",
+    discountedPrice: "₹60",
+    images: [
+      `${process.env.PUBLIC_URL}/image/TemperedGlass/Full-Glue Tempered-Glass.jpg`,
+    ],
+    description: "Scratch resistant tempered glass with full glue.",
+  },
+  {
+    id: 2,
+    name: "Privacy Tempered Glass",
+    model: "Anti-Spy",
+    quality: "Screen Visible Only to You",
+    price: "₹150",
+    discountedPrice: "₹99",
+    images: [
+      `${process.env.PUBLIC_URL}/image/TemperedGlass/Privacy-Tempered-Glass.jpg`,
+    ],
+    description: "Protects screen and your privacy from side views.",
+  },
+  {
+    id: 3,
+    name: "Edge Black Tempered Glass",
+    model: "3D Curved",
+    quality: "Full Coverage, Strong Edge",
+    price: "₹120",
+    discountedPrice: "₹80",
+    images: [
+      `${process.env.PUBLIC_URL}/image/TemperedGlass/Edge-Black-Tempered-Glass.jpg`,
+    ],
+    description: "Curved edge black glass for stylish protection.",
+  },
+  {
+    id: 4,
+    name: "Matte Tempered Glass",
+    model: "Anti-Glare",
+    quality: "Smooth Touch, No Fingerprints",
+    price: "₹120",
+    discountedPrice: "₹85",
+    images: [
+      `${process.env.PUBLIC_URL}/image/TemperedGlass/Matte-Tempered-Glass.jpg`,
+    ],
+    description: "Matte finish to reduce glare and fingerprints.",
+  },
+  {
+    id: 5,
+    name: "Camera Lens Tempered Glass",
+    model: "Scratch Proof",
+    quality: "Crystal Clear, Strong Protection",
+    price: "₹70",
+    discountedPrice: "₹40",
+    images: [
+      `${process.env.PUBLIC_URL}/image/TemperedGlass/Camera-Lens-Tempered-Glass.jpg`,
+    ],
+    description: "Protects your camera lens from scratches and dust.",
+  },
+  {
+    id: 6,
+    name: "Full Body Tempered Glass",
+    model: "360° Coverage",
+    quality: "Front + Back Protection",
+    price: "₹180",
+    discountedPrice: "₹120",
+    images: [
+      `${process.env.PUBLIC_URL}/image/TemperedGlass/Full-Body-Tempered-Glass.jpg`,
+    ],
+    description: "Covers both front and back for all-around safety.",
+  },
+  {
+    id: 7,
+    name: "UV Tempered Glass",
+    model: "UV Glue Based",
+    quality: "Ultra Strong Bonding, Bubble-Free",
+    price: "₹200",
+    discountedPrice: "₹140",
+    images: [
+      `${process.env.PUBLIC_URL}/image/TemperedGlass/UV-Tempered-Glass.jpg`,
+    ],
+    description: "Uses UV light to cure the glue for a perfect fit.",
+  },
+];
 
   const handleImageChange = (productId, direction, totalImages) => {
     setCurrentImages((prev) => {

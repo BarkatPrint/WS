@@ -3,10 +3,12 @@ import React, { useState } from "react";
 export default function ScreenCombo() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [currentImages, setCurrentImages] = useState({});
-  const [comboType, setComboType] = useState("Touch + Display");
-  const [customComboType, setCustomComboType] = useState("");
+  const [defaultComboType, setDefaultComboType] = useState("Touch + Display");
+  const [customDefaultComboType, setCustomDefaultComboType] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("Samsung");
   const [customBrand, setCustomBrand] = useState("");
+  const [productCombos, setProductCombos] = useState({});
+  const [customProductCombos, setCustomProductCombos] = useState({});
 
   const products = [
     {
@@ -65,16 +67,20 @@ export default function ScreenCombo() {
   };
 
   const handleBuyNow = (product) => {
-    const finalComboType =
-      comboType === "Other" ? customComboType || "Not specified" : comboType;
-    const finalBrand = selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
+    const productComboType =
+      productCombos[product.id] === "Other"
+        ? customProductCombos[product.id] || "Not specified"
+        : productCombos[product.id] || (defaultComboType === "Other" ? customDefaultComboType || "Not specified" : defaultComboType);
+
+    const finalBrand =
+      selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
 
     const message = `*Product Details:*
 📱 Name: ${product.name}
 📦 Model: ${product.model}
 ✅ Quality: ${product.quality}
 💸 Price: ${product.discountedPrice}
-🔧 Combo Type: ${finalComboType}
+🔧 Combo Type: ${productComboType}
 🏷️ Mobile Brand: ${finalBrand}
 💳 Payment Method: ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}`;
 
@@ -90,14 +96,14 @@ export default function ScreenCombo() {
       </p>
 
       <div className="flex gap-4 mb-6 flex-wrap">
-        {/* Combo Type Selector */}
+        {/* Default Combo Type Selector */}
         <div className="flex-1 min-w-[140px]">
           <label className="block mb-1 font-semibold text-gray-700 text-sm">
-            Select Combo Type:
+            Default Combo Type (applies to all if not changed individually):
           </label>
           <select
-            value={comboType}
-            onChange={(e) => setComboType(e.target.value)}
+            value={defaultComboType}
+            onChange={(e) => setDefaultComboType(e.target.value)}
             className="border px-2 py-1 rounded w-full text-sm"
           >
             <option value="">-- Choose Combo Type --</option>
@@ -106,14 +112,13 @@ export default function ScreenCombo() {
             <option value="Touch + Display Repair Kit">Touch + Display Repair Kit</option>
             <option value="Other">Other</option>
           </select>
-
-          {comboType === "Other" && (
+          {defaultComboType === "Other" && (
             <input
               type="text"
               placeholder="Enter custom combo type"
               className="mt-2 border px-2 py-1 rounded w-full text-sm"
-              value={customComboType}
-              onChange={(e) => setCustomComboType(e.target.value)}
+              value={customDefaultComboType}
+              onChange={(e) => setCustomDefaultComboType(e.target.value)}
             />
           )}
         </div>
@@ -142,7 +147,6 @@ export default function ScreenCombo() {
             <option value="Motorola">Motorola</option>
             <option value="Other">Other</option>
           </select>
-
           {selectedBrand === "Other" && (
             <input
               type="text"
@@ -186,6 +190,7 @@ export default function ScreenCombo() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {products.map((product) => {
           const currentIndex = currentImages[product.id] || 0;
+          const combo = productCombos[product.id] || "";
 
           return (
             <div
@@ -222,6 +227,43 @@ export default function ScreenCombo() {
                 <li><strong>Model:</strong> {product.model}</li>
                 <li><strong>Quality:</strong> {product.quality}</li>
               </ul>
+
+              {/* Individual Combo Type Selector */}
+              <div className="mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Select Combo Type (for this product):
+                </label>
+                <select
+                  value={productCombos[product.id] || ""}
+                  onChange={(e) =>
+                    setProductCombos((prev) => ({
+                      ...prev,
+                      [product.id]: e.target.value,
+                    }))
+                  }
+                  className="border px-2 py-1 rounded w-full text-sm"
+                >
+                  <option value="">Use Default</option>
+                  <option value="Touch + Display">Touch + Display</option>
+                  <option value="Touch + LCD Display">Touch + LCD Display</option>
+                  <option value="Touch + Display Repair Kit">Touch + Display Repair Kit</option>
+                  <option value="Other">Other</option>
+                </select>
+                {productCombos[product.id] === "Other" && (
+                  <input
+                    type="text"
+                    placeholder="Enter custom combo"
+                    className="mt-2 border px-2 py-1 rounded w-full text-sm"
+                    value={customProductCombos[product.id] || ""}
+                    onChange={(e) =>
+                      setCustomProductCombos((prev) => ({
+                        ...prev,
+                        [product.id]: e.target.value,
+                      }))
+                    }
+                  />
+                )}
+              </div>
 
               <div className="mb-3">
                 <span className="text-gray-500 line-through text-sm mr-2">{product.price}</span>

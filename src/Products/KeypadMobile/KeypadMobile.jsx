@@ -7,44 +7,45 @@ const keypadMobiles = [
     name: "Nokia 105",
     price: 1499,
     discount: 10,
-    image: "https://m.media-amazon.com/images/I/41JVE+kkpQL._SX300_SY300_QL70_FMwebp_.jpg",
+    image: `${process.env.PUBLIC_URL}/image/Mobile/KeypadMobile/Nokia-105.jpg`,
   },
   {
     id: 2,
     name: "Lava A1",
     price: 1399,
     discount: 15,
-    image: "https://m.media-amazon.com/images/I/61k3bAfXYGL._SX522_.jpg",
+    image: `${process.env.PUBLIC_URL}/image/Mobile/KeypadMobile/Lava-A1.jpg`,
   },
   {
     id: 3,
     name: "Micromax X412",
     price: 1299,
     discount: 20,
-    image: "https://m.media-amazon.com/images/I/61Km9aIfiVL._SX522_.jpg",
+    image: `${process.env.PUBLIC_URL}/image/Mobile/KeypadMobile/Micromax-X412.jpg`,
   },
   {
     id: 4,
     name: "Itel It5026",
     price: 1199,
     discount: 10,
-    image: "https://m.media-amazon.com/images/I/71d5WYzSziL._SX522_.jpg",
+    image: `${process.env.PUBLIC_URL}/image/Mobile/KeypadMobile/Itel-It5026.jpg`,
   },
   {
     id: 5,
     name: "Samsung Guru Music 2",
     price: 1890,
     discount: 5,
-    image: "https://m.media-amazon.com/images/I/71wLsNDzslL._SX522_.jpg",
+    image: `${process.env.PUBLIC_URL}/image/Mobile/KeypadMobile/Samsung-Guru-Music-2.jpg`,
   },
   {
     id: 6,
     name: "Karbonn K9",
     price: 1290,
     discount: 15,
-    image: "https://m.media-amazon.com/images/I/61xfyKYlgIL._SX522_.jpg",
+    image: `${process.env.PUBLIC_URL}/image/Mobile/KeypadMobile/Karbonn-K9.jpg`,
   },
 ];
+
 
 const KeypadMobile = () => {
   const navigate = useNavigate();

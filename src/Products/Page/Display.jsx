@@ -17,9 +17,8 @@ export default function MobileDisplay() {
       price: "₹2500",
       discountedPrice: "₹2200",
       images: [
-        `${process.env.PUBLIC_URL}/image/Display/OriginalDisplay/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/Display/OriginalDisplay/2.jpg`,
-        `${process.env.PUBLIC_URL}/image/Display/OriginalDisplay/3.jpg`,
+        `${process.env.PUBLIC_URL}/image/Display/Original-Mobile-Display.jpg`,
+       
       ],
       description: "Genuine AMOLED original display with vibrant colors and durability.",
     },
@@ -31,8 +30,8 @@ export default function MobileDisplay() {
       price: "₹1800",
       discountedPrice: "₹1500",
       images: [
-        `${process.env.PUBLIC_URL}/image/Display/PremiumLCD/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/Display/PremiumLCD/2.jpg`,
+        `${process.env.PUBLIC_URL}/image/Display/Premium-LCD-Display.jpg`,
+      
       ],
       description: "Premium IPS LCD display with excellent viewing angles.",
     },
@@ -44,8 +43,8 @@ export default function MobileDisplay() {
       price: "₹1200",
       discountedPrice: "₹999",
       images: [
-        `${process.env.PUBLIC_URL}/image/Display/UniversalDisplay/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/Display/UniversalDisplay/2.jpg`,
+        `${process.env.PUBLIC_URL}/image/Display/Universal-Display-Panel.jpg`,
+    
       ],
       description: "Compatible display panel for many popular mobile brands.",
     },
@@ -57,8 +56,8 @@ export default function MobileDisplay() {
       price: "₹900",
       discountedPrice: "₹750",
       images: [
-        `${process.env.PUBLIC_URL}/image/Display/DIYKit/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/Display/DIYKit/2.jpg`,
+        `${process.env.PUBLIC_URL}/image/Display/DIY-Display-Replacement-Kit.jpg`,
+     
       ],
       description: "Complete DIY display replacement kit including necessary tools.",
     },

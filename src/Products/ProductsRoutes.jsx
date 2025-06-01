@@ -4,7 +4,7 @@ import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import AllProducts from "./AllProducts";
 import KeypadMobile from "./KeypadMobile/KeypadMobile";
 
-import MobilePhones from "./Mobile/MobilePhones";
+// import MobilePhones from "./Mobile/MobilePhones";
 import VivoPhones from "./Mobile/VivoPhones";
 import Battery from "./Page/Battery";
 import Headphone from "./Page/Headphone";
@@ -23,7 +23,7 @@ import MobilePartsAccessories from "./Page/MobilePartsAccessories";
 const categories = [
   { name: "All", path: "all" },
   { name: "Mobile Parts & Accessories", path: "mobile-parts-&-accessories" },
-  { name: "Mobile Phones", path: "mobile-phones" },
+  // { name: "Mobile Phones", path: "mobile-phones" },
   { name: "Keypad Mobile", path: "keypad-mobile" },  // lowercase for consistency
   { name: "Battery", path: "battery" },
   { name: "Headphone", path: "headphone" },
@@ -64,7 +64,7 @@ export default function ProductsRoutes() {
         <Route path="all" element={<AllProducts />} />
         <Route path="mobile-parts-&-accessories" element={<MobilePartsAccessories />} />
         <Route path="keypad-mobile" element={<KeypadMobile />} />
-        <Route path="mobile-phones" element={<MobilePhones />} />
+        {/* <Route path="mobile-phones" element={<MobilePhones />} /> */}
         <Route path="vivophones" element={<VivoPhones />} />
         <Route path="battery" element={<Battery />} />
         <Route path="headphone" element={<Headphone />} />
