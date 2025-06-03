@@ -9,19 +9,21 @@ export default function MobileBody() {
   // Bade Mobile Bodies
   const bigMobileBodies = [
     {
+     
       id: "big1",
-      name: "Samsung Galaxy Body",
+      name: "Vivo Mobile Body",
       model: "Original Back Panel",
       quality: "High Quality Plastic Body",
       price: "₹800",
       discountedPrice: "₹700",
       images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/Big/Samsung1.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileBody/Big/Samsung2.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileBody/Big/Samsung3.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileBody/Vivo-Mobile-Body.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileBody/Vivo-Mobile-Body2.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileBody/Vivo-Mobile-Body3.jpg`
       ],
-      description: "Durable and perfect fit Samsung Galaxy mobile back body.",
+      description: "Durable and perfect fit Vivo mobile back body.",
     },
+
     {
       id: "big2",
       name: "Apple iPhone Body",
@@ -30,24 +32,26 @@ export default function MobileBody() {
       price: "₹2500",
       discountedPrice: "₹2200",
       images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/Big/iPhone1.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileBody/Big/iPhone2.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileBody/Apple-iPhone-Body.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileBody/Apple-iPhone-Body2.jpg`,
       ],
       description: "Premium iPhone frame and back body replacement.",
     },
-    {
-      id: "big3",
-      name: "OnePlus Mobile Body",
-      model: "OEM Plastic Back",
-      quality: "Good Quality OEM Body",
-      price: "₹900",
-      discountedPrice: "₹850",
-      images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/Big/OnePlus1.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileBody/Big/OnePlus2.jpg`,
-      ],
-      description: "Perfect fit OnePlus plastic mobile back panel.",
-    },
+   {
+  id: "big3",
+  name: "Realme Mobile Body",
+  model: "OEM Plastic Back",
+  quality: "Good Quality OEM Body",
+  price: "₹900",
+  discountedPrice: "₹850",
+  images: [
+    `${process.env.PUBLIC_URL}/image/MobileBody/Realme-Mobile-Body.jpg`,
+    `${process.env.PUBLIC_URL}/image/MobileBody/Realme-Mobile-Body2.jpg`,
+    `${process.env.PUBLIC_URL}/image/MobileBodyRealme-Mobile-Body3.jpg`,
+  ],
+  description: "Perfect fit Realme plastic mobile back panel.",
+},
+
   ];
 
   // Keypad Mobile Bodies
@@ -60,8 +64,8 @@ export default function MobileBody() {
       price: "₹300",
       discountedPrice: "₹250",
       images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/Keypad/Nokia105_1.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileBody/Keypad/Nokia105_2.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Nokia-105-Body.jpg`,
+        
       ],
       description: "Replacement plastic body for Nokia 105 keypad phone.",
     },
@@ -73,24 +77,25 @@ export default function MobileBody() {
       price: "₹350",
       discountedPrice: "₹300",
       images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/Keypad/SamsungGuru_1.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileBody/Keypad/SamsungGuru_2.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Samsung-Guru-Body.jpg`,
+       
       ],
       description: "Samsung Guru keypad phone replacement back panel.",
     },
-    {
+      {
       id: "key3",
-      name: "Itel Keypad Body",
+      name: "Jio Keypad Body",
       model: "Basic Keypad Mobile Back",
       quality: "Strong Plastic Body",
       price: "₹280",
       discountedPrice: "₹250",
       images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/Keypad/Itel1.jpg`,
-        `${process.env.PUBLIC_URL}/image/MobileBody/Keypad/Itel2.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Jio-Keypad-Body.jpg`,
+       
       ],
-      description: "Keypad mobile back body for Itel brand phones.",
+      description: "Keypad mobile back body for Jio brand phones.",
     },
+
   ];
 
   const handleImageChange = (productId, direction, totalImages) => {
@@ -121,10 +126,19 @@ export default function MobileBody() {
 
   return (
     <div className="p-4">
-      <h2 className="text-3xl font-bold mb-4">📱 Mobile Body Replacement</h2>
-      <p className="text-green-700 font-medium mb-6">
-        Quality mobile back bodies for both big smartphones and keypad mobiles.
-      </p>
+      <h2 className="text-3xl font-bold mb-4">📱 Mobile Body</h2>
+<p className="text-green-700 font-medium mb-6">
+  Sabhi mobile phones ke liye back body available hai – chahe smartphone ho ya keypad phone. 
+  Aapko jo bhi mobile ka body chahiye ho, direct WhatsApp par contact karein:{" "}
+  <a
+    href="https://wa.me/917050266383"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 underline font-semibold"
+  >
+    7050266383
+  </a>
+</p>
 
       {/* Brand Selector */}
       <div className="mb-6 max-w-sm">
@@ -189,8 +203,9 @@ export default function MobileBody() {
 
       {/* Big Mobile Bodies Section */}
       <section className="mb-10">
-        <h3 className="text-2xl font-semibold mb-4">Bade Mobile Bodies</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+        <h3 className="text-2xl font-semibold mb-4">Bada Mobile Bodies</h3>
+      
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
           {bigMobileBodies.map((product) => {
             const currentIndex = currentImages[product.id] || 0;
             return (
@@ -249,13 +264,25 @@ export default function MobileBody() {
       {/* Keypad Mobile Bodies Section */}
       <section>
         <h3 className="text-2xl font-semibold mb-4">Keypad Mobile Bodies</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+          <p className="text-green-700 font-medium mb-6">
+          Sabhi mobile phones ke liye back body available hai – chahe smartphone ho ya keypad phone. 
+          Aapko jo bhi mobile ka body chahiye ho, direct WhatsApp par contact karein:{" "}
+          <a
+            href="https://wa.me/917050266383"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline font-semibold"
+          >
+            7050266383
+          </a>
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
           {keypadMobileBodies.map((product) => {
             const currentIndex = currentImages[product.id] || 0;
             return (
               <div
                 key={product.id}
-                className="border rounded-xl shadow-lg p-4 bg-white flex flex-col"
+                className="border rounded-xl shadow-lg p-2 bg-white flex flex-col"
               >
                 <div className="relative w-full pb-[100%] mb-4 overflow-hidden rounded bg-gray-100">
                   <img

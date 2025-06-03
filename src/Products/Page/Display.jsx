@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 export default function MobileDisplay() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -18,7 +18,6 @@ export default function MobileDisplay() {
       discountedPrice: "₹2200",
       images: [
         `${process.env.PUBLIC_URL}/image/Display/Original-Mobile-Display.jpg`,
-       
       ],
       description: "Genuine AMOLED original display with vibrant colors and durability.",
     },
@@ -31,7 +30,6 @@ export default function MobileDisplay() {
       discountedPrice: "₹1500",
       images: [
         `${process.env.PUBLIC_URL}/image/Display/Premium-LCD-Display.jpg`,
-      
       ],
       description: "Premium IPS LCD display with excellent viewing angles.",
     },
@@ -44,7 +42,6 @@ export default function MobileDisplay() {
       discountedPrice: "₹999",
       images: [
         `${process.env.PUBLIC_URL}/image/Display/Universal-Display-Panel.jpg`,
-    
       ],
       description: "Compatible display panel for many popular mobile brands.",
     },
@@ -57,7 +54,6 @@ export default function MobileDisplay() {
       discountedPrice: "₹750",
       images: [
         `${process.env.PUBLIC_URL}/image/Display/DIY-Display-Replacement-Kit.jpg`,
-     
       ],
       description: "Complete DIY display replacement kit including necessary tools.",
     },
@@ -89,6 +85,21 @@ export default function MobileDisplay() {
 
     const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
+  };
+
+  // Ref for horizontal scroll container
+  const scrollRef = useRef(null);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    }
   };
 
   return (
@@ -192,61 +203,85 @@ export default function MobileDisplay() {
         </div>
       </div>
 
-      {/* Product Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {products.map((product) => {
-          const currentIndex = currentImages[product.id] || 0;
+      {/* Horizontal Scroll Buttons */}
+      <div className="flex items-center mb-2">
+        <button
+          onClick={scrollLeft}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-l"
+          aria-label="Scroll Left"
+        >
+          ‹
+        </button>
+        <div
+          ref={scrollRef}
+          className="flex overflow-x-auto scrollbar-hide gap-3 scroll-smooth"
+          style={{ scrollBehavior: "smooth" }}
+        >
+          {/* Product Cards */}
+          {products.map((product) => {
+            const currentIndex = currentImages[product.id] || 0;
 
-          return (
-            <div
-              key={product.id}
-              className="border rounded-xl shadow-lg p-4 bg-white flex flex-col"
-            >
-              <div className="relative w-full pb-[100%] mb-4 overflow-hidden rounded bg-gray-100">
-                <img
-                  src={product.images[currentIndex]}
-                  alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <button
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                  onClick={() =>
-                    handleImageChange(product.id, "prev", product.images.length)
-                  }
-                >
-                  ‹
-                </button>
-                <button
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                  onClick={() =>
-                    handleImageChange(product.id, "next", product.images.length)
-                  }
-                >
-                  ›
-                </button>
-              </div>
-
-              <h2 className="text-lg font-bold text-gray-800">{product.name}</h2>
-              <p className="text-sm text-gray-600 mb-2">{product.description}</p>
-              <ul className="text-sm text-gray-700 mb-3 space-y-1">
-                <li><strong>Model:</strong> {product.model}</li>
-                <li><strong>Quality:</strong> {product.quality}</li>
-              </ul>
-
-              <div className="mb-3">
-                <span className="text-gray-500 line-through text-sm mr-2">{product.price}</span>
-                <span className="text-green-700 font-bold text-lg">{product.discountedPrice}</span>
-              </div>
-
-              <button
-                onClick={() => handleBuyNow(product)}
-                className="mt-auto bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+            return (
+              <div
+                key={product.id}
+                className="flex-shrink-0 w-48 border rounded-xl shadow-md p-3 bg-white flex flex-col"
               >
-                Buy Now
-              </button>
-            </div>
-          );
-        })}
+                <div className="relative w-full pb-[100%] mb-3 overflow-hidden rounded bg-gray-100">
+                  <img
+                    src={product.images[currentIndex]}
+                    alt={product.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <button
+                    className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-1 py-0.5 rounded shadow"
+                    onClick={() =>
+                      handleImageChange(product.id, "prev", product.images.length)
+                    }
+                    aria-label="Previous Image"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-1 py-0.5 rounded shadow"
+                    onClick={() =>
+                      handleImageChange(product.id, "next", product.images.length)
+                    }
+                    aria-label="Next Image"
+                  >
+                    ›
+                  </button>
+                </div>
+
+                <h3 className="text-md font-semibold text-gray-800 truncate">{product.name}</h3>
+                <p className="text-xs text-gray-600 mb-1 truncate">{product.description}</p>
+
+                <ul className="text-xs text-gray-700 mb-2 space-y-0.5">
+                  <li><strong>Model:</strong> {product.model}</li>
+                  <li><strong>Quality:</strong> {product.quality}</li>
+                </ul>
+
+                <div className="mb-2">
+                  <span className="text-gray-500 line-through text-xs mr-1">{product.price}</span>
+                  <span className="text-green-700 font-bold text-sm">{product.discountedPrice}</span>
+                </div>
+
+                <button
+                  onClick={() => handleBuyNow(product)}
+                  className="mt-auto bg-green-600 text-white py-1.5 rounded hover:bg-green-700 text-sm transition"
+                >
+                  Buy Now
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        <button
+          onClick={scrollRight}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-r"
+          aria-label="Scroll Right"
+        >
+          ›
+        </button>
       </div>
     </div>
   );

@@ -7,53 +7,72 @@ export default function ScreenCombo() {
   const [customDefaultComboType, setCustomDefaultComboType] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("Samsung");
   const [customBrand, setCustomBrand] = useState("");
+
+
   const [productCombos, setProductCombos] = useState({});
   const [customProductCombos, setCustomProductCombos] = useState({});
 
-  const products = [
-    {
-      id: 1,
-      name: "Touch + Display Combo",
-      model: "High Quality Replacement",
-      quality: "Original Touch + AMOLED Display",
-      price: "₹3500",
-      discountedPrice: "₹3200",
-      images: [
-        `${process.env.PUBLIC_URL}/image/ScreenCombo/TouchDisplay/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/ScreenCombo/TouchDisplay/2.jpg`,
-        `${process.env.PUBLIC_URL}/image/ScreenCombo/TouchDisplay/3.jpg`,
-      ],
-      description:
-        "Premium touch and AMOLED display combo for smooth touch response and vivid colors.",
-    },
-    {
-      id: 2,
-      name: "Touch + LCD Display Combo",
-      model: "IPS LCD Replacement",
-      quality: "Durable Touch + LCD Panel",
-      price: "₹2500",
-      discountedPrice: "₹2300",
-      images: [
-        `${process.env.PUBLIC_URL}/image/ScreenCombo/TouchLCD/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/ScreenCombo/TouchLCD/2.jpg`,
-      ],
-      description: "Affordable touch and LCD display combo for reliable replacements.",
-    },
-    {
-      id: 3,
-      name: "Touch + Display Repair Kit",
-      model: "Complete DIY Kit",
-      quality: "Tools + Touch + Display Combo",
-      price: "₹1800",
-      discountedPrice: "₹1600",
-      images: [
-        `${process.env.PUBLIC_URL}/image/ScreenCombo/DIYKit/1.jpg`,
-        `${process.env.PUBLIC_URL}/image/ScreenCombo/DIYKit/2.jpg`,
-      ],
-      description:
-        "DIY kit with tools, touch panel and display combo for easy repair at home.",
-    },
-  ];
+const products = [
+   
+  {
+    id: 1,
+    name: "Touch + Display Combo (Original)",
+    model: "High Quality Replacement",
+    quality: "Original Touch + AMOLED Display",
+    price: "₹3500",
+    discountedPrice: "₹3200",
+    images: [
+      `${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Original).jpg`,
+    
+    ],
+    description:
+      "Original AMOLED combo for high-end performance and vibrant visuals. Best for branded phones.",
+  },
+  {
+    id: 2,
+    name: "Touch + Display Combo (Compatible)",
+    model: "IPS LCD Replacement",
+    quality: "Durable Compatible Touch + LCD Panel",
+    price: "₹2500",
+    discountedPrice: "₹2300",
+    images: [
+      `${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Compatible).jpg`,
+     
+    ],
+    description:
+      "Compatible touch and display combo at budget price for smooth and stable performance.",
+  },
+  {
+    id: 3,
+    name: "Touch + Display Combo (Normal Copy)",
+    model: "DIY Repair Kit",
+    quality: "Copy Panel + Tools Kit",
+    price: "₹1800",
+    discountedPrice: "₹1600",
+    images: [
+      `${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Normal-Copy).jpg`,
+      
+    ],
+    description:
+      "Affordable combo with tools included for basic mobile repair at home. Suitable for older models.",
+  },
+  {
+  id: 5,
+  name: "iPhone Touch + Display Combo (Original)",
+  model: "iPhone Series Replacement",
+  quality: "Original Retina Display + Touch Panel",
+  price: "₹6200",
+  discountedPrice: "₹5800",
+  images: [
+    `${process.env.PUBLIC_URL}/image/ScreenCombo/iPhone-Combo-(Original).jpg`,
+  ],
+  description:
+    "Premium quality original iPhone touch and display combo. Retina display with multi-touch support, ideal for iPhone 6 to iPhone 12 models. Contact us for your specific model.",
+}
+
+ 
+];
+
 
   const handleImageChange = (productId, direction, totalImages) => {
     setCurrentImages((prev) => {
@@ -92,7 +111,7 @@ export default function ScreenCombo() {
     <div className="p-4">
       <h2 className="text-3xl font-bold mb-4">📱 Screen Combo Replacement</h2>
       <p className="text-green-700 font-medium text-sm mb-4">
-        Quality touch + display combos for mobile phones.
+       High-Quality Touch + Display Combos Available for All Mobile Brands.
       </p>
 
       <div className="flex gap-4 mb-6 flex-wrap">
@@ -187,7 +206,7 @@ export default function ScreenCombo() {
       </div>
 
       {/* Product Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {products.map((product) => {
           const currentIndex = currentImages[product.id] || 0;
           const combo = productCombos[product.id] || "";

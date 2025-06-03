@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Touch() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -18,7 +18,7 @@ export default function Touch() {
       discountedPrice: "₹799",
       images: [
         `${process.env.PUBLIC_URL}/image/Touch/Original-Touch-Screen.jpg`,
-    
+        // Add more images here for slider effect
       ],
       description: "Genuine original touch screen with perfect responsiveness.",
     },
@@ -31,7 +31,6 @@ export default function Touch() {
       discountedPrice: "₹599",
       images: [
         `${process.env.PUBLIC_URL}/image/Touch/Premium-Touch-Screen.jpg`,
-    
       ],
       description: "Tempered glass touch screen with high scratch resistance.",
     },
@@ -44,7 +43,6 @@ export default function Touch() {
       discountedPrice: "₹399",
       images: [
         `${process.env.PUBLIC_URL}/image/Touch/Universal-Touch-Panel.jpg`,
-   
       ],
       description: "Compatible touch panel for many brands and models.",
     },
@@ -57,11 +55,32 @@ export default function Touch() {
       discountedPrice: "₹350",
       images: [
         `${process.env.PUBLIC_URL}/image/Touch/DIY-Touch-Digitizer.jpg`,
-  
       ],
       description: "Touch digitizer replacement for DIY repair.",
     },
   ];
+
+  // Automatic slider effect for each product
+  useEffect(() => {
+    const intervals = products.map((product) => {
+      if (product.images.length <= 1) return null; // No slider needed
+
+      return setInterval(() => {
+        setCurrentImages((prev) => {
+          const currentIndex = prev[product.id] || 0;
+          const nextIndex = (currentIndex + 1) % product.images.length;
+          return { ...prev, [product.id]: nextIndex };
+        });
+      }, 3000); // Change image every 3 seconds
+    });
+
+    // Cleanup intervals on unmount
+    return () => {
+      intervals.forEach((id) => {
+        if (id) clearInterval(id);
+      });
+    };
+  }, [products]);
 
   const handleImageChange = (productId, direction, totalImages) => {
     setCurrentImages((prev) => {
@@ -92,22 +111,20 @@ export default function Touch() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-3xl font-bold mb-4">📱 Touch Screens & Digitizers</h2>
-      <p className="text-green-700 font-medium text-sm mb-4">
+    <div className="p-6 max-w-3xl mx-auto">
+      <h2 className="text-4xl font-bold mb-4 text-center">📱 Touch Screens & Digitizers</h2>
+      <p className="text-green-700 font-medium text-center mb-8">
         All types of touch screens available — Original, Premium, Universal & more!
       </p>
 
-      <div className="flex gap-4 mb-6 flex-wrap">
-        {/* Touch Type Selector */}
-        <div className="flex-1 min-w-[140px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-sm">
-            Select Touch Type:
-          </label>
+      {/* Selectors: Touch Type and Brand */}
+      <div className="flex flex-col md:flex-row gap-6 mb-8">
+        <div className="flex-1 min-w-[150px]">
+          <label className="block mb-2 font-semibold text-gray-700">Select Touch Type:</label>
           <select
             value={touchType}
             onChange={(e) => setTouchType(e.target.value)}
-            className="border px-2 py-1 rounded w-full text-sm"
+            className="border px-3 py-2 rounded w-full text-base"
           >
             <option value="">-- Choose Touch Type --</option>
             <option value="Original">Original</option>
@@ -116,27 +133,23 @@ export default function Touch() {
             <option value="DIY Digitizer">DIY Digitizer</option>
             <option value="Other">Other</option>
           </select>
-
           {touchType === "Other" && (
             <input
               type="text"
               placeholder="Enter custom touch type"
-              className="mt-2 border px-2 py-1 rounded w-full text-sm"
+              className="mt-2 border px-3 py-2 rounded w-full text-base"
               value={customTouchType}
               onChange={(e) => setCustomTouchType(e.target.value)}
             />
           )}
         </div>
 
-        {/* Brand Selector */}
-        <div className="flex-1 min-w-[140px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-sm">
-            Select Mobile Brand:
-          </label>
+        <div className="flex-1 min-w-[150px]">
+          <label className="block mb-2 font-semibold text-gray-700">Select Mobile Brand:</label>
           <select
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
-            className="border px-2 py-1 rounded w-full text-sm"
+            className="border px-3 py-2 rounded w-full text-base"
           >
             <option value="Vivo">Vivo</option>
             <option value="MI">MI</option>
@@ -152,12 +165,11 @@ export default function Touch() {
             <option value="Motorola">Motorola</option>
             <option value="Other">Other</option>
           </select>
-
           {selectedBrand === "Other" && (
             <input
               type="text"
               placeholder="Enter custom brand name"
-              className="mt-2 border px-2 py-1 rounded w-full text-sm"
+              className="mt-2 border px-3 py-2 rounded w-full text-base"
               value={customBrand}
               onChange={(e) => setCustomBrand(e.target.value)}
             />
@@ -166,10 +178,10 @@ export default function Touch() {
       </div>
 
       {/* Payment Method */}
-      <div className="mb-6">
-        <label className="block mb-2 font-semibold text-gray-700">Payment Method:</label>
-        <div className="flex gap-4">
-          <label className="inline-flex items-center">
+      <div className="mb-10">
+        <label className="block mb-3 font-semibold text-gray-700">Payment Method:</label>
+        <div className="flex gap-8 flex-wrap">
+          <label className="inline-flex items-center cursor-pointer">
             <input
               type="radio"
               value="cod"
@@ -179,7 +191,7 @@ export default function Touch() {
             />
             Cash on Delivery
           </label>
-          <label className="inline-flex items-center">
+          <label className="inline-flex items-center cursor-pointer">
             <input
               type="radio"
               value="online"
@@ -192,58 +204,66 @@ export default function Touch() {
         </div>
       </div>
 
-      {/* Product Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {/* Products List */}
+      <div className="space-y-10">
         {products.map((product) => {
           const currentIndex = currentImages[product.id] || 0;
 
           return (
             <div
               key={product.id}
-              className="border rounded-xl shadow-lg p-4 bg-white flex flex-col"
+              className="border rounded-xl shadow-md p-6 bg-white flex flex-col md:flex-row items-center gap-6"
             >
-              <div className="relative w-full pb-[100%] mb-4 overflow-hidden rounded bg-gray-100">
+              {/* Image slider */}
+              <div className="relative w-full max-w-[300px] aspect-square rounded overflow-hidden bg-gray-100 flex-shrink-0">
                 <img
                   src={product.images[currentIndex]}
                   alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="w-full h-full object-cover"
                 />
-                <button
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                  onClick={() =>
-                    handleImageChange(product.id, "prev", product.images.length)
-                  }
-                >
-                  ‹
-                </button>
-                <button
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                  onClick={() =>
-                    handleImageChange(product.id, "next", product.images.length)
-                  }
-                >
-                  ›
-                </button>
+                {product.images.length > 1 && (
+                  <>
+                    <button
+                      onClick={() =>
+                        handleImageChange(product.id, "prev", product.images.length)
+                      }
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full px-2 py-1 shadow hover:bg-opacity-100 transition"
+                      aria-label="Previous Image"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleImageChange(product.id, "next", product.images.length)
+                      }
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full px-2 py-1 shadow hover:bg-opacity-100 transition"
+                      aria-label="Next Image"
+                    >
+                      ›
+                    </button>
+                  </>
+                )}
               </div>
 
-              <h2 className="text-lg font-bold text-gray-800">{product.name}</h2>
-              <p className="text-sm text-gray-600 mb-2">{product.description}</p>
-              <ul className="text-sm text-gray-700 mb-3 space-y-1">
-                <li><strong>Model:</strong> {product.model}</li>
-                <li><strong>Quality:</strong> {product.quality}</li>
-              </ul>
-
-              <div className="mb-3">
-                <span className="text-gray-500 line-through text-sm mr-2">{product.price}</span>
-                <span className="text-green-700 font-bold text-lg">{product.discountedPrice}</span>
+              {/* Details */}
+              <div className="flex flex-col flex-1">
+                <h3 className="text-2xl font-semibold text-gray-800">{product.name}</h3>
+                <p className="text-gray-600 mt-1 mb-3">{product.description}</p>
+                <ul className="text-gray-700 mb-4 space-y-1 text-base">
+                  <li><strong>Model:</strong> {product.model}</li>
+                  <li><strong>Quality:</strong> {product.quality}</li>
+                </ul>
+                <div className="mb-5">
+                  <span className="line-through text-gray-500 mr-3">{product.price}</span>
+                  <span className="text-green-700 font-bold text-xl">{product.discountedPrice}</span>
+                </div>
+                <button
+                  onClick={() => handleBuyNow(product)}
+                  className="self-start bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition"
+                >
+                  Buy Now
+                </button>
               </div>
-
-              <button
-                onClick={() => handleBuyNow(product)}
-                className="mt-auto bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
-              >
-                Buy Now
-              </button>
             </div>
           );
         })}
@@ -251,3 +271,4 @@ export default function Touch() {
     </div>
   );
 }
+  
