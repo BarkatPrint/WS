@@ -8,71 +8,52 @@ export default function ScreenCombo() {
   const [selectedBrand, setSelectedBrand] = useState("Samsung");
   const [customBrand, setCustomBrand] = useState("");
 
-
-  const [productCombos, setProductCombos] = useState({});
-  const [customProductCombos, setCustomProductCombos] = useState({});
-
-const products = [
-   
-  {
-    id: 1,
-    name: "Touch + Display Combo (Original)",
-    model: "High Quality Replacement",
-    quality: "Original Touch + AMOLED Display",
-    price: "₹3500",
-    discountedPrice: "₹3200",
-    images: [
-      `${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Original).jpg`,
-    
-    ],
-    description:
-      "Original AMOLED combo for high-end performance and vibrant visuals. Best for branded phones.",
-  },
-  {
-    id: 2,
-    name: "Touch + Display Combo (Compatible)",
-    model: "IPS LCD Replacement",
-    quality: "Durable Compatible Touch + LCD Panel",
-    price: "₹2500",
-    discountedPrice: "₹2300",
-    images: [
-      `${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Compatible).jpg`,
-     
-    ],
-    description:
-      "Compatible touch and display combo at budget price for smooth and stable performance.",
-  },
-  {
-    id: 3,
-    name: "Touch + Display Combo (Normal Copy)",
-    model: "DIY Repair Kit",
-    quality: "Copy Panel + Tools Kit",
-    price: "₹1800",
-    discountedPrice: "₹1600",
-    images: [
-      `${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Normal-Copy).jpg`,
-      
-    ],
-    description:
-      "Affordable combo with tools included for basic mobile repair at home. Suitable for older models.",
-  },
-  {
-  id: 5,
-  name: "iPhone Touch + Display Combo (Original)",
-  model: "iPhone Series Replacement",
-  quality: "Original Retina Display + Touch Panel",
-  price: "₹6200",
-  discountedPrice: "₹5800",
-  images: [
-    `${process.env.PUBLIC_URL}/image/ScreenCombo/iPhone-Combo-(Original).jpg`,
-  ],
-  description:
-    "Premium quality original iPhone touch and display combo. Retina display with multi-touch support, ideal for iPhone 6 to iPhone 12 models. Contact us for your specific model.",
-}
-
- 
-];
-
+  const products = [
+    {
+      id: 1,
+      name: "Touch + Display Combo (Original)",
+      model: "Model-wise rate applicable",
+      quality: "Original AMOLED",
+      price: "₹3200",
+      discountedPrice: "₹2250",
+      images: [`${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Original).jpg`],
+      description:
+        "Price varies as per phone model. Send your model name on WhatsApp for exact pricing. All parts are provided at wholesale rates.",
+    },
+    {
+      id: 2,
+      name: "Touch + Display Combo (Compatible)",
+      model: "IPS LCD Replacement",
+      quality: "Durable Compatible Touch + LCD Panel",
+      price: "₹2200",
+      discountedPrice: "₹630",
+      images: [`${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Compatible).jpg`],
+      description:
+        "Compatible touch and display combo at budget price for smooth and stable performance.",
+    },
+    {
+      id: 3,
+      name: "Touch + Display Combo (Normal Copy)",
+      model: "DIY Repair Kit",
+      quality: "Copy Panel + Tools Kit",
+      price: "₹1200",
+      discountedPrice: "₹630",
+      images: [`${process.env.PUBLIC_URL}/image/ScreenCombo/Combo-(Normal-Copy).jpg`],
+      description:
+        "Affordable combo with tools included for basic mobile repair at home. Suitable for older models.",
+    },
+    {
+      id: 5,
+      name: "iPhone Touch + Display Combo (Original)",
+      model: "iPhone Series Replacement",
+      quality: "Original Retina Display + Touch Panel",
+      price: "₹8000",
+      discountedPrice: "₹1000",
+      images: [`${process.env.PUBLIC_URL}/image/ScreenCombo/iPhone-Combo-(Original).jpg`],
+      description:
+        "Premium quality original iPhone touch and display combo. Retina display with multi-touch support, ideal for iPhone 6 to iPhone 12 models. Contact us for your specific model.",
+    }
+  ];
 
   const handleImageChange = (productId, direction, totalImages) => {
     setCurrentImages((prev) => {
@@ -85,11 +66,18 @@ const products = [
     });
   };
 
+  const calculateDiscount = (original, discounted) => {
+    const clean = (s) => parseInt(s.replace(/[₹,]/g, ""), 10);
+    const orig = clean(original);
+    const disc = clean(discounted);
+    return `${Math.round(((orig - disc) / orig) * 100)}% off`;
+  };
+
   const handleBuyNow = (product) => {
-    const productComboType =
-      productCombos[product.id] === "Other"
-        ? customProductCombos[product.id] || "Not specified"
-        : productCombos[product.id] || (defaultComboType === "Other" ? customDefaultComboType || "Not specified" : defaultComboType);
+    const comboType =
+      defaultComboType === "Other"
+        ? customDefaultComboType || "Not specified"
+        : defaultComboType;
 
     const finalBrand =
       selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
@@ -99,7 +87,7 @@ const products = [
 📦 Model: ${product.model}
 ✅ Quality: ${product.quality}
 💸 Price: ${product.discountedPrice}
-🔧 Combo Type: ${productComboType}
+🔧 Combo Type: ${comboType}
 🏷️ Mobile Brand: ${finalBrand}
 💳 Payment Method: ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}`;
 
@@ -111,14 +99,14 @@ const products = [
     <div className="p-4">
       <h2 className="text-3xl font-bold mb-4">📱 Screen Combo Replacement</h2>
       <p className="text-green-700 font-medium text-sm mb-4">
-       High-Quality Touch + Display Combos Available for All Mobile Brands.
+        High-Quality Touch + Display Combos Available for All Mobile Brands.
       </p>
 
       <div className="flex gap-4 mb-6 flex-wrap">
-        {/* Default Combo Type Selector */}
+        {/* Combo Type */}
         <div className="flex-1 min-w-[140px]">
           <label className="block mb-1 font-semibold text-gray-700 text-sm">
-            Default Combo Type (applies to all if not changed individually):
+            Default Combo Type:
           </label>
           <select
             value={defaultComboType}
@@ -142,7 +130,7 @@ const products = [
           )}
         </div>
 
-        {/* Brand Selector */}
+        {/* Mobile Brand */}
         <div className="flex-1 min-w-[140px]">
           <label className="block mb-1 font-semibold text-gray-700 text-sm">
             Select Mobile Brand:
@@ -209,7 +197,7 @@ const products = [
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {products.map((product) => {
           const currentIndex = currentImages[product.id] || 0;
-          const combo = productCombos[product.id] || "";
+          const discountText = calculateDiscount(product.price, product.discountedPrice);
 
           return (
             <div
@@ -247,46 +235,10 @@ const products = [
                 <li><strong>Quality:</strong> {product.quality}</li>
               </ul>
 
-              {/* Individual Combo Type Selector */}
-              <div className="mb-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Select Combo Type (for this product):
-                </label>
-                <select
-                  value={productCombos[product.id] || ""}
-                  onChange={(e) =>
-                    setProductCombos((prev) => ({
-                      ...prev,
-                      [product.id]: e.target.value,
-                    }))
-                  }
-                  className="border px-2 py-1 rounded w-full text-sm"
-                >
-                  <option value="">Use Default</option>
-                  <option value="Touch + Display">Touch + Display</option>
-                  <option value="Touch + LCD Display">Touch + LCD Display</option>
-                  <option value="Touch + Display Repair Kit">Touch + Display Repair Kit</option>
-                  <option value="Other">Other</option>
-                </select>
-                {productCombos[product.id] === "Other" && (
-                  <input
-                    type="text"
-                    placeholder="Enter custom combo"
-                    className="mt-2 border px-2 py-1 rounded w-full text-sm"
-                    value={customProductCombos[product.id] || ""}
-                    onChange={(e) =>
-                      setCustomProductCombos((prev) => ({
-                        ...prev,
-                        [product.id]: e.target.value,
-                      }))
-                    }
-                  />
-                )}
-              </div>
-
               <div className="mb-3">
                 <span className="text-gray-500 line-through text-sm mr-2">{product.price}</span>
                 <span className="text-green-700 font-bold text-lg">{product.discountedPrice}</span>
+                <span className="text-sm text-red-600 ml-2">({discountText})</span>
               </div>
 
               <button

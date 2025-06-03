@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export default function Touch() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
-  const [currentImages, setCurrentImages] = useState({});
   const [touchType, setTouchType] = useState("Original");
   const [customTouchType, setCustomTouchType] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("Vivo");
   const [customBrand, setCustomBrand] = useState("");
+  const [isAutoSliding, setIsAutoSliding] = useState(true);
+
+  const sliderRef = useRef(null);
+  const autoSlideInterval = useRef(null);
 
   const products = [
     {
@@ -14,12 +17,9 @@ export default function Touch() {
       name: "Original Touch Screen",
       model: "High Quality Glass",
       quality: "Responsive & Durable",
-      price: "₹900",
-      discountedPrice: "₹799",
-      images: [
-        `${process.env.PUBLIC_URL}/image/Touch/Original-Touch-Screen.jpg`,
-        // Add more images here for slider effect
-      ],
+      price: "₹500",
+      discountedPrice: "₹100",
+      images: [`${process.env.PUBLIC_URL}/image/Touch/Original-Touch-Screen.jpg`],
       description: "Genuine original touch screen with perfect responsiveness.",
     },
     {
@@ -27,11 +27,9 @@ export default function Touch() {
       name: "Premium Touch Screen",
       model: "Tempered Glass",
       quality: "Scratch Resistant",
-      price: "₹700",
-      discountedPrice: "₹599",
-      images: [
-        `${process.env.PUBLIC_URL}/image/Touch/Premium-Touch-Screen.jpg`,
-      ],
+      price: "₹599",
+      discountedPrice: "₹140",
+      images: [`${process.env.PUBLIC_URL}/image/Touch/Premium-Touch-Screen.jpg`],
       description: "Tempered glass touch screen with high scratch resistance.",
     },
     {
@@ -39,63 +37,27 @@ export default function Touch() {
       name: "Universal Touch Panel",
       model: "Compatible with multiple models",
       quality: "Affordable & Reliable",
-      price: "₹500",
-      discountedPrice: "₹399",
-      images: [
-        `${process.env.PUBLIC_URL}/image/Touch/Universal-Touch-Panel.jpg`,
-      ],
+      price: "₹1500",
+      discountedPrice: "₹800",
+      images: [`${process.env.PUBLIC_URL}/image/Touch/Universal-Touch-Panel.jpg`],
       description: "Compatible touch panel for many brands and models.",
-    },
-    {
-      id: 4,
-      name: "DIY Touch Digitizer",
-      model: "Replacement part",
-      quality: "Easy to install",
-      price: "₹450",
-      discountedPrice: "₹350",
-      images: [
-        `${process.env.PUBLIC_URL}/image/Touch/DIY-Touch-Digitizer.jpg`,
-      ],
-      description: "Touch digitizer replacement for DIY repair.",
     },
   ];
 
-  // Automatic slider effect for each product
-  useEffect(() => {
-    const intervals = products.map((product) => {
-      if (product.images.length <= 1) return null; // No slider needed
-
-      return setInterval(() => {
-        setCurrentImages((prev) => {
-          const currentIndex = prev[product.id] || 0;
-          const nextIndex = (currentIndex + 1) % product.images.length;
-          return { ...prev, [product.id]: nextIndex };
-        });
-      }, 3000); // Change image every 3 seconds
-    });
-
-    // Cleanup intervals on unmount
-    return () => {
-      intervals.forEach((id) => {
-        if (id) clearInterval(id);
-      });
-    };
-  }, [products]);
-
-  const handleImageChange = (productId, direction, totalImages) => {
-    setCurrentImages((prev) => {
-      const currentIndex = prev[productId] || 0;
-      const newIndex =
-        direction === "next"
-          ? (currentIndex + 1) % totalImages
-          : (currentIndex - 1 + totalImages) % totalImages;
-      return { ...prev, [productId]: newIndex };
-    });
+  const calculateDiscountPercent = (price, discountedPrice) => {
+    const p = Number(price.replace(/[₹,]/g, ""));
+    const dp = Number(discountedPrice.replace(/[₹,]/g, ""));
+    if (p && dp && p > dp) {
+      return Math.round(((p - dp) / p) * 100);
+    }
+    return 0;
   };
 
   const handleBuyNow = (product) => {
-    const finalTouchType = touchType === "Other" ? customTouchType || "Not specified" : touchType;
-    const finalBrand = selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
+    const finalTouchType =
+      touchType === "Other" ? customTouchType || "Not specified" : touchType;
+    const finalBrand =
+      selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
 
     const message = `*Product Details:*
 📱 Name: ${product.name}
@@ -104,27 +66,70 @@ export default function Touch() {
 💸 Price: ${product.discountedPrice}
 🧩 Touch Type: ${finalTouchType}
 🏷️ Mobile Brand: ${finalBrand}
-💳 Payment Method: ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}`;
+💳 Payment Method: ${
+      paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"
+    }`;
 
     const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
   };
 
+  const slide = (direction) => {
+    if (!sliderRef.current) return;
+    setIsAutoSliding(false);
+
+    const scrollAmount = sliderRef.current.clientWidth / 2;
+    if (direction === "left") {
+      sliderRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    } else {
+      sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    if (!sliderRef.current) return;
+
+    if (isAutoSliding) {
+      autoSlideInterval.current = setInterval(() => {
+        const maxScrollLeft =
+          sliderRef.current.scrollWidth - sliderRef.current.clientWidth;
+        if (sliderRef.current.scrollLeft >= maxScrollLeft) {
+          sliderRef.current.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          sliderRef.current.scrollBy({ left: 300, behavior: "smooth" });
+        }
+      }, 3000);
+    }
+
+    return () => {
+      if (autoSlideInterval.current) clearInterval(autoSlideInterval.current);
+    };
+  }, [isAutoSliding]);
+
+  useEffect(() => {
+    if (!isAutoSliding) {
+      const timeout = setTimeout(() => setIsAutoSliding(true), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isAutoSliding]);
+
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h2 className="text-4xl font-bold mb-4 text-center">📱 Touch Screens & Digitizers</h2>
+    <div className="p-6 max-w-6xl mx-auto relative">
+      <h2 className="text-4xl font-bold mb-4 text-center">
+        📱 Touch Screens & Digitizers
+      </h2>
       <p className="text-green-700 font-medium text-center mb-8">
         All types of touch screens available — Original, Premium, Universal & more!
       </p>
 
-      {/* Selectors: Touch Type and Brand */}
+      {/* Selectors */}
       <div className="flex flex-col md:flex-row gap-6 mb-8">
-        <div className="flex-1 min-w-[150px]">
-          <label className="block mb-2 font-semibold text-gray-700">Select Touch Type:</label>
+        <div className="flex-1">
+          <label className="block mb-2 font-semibold">Select Touch Type:</label>
           <select
             value={touchType}
             onChange={(e) => setTouchType(e.target.value)}
-            className="border px-3 py-2 rounded w-full text-base"
+            className="border px-3 py-2 rounded w-full"
           >
             <option value="">-- Choose Touch Type --</option>
             <option value="Original">Original</option>
@@ -137,19 +142,19 @@ export default function Touch() {
             <input
               type="text"
               placeholder="Enter custom touch type"
-              className="mt-2 border px-3 py-2 rounded w-full text-base"
+              className="mt-2 border px-3 py-2 rounded w-full"
               value={customTouchType}
               onChange={(e) => setCustomTouchType(e.target.value)}
             />
           )}
         </div>
 
-        <div className="flex-1 min-w-[150px]">
-          <label className="block mb-2 font-semibold text-gray-700">Select Mobile Brand:</label>
+        <div className="flex-1">
+          <label className="block mb-2 font-semibold">Select Mobile Brand:</label>
           <select
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
-            className="border px-3 py-2 rounded w-full text-base"
+            className="border px-3 py-2 rounded w-full"
           >
             <option value="Vivo">Vivo</option>
             <option value="MI">MI</option>
@@ -169,7 +174,7 @@ export default function Touch() {
             <input
               type="text"
               placeholder="Enter custom brand name"
-              className="mt-2 border px-3 py-2 rounded w-full text-base"
+              className="mt-2 border px-3 py-2 rounded w-full"
               value={customBrand}
               onChange={(e) => setCustomBrand(e.target.value)}
             />
@@ -179,9 +184,9 @@ export default function Touch() {
 
       {/* Payment Method */}
       <div className="mb-10">
-        <label className="block mb-3 font-semibold text-gray-700">Payment Method:</label>
+        <label className="block mb-3 font-semibold">Payment Method:</label>
         <div className="flex gap-8 flex-wrap">
-          <label className="inline-flex items-center cursor-pointer">
+          <label className="inline-flex items-center">
             <input
               type="radio"
               value="cod"
@@ -191,7 +196,7 @@ export default function Touch() {
             />
             Cash on Delivery
           </label>
-          <label className="inline-flex items-center cursor-pointer">
+          <label className="inline-flex items-center">
             <input
               type="radio"
               value="online"
@@ -204,71 +209,80 @@ export default function Touch() {
         </div>
       </div>
 
-      {/* Products List */}
-      <div className="space-y-10">
-        {products.map((product) => {
-          const currentIndex = currentImages[product.id] || 0;
+      {/* Slider Container with Centered Arrows */}
+      <div className="relative">
+        <button
+          onClick={() => slide("left")}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-gray-200 hover:bg-gray-300 rounded-full shadow"
+          aria-label="Slide Left"
+        >
+          ‹
+        </button>
+        <button
+          onClick={() => slide("right")}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-gray-200 hover:bg-gray-300 rounded-full shadow"
+          aria-label="Slide Right"
+        >
+          ›
+        </button>
 
-          return (
-            <div
-              key={product.id}
-              className="border rounded-xl shadow-md p-6 bg-white flex flex-col md:flex-row items-center gap-6"
-            >
-              {/* Image slider */}
-              <div className="relative w-full max-w-[300px] aspect-square rounded overflow-hidden bg-gray-100 flex-shrink-0">
-                <img
-                  src={product.images[currentIndex]}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-                {product.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={() =>
-                        handleImageChange(product.id, "prev", product.images.length)
-                      }
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full px-2 py-1 shadow hover:bg-opacity-100 transition"
-                      aria-label="Previous Image"
-                    >
-                      ‹
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleImageChange(product.id, "next", product.images.length)
-                      }
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full px-2 py-1 shadow hover:bg-opacity-100 transition"
-                      aria-label="Next Image"
-                    >
-                      ›
-                    </button>
-                  </>
-                )}
-              </div>
+        <div
+          ref={sliderRef}
+          className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth px-8"
+          onMouseEnter={() => setIsAutoSliding(false)}
+          onMouseLeave={() => setIsAutoSliding(true)}
+        >
+          {products.map((product) => {
+            const discountPercent = calculateDiscountPercent(
+              product.price,
+              product.discountedPrice
+            );
 
-              {/* Details */}
-              <div className="flex flex-col flex-1">
-                <h3 className="text-2xl font-semibold text-gray-800">{product.name}</h3>
-                <p className="text-gray-600 mt-1 mb-3">{product.description}</p>
-                <ul className="text-gray-700 mb-4 space-y-1 text-base">
+            return (
+              <div
+                key={product.id}
+                className="min-w-[280px] max-w-[280px] border rounded-xl shadow-md p-4 bg-white flex-shrink-0 flex flex-col"
+              >
+                <div className="aspect-square rounded overflow-hidden bg-gray-100 mb-4">
+                  <img
+                    src={product.images[0]}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                    draggable={false}
+                  />
+                </div>
+
+                <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
+                <p className="text-gray-600 mt-1 mb-2 text-sm">{product.description}</p>
+
+                <ul className="text-gray-700 mb-3 space-y-1 text-sm">
                   <li><strong>Model:</strong> {product.model}</li>
                   <li><strong>Quality:</strong> {product.quality}</li>
                 </ul>
-                <div className="mb-5">
-                  <span className="line-through text-gray-500 mr-3">{product.price}</span>
-                  <span className="text-green-700 font-bold text-xl">{product.discountedPrice}</span>
+
+                <div className="mb-4 flex items-center gap-2">
+                  <span className="line-through text-gray-500">{product.price}</span>
+                  <span className="text-green-700 font-bold text-lg">
+                    {product.discountedPrice}
+                  </span>
+                  {discountPercent > 0 && (
+                    <span className="text-red-600 font-semibold ml-1">
+                      ({discountPercent}% off)
+                    </span>
+                  )}
                 </div>
+
                 <button
                   onClick={() => handleBuyNow(product)}
-                  className="self-start bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition"
+                  className="mt-auto px-4 py-2 bg-green-700 text-white font-semibold rounded hover:bg-green-800 transition"
                 >
                   Buy Now
                 </button>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
-  

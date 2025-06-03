@@ -5,22 +5,20 @@ export default function TemperedGlass() {
   const [currentImages, setCurrentImages] = useState({});
   const [selectedBrand, setSelectedBrand] = useState("Vivo");
   const [customBrand, setCustomBrand] = useState("");
-  const [isPaused, setIsPaused] = useState(false); // Auto-scroll pause control
+  const [isPaused, setIsPaused] = useState(false);
 
-  const scrollRef = useRef(null); // Scroll container reference
-  const scrollIntervalRef = useRef(null); // Interval reference
+  const scrollRef = useRef(null);
+  const scrollIntervalRef = useRef(null);
 
- const products = [
+  const products = [
     {
       id: 1,
       name: "Full Glue Tempered Glass",
       model: "9H Hardness",
       quality: "Edge to Edge, Bubble-Free",
-      price: "₹100",
-      discountedPrice: "₹60",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/Full-Glue Tempered-Glass.jpg`,
-      ],
+      price: "₹250",
+      discountedPrice: "₹89",
+      images: [`${process.env.PUBLIC_URL}/image/TemperedGlass/Full-Glue Tempered-Glass.jpg`],
       description: "Scratch resistant tempered glass with full glue.",
     },
     {
@@ -28,11 +26,9 @@ export default function TemperedGlass() {
       name: "Privacy Tempered Glass",
       model: "Anti-Spy",
       quality: "Screen Visible Only to You",
-      price: "₹150",
+      price: "₹300",
       discountedPrice: "₹99",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/Privacy-Tempered-Glass.jpg`,
-      ],
+      images: [`${process.env.PUBLIC_URL}/image/TemperedGlass/Privacy-Tempered-Glass.jpg`],
       description: "Protects screen and your privacy from side views.",
     },
     {
@@ -40,11 +36,9 @@ export default function TemperedGlass() {
       name: "Edge Black Tempered Glass",
       model: "3D Curved",
       quality: "Full Coverage, Strong Edge",
-      price: "₹120",
-      discountedPrice: "₹80",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/Edge-Black-Tempered-Glass.jpg`,
-      ],
+      price: "₹50",
+      discountedPrice: "₹30",
+      images: [`${process.env.PUBLIC_URL}/image/TemperedGlass/Edge-Black-Tempered-Glass.jpg`],
       description: "Curved edge black glass for stylish protection.",
     },
     {
@@ -52,11 +46,9 @@ export default function TemperedGlass() {
       name: "Matte Tempered Glass",
       model: "Anti-Glare",
       quality: "Smooth Touch, No Fingerprints",
-      price: "₹120",
-      discountedPrice: "₹85",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/Matte-Tempered-Glass.jpg`,
-      ],
+      price: "₹300",
+      discountedPrice: "₹99",
+      images: [`${process.env.PUBLIC_URL}/image/TemperedGlass/Matte-Tempered-Glass.jpg`],
       description: "Matte finish to reduce glare and fingerprints.",
     },
     {
@@ -64,11 +56,9 @@ export default function TemperedGlass() {
       name: "Camera Lens Tempered Glass",
       model: "Scratch Proof",
       quality: "Crystal Clear, Strong Protection",
-      price: "₹70",
-      discountedPrice: "₹40",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/Camera-Lens-Tempered-Glass.jpg`,
-      ],
+      price: "₹250",
+      discountedPrice: "₹150",
+      images: [`${process.env.PUBLIC_URL}/image/TemperedGlass/Camera-Lens-Tempered-Glass.jpg`],
       description: "Protects your camera lens from scratches and dust.",
     },
     {
@@ -76,11 +66,9 @@ export default function TemperedGlass() {
       name: "Full Body Tempered Glass",
       model: "360° Coverage",
       quality: "Front + Back Protection",
-      price: "₹180",
-      discountedPrice: "₹120",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/Full-Body-Tempered-Glass.jpg`,
-      ],
+      price: "₹50",
+      discountedPrice: "₹30",
+      images: [`${process.env.PUBLIC_URL}/image/TemperedGlass/Full-Body-Tempered-Glass.jpg`],
       description: "Covers both front and back for all-around safety.",
     },
     {
@@ -88,14 +76,18 @@ export default function TemperedGlass() {
       name: "UV Tempered Glass",
       model: "UV Glue Based",
       quality: "Ultra Strong Bonding, Bubble-Free",
-      price: "₹200",
-      discountedPrice: "₹140",
-      images: [
-        `${process.env.PUBLIC_URL}/image/TemperedGlass/UV-Tempered-Glass.jpg`,
-      ],
+      price: "₹300",
+      discountedPrice: "₹89",
+      images: [`${process.env.PUBLIC_URL}/image/TemperedGlass/UV-Tempered-Glass.jpg`],
       description: "Uses UV light to cure the glue for a perfect fit.",
     },
   ];
+
+  const calculateDiscount = (original, discounted) => {
+    const originalPrice = parseFloat(original.replace(/[₹,]/g, ""));
+    const discountedPrice = parseFloat(discounted.replace(/[₹,]/g, ""));
+    return Math.round(((originalPrice - discountedPrice) / originalPrice) * 100);
+  };
 
   const handleImageChange = (productId, direction, totalImages) => {
     setCurrentImages((prev) => {
@@ -112,7 +104,6 @@ export default function TemperedGlass() {
   const handleBuyNow = (product) => {
     pauseAutoScroll();
     const finalBrand = selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
-
     const message = `*Product Details:*
 📱 Name: ${product.name}
 📦 Model: ${product.model}
@@ -120,12 +111,10 @@ export default function TemperedGlass() {
 💸 Price: ${product.discountedPrice}
 🏷️ Mobile Brand: ${finalBrand}
 💳 Payment Method: ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}`;
-
     const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
   };
 
-  // Pause function to clear interval and set pause state
   const pauseAutoScroll = () => {
     if (!isPaused) {
       setIsPaused(true);
@@ -133,7 +122,6 @@ export default function TemperedGlass() {
     }
   };
 
-  // Auto-scroll effect
   useEffect(() => {
     if (!isPaused) {
       scrollIntervalRef.current = setInterval(() => {
@@ -142,35 +130,23 @@ export default function TemperedGlass() {
         }
       }, 3000);
     }
-    return () => {
-      clearInterval(scrollIntervalRef.current);
-    };
+    return () => clearInterval(scrollIntervalRef.current);
   }, [isPaused]);
 
-  // Global click listener to pause auto-scroll on any click
   useEffect(() => {
-    const handleGlobalClick = (e) => {
-      pauseAutoScroll();
-    };
+    const handleGlobalClick = () => pauseAutoScroll();
     document.addEventListener("click", handleGlobalClick);
-
-    return () => {
-      document.removeEventListener("click", handleGlobalClick);
-    };
+    return () => document.removeEventListener("click", handleGlobalClick);
   }, [isPaused]);
 
   const scrollLeft = () => {
     pauseAutoScroll();
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -250, behavior: "smooth" });
-    }
+    scrollRef.current?.scrollBy({ left: -250, behavior: "smooth" });
   };
 
   const scrollRight = () => {
     pauseAutoScroll();
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 250, behavior: "smooth" });
-    }
+    scrollRef.current?.scrollBy({ left: 250, behavior: "smooth" });
   };
 
   return (
@@ -185,9 +161,14 @@ export default function TemperedGlass() {
           onChange={(e) => setSelectedBrand(e.target.value)}
           className="border px-3 py-2 rounded w-full"
         >
-          {/* options... */}
+          <option value="Vivo">Vivo</option>
+          <option value="Oppo">Oppo</option>
+          <option value="Samsung">Samsung</option>
+          <option value="Realme">Realme</option>
+          <option value="iPhone">iPhone</option>
+          <option value="MI">MI</option>
+          <option value="Other">Other</option>
         </select>
-
         {selectedBrand === "Other" && (
           <input
             type="text"
@@ -203,7 +184,24 @@ export default function TemperedGlass() {
       <div className="mb-6">
         <label className="block mb-2 font-semibold text-gray-700">Payment Method:</label>
         <div className="flex gap-4">
-          {/* Radio buttons */}
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              value="cod"
+              checked={paymentMethod === "cod"}
+              onChange={() => setPaymentMethod("cod")}
+            />
+            Cash on Delivery
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              value="online"
+              checked={paymentMethod === "online"}
+              onChange={() => setPaymentMethod("online")}
+            />
+            Online Payment
+          </label>
         </div>
       </div>
 
@@ -212,7 +210,6 @@ export default function TemperedGlass() {
         <h2 className="text-3xl font-bold mb-4">📱 Mobile Products</h2>
 
         <div className="relative flex items-center">
-          {/* Left Scroll Button */}
           <button
             onClick={scrollLeft}
             className="absolute z-10 left-0 bg-white border shadow p-2 rounded-full hover:bg-gray-200"
@@ -220,14 +217,13 @@ export default function TemperedGlass() {
             ‹
           </button>
 
-          {/* Scrollable product cards */}
           <div
             ref={scrollRef}
             className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4 px-8 snap-x snap-mandatory"
-            // NOTE: ab kisi bhi jagah click hone par pause ho jayega global listener ki wajah se
           >
             {products.map((product) => {
               const currentIndex = currentImages[product.id] || 0;
+              const discount = calculateDiscount(product.price, product.discountedPrice);
               return (
                 <div
                   key={product.id}
@@ -242,7 +238,7 @@ export default function TemperedGlass() {
                     <button
                       className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
                       onClick={(e) => {
-                        e.stopPropagation(); // Event bubbling rokne ke liye
+                        e.stopPropagation();
                         handleImageChange(product.id, "prev", product.images.length);
                       }}
                     >
@@ -266,9 +262,12 @@ export default function TemperedGlass() {
                     <li><strong>Quality:</strong> {product.quality}</li>
                   </ul>
 
-                  <div className="mb-3">
+                  <div className="mb-2">
                     <span className="text-gray-500 line-through text-sm mr-2">{product.price}</span>
                     <span className="text-green-700 font-bold text-lg">{product.discountedPrice}</span>
+                  </div>
+                  <div className="text-red-600 text-sm mb-3 font-semibold">
+                    {discount}% OFF
                   </div>
 
                   <button
@@ -285,7 +284,6 @@ export default function TemperedGlass() {
             })}
           </div>
 
-          {/* Right Scroll Button */}
           <button
             onClick={(e) => {
               e.stopPropagation();

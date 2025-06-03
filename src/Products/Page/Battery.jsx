@@ -5,93 +5,74 @@ import KeypadBatteries from "../Page/KeypadBatteries";
 export default function Batteries() {
   const navigate = useNavigate();
 
-  // States
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [batteryType, setBatteryType] = useState("Li-ion");
   const [selectedBrand, setSelectedBrand] = useState("Vivo");
-  const [otherBrand, setOtherBrand] = useState(""); // ✅ ADD THIS
+  const [otherBrand, setOtherBrand] = useState("");
   const [currentImages, setCurrentImages] = useState({});
   const [paused, setPaused] = useState(false);
 
   const sliderRef = useRef(null);
   const autoSlideRef = useRef();
 
-const batteries = [
-  {
-    id: 1,
-    name: "Vivo V15 Battery",
-    description: "Compatible Battery",
-    images: [
-      `${process.env.PUBLIC_URL}/image/Battery/Vivo-V15-Battery.jpg`,
-      
-    ],
-    model: "BLP685",
-    capacity: "3700 mAh",
-    quality: "High Quality",
-    price: "₹799",
-    discountedPrice: "₹499",
-  },
-  {
-    id: 2,
-    name: "Samsung J7 Battery",
-    description: "Compatible Battery",
-    images: [
-      `${process.env.PUBLIC_URL}/image/Battery/Samsung-J7.jpg`,
-      
-    ],
-    model: "EB-BJ700CBE",
-    capacity: "3000 mAh",
-    quality: "High Quality",
-    price: "₹699",
-    discountedPrice: "₹449",
-  },
-  {
-    id: 3,
-    name: "Redmi Note 7 Battery",
-    description: "Compatible Battery",
-    images: [
-      `${process.env.PUBLIC_URL}/image/Battery/Redmi-Note-7.jpg`,
-      
-    ],
-    model: "BN46",
-    capacity: "4000 mAh",
-    quality: "High Quality",
-    price: "₹849",
-    discountedPrice: "₹549",
-  },
-  {
-    id: 4,
-    name: "Oppo A37 Battery",
-    description: "Compatible Battery",
-    images: [
-      `${process.env.PUBLIC_URL}/image/Battery/Oppo-A37.jpg`,
-     
-    ],
-    model: "BLP615",
-    capacity: "2630 mAh",
-    quality: "High Quality",
-    price: "₹749",
-    discountedPrice: "₹449",
-  },
-  {
-    id: 5,
-    name: "Realme C2 Battery",
-    description: "Compatible Battery",
-    images: [
-      `${process.env.PUBLIC_URL}/image/Battery/Realme-C2.jpg`,
-      
-    ],
-    model: "BLPB051",
-    capacity: "4000 mAh",
-    quality: "High Quality",
-    price: "₹899",
-    discountedPrice: "₹599",
-  },
-];
+  const batteries = [
+    {
+      id: 1,
+      name: "Vivo V15 Battery",
+      description: "Compatible Battery",
+      images: [`${process.env.PUBLIC_URL}/image/Battery/Vivo-V15-Battery.jpg`],
+      model: "BLP685",
+      capacity: "3700 mAh",
+      quality: "High Quality",
+      price: "₹1650",
+      discountedPrice: "₹850",
+    },
+    {
+      id: 2,
+      name: "Samsung J7 Battery",
+      description: "Compatible Battery",
+      images: [`${process.env.PUBLIC_URL}/image/Battery/Samsung-J7.jpg`],
+      model: "EB-BJ700CBE",
+      capacity: "3000 mAh",
+      quality: "High Quality",
+      price: "₹650",
+      discountedPrice: "₹350",
+    },
+    {
+      id: 3,
+      name: "Redmi Note 7 Battery",
+      description: "Compatible Battery",
+      images: [`${process.env.PUBLIC_URL}/image/Battery/Redmi-Note-7.jpg`],
+      model: "BN46",
+      capacity: "4000 mAh",
+      quality: "High Quality",
+      price: "₹850",
+      discountedPrice: "₹450",
+    },
+    {
+      id: 4,
+      name: "Oppo A37 Battery",
+      description: "Compatible Battery",
+      images: [`${process.env.PUBLIC_URL}/image/Battery/Oppo-A37.jpg`],
+      model: "BLP615",
+      capacity: "2630 mAh",
+      quality: "High Quality",
+      price: "₹650",
+      discountedPrice: "₹350",
+    },
+    {
+      id: 5,
+      name: "Realme C2 Battery",
+      description: "Compatible Battery",
+      images: [`${process.env.PUBLIC_URL}/image/Battery/Realme-C2.jpg`],
+      model: "BLPB051",
+      capacity: "4000 mAh",
+      quality: "High Quality",
+      price: "₹650",
+      discountedPrice: "₹350",
+    },
+  ];
 
-
-
-  // Auto-slide effect
   useEffect(() => {
     autoSlideRef.current = setInterval(() => {
       if (!paused) {
@@ -111,7 +92,7 @@ const batteries = [
 
   const handleImageChange = (productId, direction, totalImages) => {
     setPaused(true);
-    setTimeout(() => setPaused(false), 5000); // resume auto-slide after 5 sec
+    setTimeout(() => setPaused(false), 5000);
 
     setCurrentImages((prev) => {
       const currentIndex = prev[productId] || 0;
@@ -133,76 +114,73 @@ const batteries = [
 
   const handleBuyNow = (product) => {
     const message = `📱 *Battery Order* \n\n🔋 *${product.name}*\n💥 ${product.discountedPrice} (was ${product.price})\n⚡ ${product.capacity}, ${product.quality}\n💰 Payment: ${paymentMethod}\n\nPlease confirm the order.`;
-    const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
+    const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(
+      message
+    )}`;
     window.open(whatsappURL, "_blank");
+  };
+
+  const calculateDiscount = (original, discounted) => {
+    const o = parseInt(original.replace("₹", ""));
+    const d = parseInt(discounted.replace("₹", ""));
+    const percent = Math.round(((o - d) / o) * 100);
+    return percent;
   };
 
   return (
     <div className="p-4">
       <h2 className="text-3xl font-bold mb-4">🔋 Battery</h2>
 
-      {/* Dropdowns */}
+      {/* Dropdown Filters */}
       <div className="flex flex-wrap gap-4 mb-4">
-      {/* Battery Type */}
-      <select
-        value={batteryType}
-        onChange={(e) => setBatteryType(e.target.value)}
-        className="border rounded px-3 py-2"
-      >
-        <option value="Li-ion">Li-ion</option>
-        <option value="Li-Poly">Li-Poly</option>
-      </select>
-
-      {/* Brand Selection */}
-      <select
-        value={selectedBrand}
-        onChange={(e) => {
-          setSelectedBrand(e.target.value);
-          if (e.target.value !== "Other") {
-            setOtherBrand(""); // Clear manual input if not 'Other'
-          }
-        }}
-        className="border rounded px-3 py-2"
-      >
-        <option value="Vivo">Vivo</option>
-        <option value="Samsung">Samsung</option>
-        <option value="MI">MI</option>
-        <option value="Oppo">Oppo</option>
-        <option value="Realme">Realme</option>
-        <option value="Lava">Lava</option>
-        <option value="Nokia">Nokia</option>
-        <option value="Other">Other</option>
-      </select>
-
-      {/* Show text input if Other is selected */}
-      {selectedBrand === "Other" && (
-        <input
-          type="text"
-          value={otherBrand}
-          onChange={(e) => setOtherBrand(e.target.value)}
-          placeholder="Enter brand name"
+        <select
+          value={batteryType}
+          onChange={(e) => setBatteryType(e.target.value)}
           className="border rounded px-3 py-2"
-        />
-      )}
+        >
+          <option value="Li-ion">Li-ion</option>
+          <option value="Li-Poly">Li-Poly</option>
+        </select>
 
-      {/* Payment Method */}
-      <select
-        value={paymentMethod}
-        onChange={(e) => setPaymentMethod(e.target.value)}
-        className="border rounded px-3 py-2"
-      >
-        <option value="cod">Cash on Delivery</option>
-        <option value="prepaid">Prepaid</option>
-      </select>
-    </div>
+        <select
+          value={selectedBrand}
+          onChange={(e) => {
+            setSelectedBrand(e.target.value);
+            if (e.target.value !== "Other") setOtherBrand("");
+          }}
+          className="border rounded px-3 py-2"
+        >
+          <option value="Vivo">Vivo</option>
+          <option value="Samsung">Samsung</option>
+          <option value="MI">MI</option>
+          <option value="Oppo">Oppo</option>
+          <option value="Realme">Realme</option>
+          <option value="Lava">Lava</option>
+          <option value="Nokia">Nokia</option>
+          <option value="Other">Other</option>
+        </select>
 
+        {selectedBrand === "Other" && (
+          <input
+            type="text"
+            value={otherBrand}
+            onChange={(e) => setOtherBrand(e.target.value)}
+            placeholder="Enter brand name"
+            className="border rounded px-3 py-2"
+          />
+        )}
 
+        <select
+          value={paymentMethod}
+          onChange={(e) => setPaymentMethod(e.target.value)}
+          className="border rounded px-3 py-2"
+        >
+          <option value="cod">Cash on Delivery</option>
+          <option value="prepaid">Prepaid</option>
+        </select>
+      </div>
 
-
-
-
-
-      {/* Carousel section */}
+      {/* Product Carousel */}
       <div className="relative">
         <button
           onClick={scrollLeft}
@@ -217,6 +195,10 @@ const batteries = [
         >
           {batteries.map((product) => {
             const currentIndex = currentImages[product.id] || 0;
+            const discount = calculateDiscount(
+              product.price,
+              product.discountedPrice
+            );
             return (
               <div
                 key={product.id}
@@ -269,11 +251,14 @@ const batteries = [
                   </li>
                 </ul>
                 <div className="mb-2">
-                  <span className="text-red-600 font-bold mr-2">
+                  <span className="text-green-600 font-bold mr-2">
                     {product.discountedPrice}
                   </span>
                   <span className="line-through text-sm text-gray-500">
                     {product.price}
+                  </span>
+                  <span className="ml-2 text-red-600 font-semibold">
+                    ({discount}% OFF)
                   </span>
                 </div>
                 <button
@@ -295,7 +280,7 @@ const batteries = [
         </button>
       </div>
 
-      {/* See all button */}
+      {/* See All Link */}
       <div className="text-center mt-6">
         <button
           onClick={() => navigate("/products/battery")}
@@ -305,7 +290,7 @@ const batteries = [
         </button>
       </div>
 
-      {/* Keypad batteries section */}
+      {/* Keypad Battery Section */}
       <KeypadBatteries />
     </div>
   );

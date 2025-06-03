@@ -1,4 +1,3 @@
-
 import React, { useRef, useState } from "react";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
@@ -18,8 +17,8 @@ export default function DataCable() {
       name: "USB Data Cable",
       model: "Type-C, Micro USB, iPhone Lightning",
       quality: "Fast Charging Support",
-      price: "₹60",
-      discountedPrice: "₹45",
+      price: "₹80",
+      discountedPrice: "₹40",
       images: [
         `${process.env.PUBLIC_URL}/image/DataCable/1.jpeg`,
         `${process.env.PUBLIC_URL}/image/DataCable/2.jpeg`,
@@ -32,7 +31,7 @@ export default function DataCable() {
       name: "Premium Data Cable",
       model: "VOOC, DASH, Turbo, Super Charge",
       quality: "Premium Quality",
-      price: "₹80",
+      price: "₹120",
       discountedPrice: "₹60",
       images: [
          `${process.env.PUBLIC_URL}/image/DataCable/4.jpg`,
@@ -46,8 +45,8 @@ export default function DataCable() {
       name: "Super Fast Data Cable",
       model: "Type-C, VOOC, QC 3.0",
       quality: "High-Speed Charging & Data Transfer",
-      price: "₹90",
-      discountedPrice: "₹65",
+      price: "₹200",
+      discountedPrice: "₹80",
       images: [
         `${process.env.PUBLIC_URL}/image/DataCable/8.jpg`,
         `${process.env.PUBLIC_URL}/image/DataCable/9.jpg`,
@@ -60,7 +59,7 @@ export default function DataCable() {
       name: "iPhone Cable",
       model: "Original Connector",
       quality: "iPhone Compatible Fast Charging",
-      price: "₹120",
+      price: "₹250",
       discountedPrice: "₹90",
       images: [
         `${process.env.PUBLIC_URL}/image/DataCable/iPhoneCable.jpg`,
@@ -107,6 +106,15 @@ export default function DataCable() {
         [productId]: (currentIndex - 1 + totalImages) % totalImages,
       };
     });
+  };
+
+  // Helper to calculate discount percent
+  const getDiscountPercent = (priceStr, discountedPriceStr) => {
+    const price = Number(priceStr.replace(/[₹,]/g, ""));
+    const discountedPrice = Number(discountedPriceStr.replace(/[₹,]/g, ""));
+    if (!price || !discountedPrice) return 0;
+    const discount = ((price - discountedPrice) / price) * 100;
+    return Math.round(discount);
   };
 
   const handleBuyNow = (product) => {
@@ -247,61 +255,52 @@ export default function DataCable() {
           {products.map((product) => {
             const currentIndex = currentImages[product.id] || 0;
             const currentImage = product.images[currentIndex];
+            const discountPercent = getDiscountPercent(product.price, product.discountedPrice);
 
             return (
               <div
                 key={product.id}
-                className="flex-shrink-0 w-[180px] border rounded-lg shadow-md p-3 bg-white flex flex-col scroll-snap-align-start"
+                className="flex-shrink-0 w-[180px] border rounded-md p-3 bg-white shadow-sm relative scroll-snap-align-start"
               >
-                <div className="relative w-full h-28 mb-3 overflow-hidden rounded bg-gray-100 flex items-center justify-center">
+                <div className="relative">
+                  <img
+                    src={currentImage}
+                    alt={product.name}
+                    className="w-full h-36 object-contain rounded-md"
+                    loading="lazy"
+                  />
                   <button
                     onClick={() => prevImage(product.id)}
-                    className="absolute left-1 z-20 bg-white bg-opacity-70 rounded-full p-1 hover:bg-opacity-90"
+                    className="absolute top-1/2 left-1 bg-white rounded-full p-1 shadow-md -translate-y-1/2"
+                    aria-label="Previous Image"
                   >
                     <MdArrowBackIos size={16} />
                   </button>
-
-                  <img
-                    src={currentImage}
-                    alt={`${product.name} image ${currentIndex + 1}`}
-                    className="w-full h-full object-cover rounded"
-                  />
-
                   <button
                     onClick={() => nextImage(product.id)}
-                    className="absolute right-1 z-20 bg-white bg-opacity-70 rounded-full p-1 hover:bg-opacity-90"
+                    className="absolute top-1/2 right-1 bg-white rounded-full p-1 shadow-md -translate-y-1/2"
+                    aria-label="Next Image"
                   >
                     <MdArrowForwardIos size={16} />
                   </button>
                 </div>
-
-                <h2 className="text-md font-semibold text-gray-800 truncate">{product.name}</h2>
-                <p className="text-xs text-gray-600 mb-1 truncate" title={product.description}>
-                  {product.description}
-                </p>
-                <ul className="text-xs text-gray-700 mb-2 space-y-0.5">
-                  <li>
-                    <strong>Model:</strong> {product.model}
-                  </li>
-                  <li>
-                    <strong>Quality:</strong> {product.quality}
-                  </li>
-                </ul>
-
-                <div className="mb-2">
-                  <span className="text-gray-400 line-through text-xs mr-1">{product.price}</span>
-                  <span className="text-green-700 font-semibold text-sm">{product.discountedPrice}</span>
+                <h3 className="font-semibold text-sm mt-2">{product.name}</h3>
+                <p className="text-xs text-gray-600 mb-1">{product.model}</p>
+                <p className="text-xs text-gray-500 mb-1">{product.quality}</p>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-bold">{product.discountedPrice}</span>
+                  <span className="text-xs line-through text-gray-400">{product.price}</span>
+                  {discountPercent > 0 && (
+                    <span className="text-xs font-semibold text-green-600">({discountPercent}% OFF)</span>
+                  )}
                 </div>
-
-                <div className="flex flex-col gap-1 mt-auto">
                 
-                  <button
-                    onClick={() => handleBuyNow(product)}
-                    className="bg-green-600 text-white py-1.5 text-sm rounded hover:bg-green-700 transition"
-                  >
-                    Buy Now
-                  </button>
-                </div>
+                <button
+                  onClick={() => handleBuyNow(product)}
+                  className="w-full bg-green-600 text-white py-1 rounded hover:bg-green-700 text-xs"
+                >
+                  Buy Now
+                </button>
               </div>
             );
           })}
@@ -315,6 +314,21 @@ export default function DataCable() {
           <MdArrowForwardIos size={18} />
         </button>
       </div>
+
+      {/* Cart Summary */}
+      {cart.length > 0 && (
+        <div className="mt-6 border-t pt-4">
+          <h3 className="font-semibold text-lg mb-2">Cart Items</h3>
+          <ul>
+            {cart.map((item) => (
+              <li key={item.id} className="flex justify-between mb-1 text-sm">
+                <span>{item.name} (x{item.quantity})</span>
+                <span>{item.discountedPrice}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

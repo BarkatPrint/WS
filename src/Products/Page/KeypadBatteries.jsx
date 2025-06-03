@@ -6,7 +6,7 @@ const keypadBatteries = [
     name: "Nokia Keypad Battery",
     model: "BL-5C, BL-4C, BL-4U",
     quality: "Local Compatible",
-    price: "₹250",
+    price: "₹200",
     discountedPrice: "₹150",
     brand: "Nokia",
     images: [
@@ -21,7 +21,7 @@ const keypadBatteries = [
     model: "AB463446BU, AB533640CU",
     quality: "Local Compatible",
     price: "₹200",
-    discountedPrice: "₹100",
+    discountedPrice: "₹150",
     brand: "Samsung",
     images: [
       `${process.env.PUBLIC_URL}/image/Battery/Keypad/Samsung/1.jpg`,
@@ -34,7 +34,7 @@ const keypadBatteries = [
     model: "BLV-18, BLV-45, BLV-59",
     quality: "Local Compatible",
     price: "₹200",
-    discountedPrice: "₹100",
+    discountedPrice: "₹150",
     brand: "Lava",
     images: [
       `${process.env.PUBLIC_URL}/image/Battery/Keypad/Lava/1.jpg`,
@@ -46,8 +46,8 @@ const keypadBatteries = [
     name: "Micromax Keypad Battery",
     model: "C115, X101, X328",
     quality: "Local Compatible",
-    price: "₹180",
-    discountedPrice: "₹90",
+    price: "₹200",
+    discountedPrice: "₹150",
     brand: "Micromax",
     images: [
       `${process.env.PUBLIC_URL}/image/Battery/Keypad/Micromax/1.jpg`,
@@ -59,8 +59,8 @@ const keypadBatteries = [
     name: "Karbonn Keypad Battery",
     model: "K9, K22, K400",
     quality: "Local Compatible",
-    price: "₹170",
-    discountedPrice: "₹80",
+    price: "₹200",
+    discountedPrice: "₹150",
     brand: "Karbonn",
     images: [
       `${process.env.PUBLIC_URL}/image/Battery/Keypad/Karbonn/1.jpg`,
@@ -72,8 +72,8 @@ const keypadBatteries = [
     name: "Itel/Intex Keypad Battery",
     model: "BL-Series Compatible",
     quality: "Local Compatible",
-    price: "₹170",
-    discountedPrice: "₹80",
+    price: "₹200",
+    discountedPrice: "₹150",
     brand: "Itel/Intex",
     images: [
       `${process.env.PUBLIC_URL}/image/Battery/Keypad/Intex/1.jpg`,
@@ -81,19 +81,18 @@ const keypadBatteries = [
     ],
   },
   {
-  id: 7,
-  name: "Ticon Keypad Battery",
-  model: "BL-Ticon Compatible",
-  quality: "Local Compatible",
-  price: "₹160",
-  discountedPrice: "₹75",
-  brand: "Ticon",
-  images: [
-    `${process.env.PUBLIC_URL}/image/Battery/Keypad/Ticon/1.jpg`,
-    `${process.env.PUBLIC_URL}/image/Battery/Keypad/Ticon/2.jpg`,
-  ],
-}
-
+    id: 7,
+    name: "Ticon Keypad Battery",
+    model: "BL-Ticon Compatible",
+    quality: "Local Compatible",
+    price: "₹200",
+    discountedPrice: "₹150",
+    brand: "Ticon",
+    images: [
+      `${process.env.PUBLIC_URL}/image/Battery/Keypad/Ticon/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/Battery/Keypad/Ticon/2.jpg`,
+    ],
+  },
 ];
 
 const KeypadBatteries = () => {
@@ -105,36 +104,25 @@ const KeypadBatteries = () => {
     }, {})
   );
   const [isPaused, setIsPaused] = useState(false);
-
   const scrollRef = useRef(null);
-  const animationFrameId = useRef(null);
+  const intervalRef = useRef(null);
 
-  // Auto scroll function
   const scrollStep = () => {
     const scrollContainer = scrollRef.current;
-    if (!scrollContainer || isPaused) {
-      animationFrameId.current = requestAnimationFrame(scrollStep);
-      return;
-    }
-
-    scrollContainer.scrollLeft += 1;
-
-    if (
-      scrollContainer.scrollLeft >=
-      scrollContainer.scrollWidth - scrollContainer.clientWidth
-    ) {
+    if (!scrollContainer || isPaused || showAll) return;
+    const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+    if (scrollContainer.scrollLeft >= maxScroll) {
       scrollContainer.scrollLeft = 0;
+    } else {
+      scrollContainer.scrollLeft += 180;
     }
-
-    animationFrameId.current = requestAnimationFrame(scrollStep);
   };
 
-  // Start auto scroll on mount and when isPaused/showAll changes
   useEffect(() => {
-    if (showAll) return; // Disable auto scroll when showing all in grid mode
-    animationFrameId.current = requestAnimationFrame(scrollStep);
-
-    return () => cancelAnimationFrame(animationFrameId.current);
+    if (!showAll) {
+      intervalRef.current = setInterval(scrollStep, 3000);
+    }
+    return () => clearInterval(intervalRef.current);
   }, [isPaused, showAll]);
 
   const handleWhatsAppOrder = (battery) => {
@@ -161,22 +149,20 @@ const KeypadBatteries = () => {
     ? keypadBatteries
     : keypadBatteries.slice(0, 6);
 
-  // Manual scroll by pixels
+  const getDiscountPercentage = (price, discountedPrice) => {
+    const p = parseInt(price.replace("₹", ""));
+    const d = parseInt(discountedPrice.replace("₹", ""));
+    return Math.round(((p - d) / p) * 100);
+  };
+
   const manualScroll = (direction) => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
-    const scrollAmount = 180; // width of one card approx
-
+    const scrollAmount = 180;
     let newScrollLeft =
       direction === "left"
         ? scrollContainer.scrollLeft - scrollAmount
         : scrollContainer.scrollLeft + scrollAmount;
-
-    // Clamp scroll left between 0 and max scroll
-    if (newScrollLeft < 0) newScrollLeft = 0;
-    if (newScrollLeft > scrollContainer.scrollWidth - scrollContainer.clientWidth)
-      newScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-
     scrollContainer.scrollTo({ left: newScrollLeft, behavior: "smooth" });
   };
 
@@ -187,7 +173,6 @@ const KeypadBatteries = () => {
         All keypad mobile batteries available – Every model in stock!
       </p>
 
-      {/* Slider controls (only in slider mode) */}
       {!showAll && (
         <div className="relative mb-2 flex items-center">
           <button
@@ -195,7 +180,6 @@ const KeypadBatteries = () => {
               setIsPaused(true);
               manualScroll("left");
             }}
-            aria-label="Scroll Left"
             className="absolute left-0 z-10 bg-white bg-opacity-90 rounded-full p-2 shadow hover:bg-green-100"
           >
             ‹
@@ -210,12 +194,15 @@ const KeypadBatteries = () => {
           >
             {visibleBatteries.map((battery) => {
               const currentImageIndex = imageIndexes[battery.id];
+              const discount = getDiscountPercentage(
+                battery.price,
+                battery.discountedPrice
+              );
               return (
                 <div
                   key={battery.id}
                   className="inline-block border rounded-2xl shadow p-3 flex-shrink-0 min-w-[180px] max-w-[220px] bg-white"
                 >
-                  {/* Image Slider */}
                   <div className="relative w-full h-40 mb-3">
                     <img
                       src={battery.images[currentImageIndex]}
@@ -229,8 +216,7 @@ const KeypadBatteries = () => {
                             e.stopPropagation();
                             handlePrevImage(battery.id, battery.images.length);
                           }}
-                          className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 text-xl px-2 rounded-full select-none"
-                          aria-label="Previous Image"
+                          className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 text-xl px-2 rounded-full"
                         >
                           ‹
                         </button>
@@ -239,19 +225,24 @@ const KeypadBatteries = () => {
                             e.stopPropagation();
                             handleNextImage(battery.id, battery.images.length);
                           }}
-                          className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 text-xl px-2 rounded-full select-none"
-                          aria-label="Next Image"
+                          className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 text-xl px-2 rounded-full"
                         >
                           ›
                         </button>
                       </>
                     )}
                   </div>
-
                   <h3 className="text-lg font-semibold">{battery.name}</h3>
                   <p className="text-sm text-gray-600">{battery.model}</p>
-                  <p className="text-sm line-through text-gray-400">{battery.price}</p>
-                  <p className="text-green-600 font-bold mb-2">{battery.discountedPrice}</p>
+                  <p className="text-sm line-through text-gray-400">
+                    {battery.price}
+                  </p>
+                  <p className="text-green-600 font-bold mb-1">
+                    {battery.discountedPrice}
+                  </p>
+                  <p className="text-red-600 text-xs font-semibold mb-2">
+                    Save {discount}%
+                  </p>
                   <button
                     onClick={() => handleWhatsAppOrder(battery)}
                     className="w-full bg-green-500 text-white rounded-xl py-2 text-sm hover:bg-green-600 transition"
@@ -268,7 +259,6 @@ const KeypadBatteries = () => {
               setIsPaused(true);
               manualScroll("right");
             }}
-            aria-label="Scroll Right"
             className="absolute right-0 z-10 bg-white bg-opacity-90 rounded-full p-2 shadow hover:bg-green-100"
           >
             ›
@@ -276,17 +266,19 @@ const KeypadBatteries = () => {
         </div>
       )}
 
-      {/* Grid mode */}
       {showAll && (
         <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
           {visibleBatteries.map((battery) => {
             const currentImageIndex = imageIndexes[battery.id];
+            const discount = getDiscountPercentage(
+              battery.price,
+              battery.discountedPrice
+            );
             return (
               <div
                 key={battery.id}
                 className="border rounded-2xl shadow p-3 bg-white"
               >
-                {/* Image Slider */}
                 <div className="relative w-full h-40 mb-3">
                   <img
                     src={battery.images[currentImageIndex]}
@@ -300,8 +292,7 @@ const KeypadBatteries = () => {
                           e.stopPropagation();
                           handlePrevImage(battery.id, battery.images.length);
                         }}
-                        className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 text-xl px-2 rounded-full select-none"
-                        aria-label="Previous Image"
+                        className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 text-xl px-2 rounded-full"
                       >
                         ‹
                       </button>
@@ -310,19 +301,24 @@ const KeypadBatteries = () => {
                           e.stopPropagation();
                           handleNextImage(battery.id, battery.images.length);
                         }}
-                        className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 text-xl px-2 rounded-full select-none"
-                        aria-label="Next Image"
+                        className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 text-xl px-2 rounded-full"
                       >
                         ›
                       </button>
                     </>
                   )}
                 </div>
-
                 <h3 className="text-lg font-semibold">{battery.name}</h3>
                 <p className="text-sm text-gray-600">{battery.model}</p>
-                <p className="text-sm line-through text-gray-400">{battery.price}</p>
-                <p className="text-green-600 font-bold mb-2">{battery.discountedPrice}</p>
+                <p className="text-sm line-through text-gray-400">
+                  {battery.price}
+                </p>
+                <p className="text-green-600 font-bold mb-1">
+                  {battery.discountedPrice}
+                </p>
+                <p className="text-red-600 text-xs font-semibold mb-2">
+                  Save {discount}%
+                </p>
                 <button
                   onClick={() => handleWhatsAppOrder(battery)}
                   className="w-full bg-green-500 text-white rounded-xl py-2 text-sm hover:bg-green-600 transition"
@@ -335,7 +331,6 @@ const KeypadBatteries = () => {
         </div>
       )}
 
-      {/* See All / Show Less */}
       <div className="text-center mt-4">
         <button
           onClick={() => setShowAll(!showAll)}

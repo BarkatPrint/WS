@@ -29,8 +29,8 @@ export default function Headphones() {
       model: "WBH-A7",
       type: "Wireless",
       quality: "Bluetooth 5.0 with clear sound",
-      price: "₹350",
-      discountedPrice: "₹300",
+      price: "₹500",
+      discountedPrice: "₹250",
       images: [
         `${process.env.PUBLIC_URL}/image/Headphone/Bluetooth Hadphone/1.jpg`,
         `${process.env.PUBLIC_URL}/image/Headphone/Bluetooth Hadphone/2.jpg`,
@@ -44,8 +44,8 @@ export default function Headphones() {
       model: "GH-500",
       type: "Wireless",
       quality: "High performance for gaming",
-      price: "₹300",
-      discountedPrice: "₹250",
+      price: "₹500",
+      discountedPrice: "₹300",
       images: [
         `${process.env.PUBLIC_URL}/image/Headphone/Ear Bluetooth/1.jpg`,
         `${process.env.PUBLIC_URL}/image/Headphone/Ear Bluetooth/2.jpg`,
@@ -59,8 +59,8 @@ export default function Headphones() {
       model: "WBH-ProX9",
       type: "Wireless",
       quality: "HD stereo sound with noise cancellation",
-      price: "₹650",
-      discountedPrice: "₹549",
+      price: "₹2200",
+      discountedPrice: "₹1550",
       images: [
         `${process.env.PUBLIC_URL}/image/Headphone/AdvancedWirelessNeckbandBluetooth/1.jpg`,
         `${process.env.PUBLIC_URL}/image/Headphone/AdvancedWirelessNeckbandBluetooth/2.jpg`,
@@ -75,8 +75,8 @@ export default function Headphones() {
       model: "GH-ProBudsX",
       type: "Wireless",
       quality: "ENC mic with low-latency and rich bass",
-      price: "₹899",
-      discountedPrice: "₹749",
+      price: "₹2500",
+      discountedPrice: "₹1599",
       images: [
         `${process.env.PUBLIC_URL}/image/Headphone/ProWirelessEarbuds/1.jpg`,
         `${process.env.PUBLIC_URL}/image/Headphone/ProWirelessEarbuds/2.jpg`,
@@ -110,7 +110,6 @@ export default function Headphones() {
     window.open(whatsappURL, "_blank");
   };
 
-  // Slider scroll handlers
   const slideLeft = () => {
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -127,7 +126,6 @@ export default function Headphones() {
     <div className="p-4">
       <h2 className="text-3xl font-bold mb-4">🎧 Headphones</h2>
 
-      {/* Brand Selector */}
       <div className="mb-4 max-w-xs">
         <label className="block mb-1 font-semibold text-gray-700">Select Mobile Brand:</label>
         <select
@@ -144,7 +142,6 @@ export default function Headphones() {
         </select>
       </div>
 
-      {/* Payment Method */}
       <div className="mb-6 max-w-xs">
         <label className="block mb-2 font-semibold text-gray-700">Payment Method:</label>
         <div className="flex gap-4">
@@ -171,12 +168,10 @@ export default function Headphones() {
         </div>
       </div>
 
-      {/* Slider Container */}
       <div className="relative">
         <button
           onClick={slideLeft}
           className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700 text-white rounded-full p-2 shadow-md hover:bg-gray-900 z-10"
-          aria-label="Scroll left"
         >
           ‹
         </button>
@@ -184,10 +179,13 @@ export default function Headphones() {
         <div
           ref={sliderRef}
           className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 py-2 px-8 scrollbar-hide"
-          style={{ scrollBehavior: "smooth" }}
         >
           {products.map((product) => {
             const currentIndex = currentImages[product.id] || 0;
+            const original = parseFloat(product.price.replace("₹", ""));
+            const discounted = parseFloat(product.discountedPrice.replace("₹", ""));
+            const discountPercent = Math.round(((original - discounted) / original) * 100);
+
             return (
               <div
                 key={product.id}
@@ -200,28 +198,14 @@ export default function Headphones() {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   <button
-                    onClick={() =>
-                      handleImageChange(
-                        product.id,
-                        "prev",
-                        product.images.length
-                      )
-                    }
+                    onClick={() => handleImageChange(product.id, "prev", product.images.length)}
                     className="absolute left-2 top-1/2 -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow hover:bg-gray-200"
-                    aria-label={`Previous image for ${product.name}`}
                   >
                     ‹
                   </button>
                   <button
-                    onClick={() =>
-                      handleImageChange(
-                        product.id,
-                        "next",
-                        product.images.length
-                      )
-                    }
+                    onClick={() => handleImageChange(product.id, "next", product.images.length)}
                     className="absolute right-2 top-1/2 -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow hover:bg-gray-200"
-                    aria-label={`Next image for ${product.name}`}
                   >
                     ›
                   </button>
@@ -234,12 +218,9 @@ export default function Headphones() {
                   <p className="text-sm text-gray-600 mb-1"><strong>Type:</strong> {product.type}</p>
                   <p className="text-sm text-gray-600 mb-2"><strong>Quality:</strong> {product.quality}</p>
 
-                  <p className="text-gray-500 line-through text-sm">
-                    {product.price}
-                  </p>
-                  <p className="font-semibold text-lg text-green-600 mb-4">
-                    {product.discountedPrice}
-                  </p>
+                  <p className="text-gray-500 line-through text-sm">{product.price}</p>
+                  <p className="font-semibold text-lg text-green-600">{product.discountedPrice}</p>
+                  <p className="text-sm text-red-600 font-semibold mb-2">Save {discountPercent}%</p>
 
                   <button
                     onClick={() => handleBuyNow(product)}
@@ -256,7 +237,6 @@ export default function Headphones() {
         <button
           onClick={slideRight}
           className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700 text-white rounded-full p-2 shadow-md hover:bg-gray-900 z-10"
-          aria-label="Scroll right"
         >
           ›
         </button>
