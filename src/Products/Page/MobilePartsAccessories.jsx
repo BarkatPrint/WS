@@ -80,12 +80,12 @@ const accessories = [
     price: "₹100",
   },
   {
-  id: 13,
-  name: "Charging Board",
-  image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/chargingboard.jpg`,
-  originalPrice: "₹350",
-  price: "₹250",
-},
+    id: 13,
+    name: "Charging Board",
+    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/chargingboard.jpg`,
+    originalPrice: "₹350",
+    price: "₹250",
+  },
 ];
 
 const AccessoriesPage = () => {
@@ -127,7 +127,7 @@ const AccessoriesPage = () => {
     clearTimeout(pauseTimeout.current);
     pauseTimeout.current = setTimeout(() => {
       setIsPaused(false);
-    }, 10000); // resume after 10 seconds
+    }, 10000);
   };
 
   const handleScrollLeft = () => {
@@ -144,13 +144,19 @@ const AccessoriesPage = () => {
     }
   };
 
+  const calculateDiscount = (originalPrice, price) => {
+    const original = parseInt(originalPrice.replace("₹", ""));
+    const current = parseInt(price.replace("₹", ""));
+    const discount = Math.round(((original - current) / original) * 100);
+    return discount;
+  };
+
   return (
     <div className="px-4 py-10 max-w-6xl mx-auto relative">
       <h2 className="text-3xl font-bold text-center mb-8 text-[#00292d]">
         Mobile Accessories & Parts
       </h2>
 
-      {/* Scroll Buttons */}
       <button
         className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200"
         onClick={handleScrollLeft}
@@ -172,37 +178,43 @@ const AccessoriesPage = () => {
         onTouchStart={handleUserInteraction}
         onMouseDown={handleUserInteraction}
       >
-        {accessories.map((item) => (
-          <div
-            key={item.id}
-            className="flex-shrink-0 w-[180px] sm:w-[200px] bg-white shadow rounded-xl snap-start"
-          >
-            <div className="w-full h-36 sm:h-40 overflow-hidden rounded-t-xl bg-gray-50">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="p-3 flex flex-col items-center text-center">
-              <h3 className="font-semibold text-sm text-gray-800">
-                {item.name}
-              </h3>
-              <div className="my-1 text-sm">
-                <span className="text-gray-500 line-through mr-1">
-                  {item.originalPrice}
-                </span>
-                <span className="text-green-600 font-bold">{item.price}</span>
+        {accessories.map((item) => {
+          const discount = calculateDiscount(item.originalPrice, item.price);
+          return (
+            <div
+              key={item.id}
+              className="flex-shrink-0 w-[180px] sm:w-[200px] bg-white shadow rounded-xl snap-start"
+            >
+              <div className="w-full h-36 sm:h-40 overflow-hidden rounded-t-xl bg-gray-50">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <button
-                onClick={() => handleBuyNow(item.name, item.price)}
-                className="mt-2 bg-green-600 hover:bg-green-700 text-white py-1 px-4 rounded text-sm"
-              >
-                Buy
-              </button>
+              <div className="p-3 flex flex-col items-center text-center">
+                <h3 className="font-semibold text-sm text-gray-800">
+                  {item.name}
+                </h3>
+                <div className="my-1 text-sm">
+                  <span className="text-gray-500 line-through mr-1">
+                    {item.originalPrice}
+                  </span>
+                  <span className="text-green-600 font-bold">{item.price}</span>
+                </div>
+                <div className="text-xs font-semibold text-red-600">
+                  {discount}% OFF
+                </div>
+                <button
+                  onClick={() => handleBuyNow(item.name, item.price)}
+                  className="mt-2 bg-green-600 hover:bg-green-700 text-white py-1 px-4 rounded text-sm"
+                >
+                  Buy
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="mt-10 text-center">

@@ -54,7 +54,7 @@ const Header = () => {
     {/* Brand Name */}
     <h2 className="text-2xl font-bold text-[#189D0E]">
       <Link to="/" onClick={closeMenu} className="no-underline">
-       Wholesale
+       WS Bazaar
       </Link>
     </h2>
   </div>

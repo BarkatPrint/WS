@@ -2,49 +2,24 @@ import React from "react";
 
 const AboutPage = () => {
   return (
-    <div
-      style={{
-        maxWidth: "900px",
-        margin: "40px auto",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-        color: "#555", // Default grey text
-      }}
-    >
-      <h1
-        style={{
-          textAlign: "center",
-          fontSize: "2.8rem",
-          fontWeight: "bold",
-          color: "#000", // Important heading in black
-          marginBottom: "20px",
-        }}
-      >
-        About Us – AR Mobile
+    <div className="max-w-4xl mx-auto p-6 text-gray-700 font-sans">
+      <h1 className="text-4xl font-bold text-center text-black mb-6">
+        About Us – WS Bazaar
       </h1>
 
-      <hr
-        style={{
-          border: "none",
-          height: "2px",
-          backgroundColor: "#ccc",
-          marginBottom: "30px",
-        }}
-      />
+      <hr className="border-t-2 border-gray-300 mb-8" />
 
-      <p style={{ fontSize: "16px", marginBottom: "20px" }}>
-        <strong style={{ color: "#000" }}>Welcome to AR Mobile</strong> – your trusted wholesale partner for mobile accessories & electronics.
-        We are based in <strong style={{ color: "#000" }}>Gaya, Bihar</strong>, and we specialize in supplying high-quality mobile products at wholesale prices to retailers, repair shops, and resellers.
+      <p className="text-base mb-5">
+        <strong className="text-black">Welcome to WS Bazaar</strong> – your trusted wholesale partner for mobile accessories & electronics.
+        We are based in <strong className="text-black">Gaya, Bihar</strong>, and we specialize in supplying high-quality mobile products at wholesale prices to retailers, repair shops, and resellers.
       </p>
 
-      <p style={{ fontSize: "16px", marginBottom: "20px" }}>
+      <p className="text-base mb-5">
         With a focus on customer satisfaction, we ensure timely delivery, genuine products, and unbeatable rates. Our inventory includes everything from phone parts to complete repair tool kits.
       </p>
 
-      <h3 style={{ fontSize: "20px", marginTop: "30px", marginBottom: "10px", color: "#000" }}>
-        🛠 What We Offer:
-      </h3>
-      <ul style={{ fontSize: "16px", marginLeft: "20px", marginBottom: "20px" }}>
+      <h3 className="text-xl font-semibold text-black mt-8 mb-3">🛠 What We Offer:</h3>
+      <ul className="list-disc list-inside space-y-1 mb-6">
         <li>Mobile Phones & Parts</li>
         <li>Displays & Combos</li>
         <li>Chargers, Power Banks & Cables</li>
@@ -53,31 +28,27 @@ const AboutPage = () => {
         <li>Mobile Repair Tools & Accessories</li>
       </ul>
 
-      <h3 style={{ fontSize: "20px", marginBottom: "10px", color: "#000" }}>
-        📍 Our Locations:
-      </h3>
-      <ul style={{ fontSize: "16px", marginLeft: "20px", marginBottom: "20px" }}>
-        <li>Iqbal Nagar, Gaya</li>
-        <li>Ramshila More, Gaya</li>
-        <li>Pirmansoor, GB Road, Gaya</li>
-        <li>GB Road, Gaya</li>
+      <h3 className="text-xl font-semibold text-black mb-3">⛳ Our Locations:</h3>
+      <ul className="list-disc list-inside space-y-1 mb-6">
+        <li>⛳ Iqbal Nagar, Gaya</li>
+        <li>⛳ Ramshila More, Gaya</li>
+        <li>⛳ Pirmansoor, GB Road, Gaya</li>
+        <li>⛳ GB Road, Gaya</li>
       </ul>
 
-      <h3 style={{ fontSize: "20px", marginBottom: "10px", color: "#000" }}>
-        🙌 Why Choose AR Mobile?
-      </h3>
-      <ul style={{ fontSize: "16px", marginLeft: "20px", marginBottom: "30px" }}>
+      <h3 className="text-xl font-semibold text-black mb-3">🙌 Why Choose WS Bazaar?</h3>
+      <ul className="list-disc list-inside space-y-1 mb-8">
         <li>100% Genuine & Tested Products</li>
         <li>Competitive Wholesale Pricing</li>
         <li>Quick Dispatch & Free Delivery on Bulk Orders</li>
         <li>
           Friendly Customer Support –{" "}
-          <strong style={{ color: "#000" }}>📞 7050266383</strong>
+          <strong className="text-black">📞 7050266383</strong>
         </li>
       </ul>
 
-      <p style={{ fontSize: "16px", textAlign: "center", fontWeight: "bold", color: "#000" }}>
-        Thank you for trusting AR Mobile. We look forward to growing your business together.
+      <p className="text-center font-bold text-black">
+        Thank you for trusting WS Bazaar. We look forward to growing your business together.
       </p>
     </div>
   );

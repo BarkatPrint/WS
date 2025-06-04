@@ -1,41 +1,70 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import AllProducts from "../Products/AllProducts";
 
+// 🔽 Add or remove banner images from this array
+const bannerImages = [
+  `${process.env.PUBLIC_URL}/Home.jpg`,
+  `${process.env.PUBLIC_URL}/WS Bazaar.jpg`,
+  `${process.env.PUBLIC_URL}/WS Bazaar 2.jpg`,
+  // `${process.env.PUBLIC_URL}/NewBanner.jpg`, // ← Add more banners here
+];
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth < 768);
-    }
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // 🔄 Auto slide change
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % bannerImages.length);
+    }, 3000); // every 3 seconds
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="w-full h-full overflow-hidden">
-      {/* Banner Image */}
-      <img
-        src={`${process.env.PUBLIC_URL}/Home.jpg`}
-        alt="Home banner"
-        className="w-full h-auto"
-        style={{ objectFit: isMobile ? "contain" : "cover" }}
-      />
+      {/* 🔁 Banner Slider */}
+      <div className="relative w-full overflow-hidden">
+        <img
+          src={bannerImages[currentSlide]}
+          alt={`Banner ${currentSlide + 1}`}
+          className="w-full h-auto transition-all duration-700"
+          style={{ objectFit: isMobile ? "contain" : "cover" }}
+        />
 
-      {/* Main Heading - Single line, centered */}
+        {/* 🔘 Slider Dots */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {bannerImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full ${
+                currentSlide === index ? "bg-blue-600" : "bg-gray-400"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* 🏷️ Main Heading */}
       <h2
         className="mt-8 mb-10 font-extrabold text-4xl text-center"
         style={{ color: "#00292d" }}
       >
-        Welcome to Our Wholesale
+        Welcome to Our WS Bazaar
       </h2>
 
-      {/* Two Column Section */}
+      {/* 📦 Info Section */}
       <div className="px-6 max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
-        {/* Left Column */}
+        {/* Left Side */}
         <div className="md:w-1/2 flex flex-col items-center md:items-start">
           <p className="text-gray-800 text-lg mb-4 text-center md:text-left">
             1 Piece ho ya 100 Piece – Sabko Milega{" "}
@@ -49,8 +78,8 @@ export default function Home() {
             Har tarah ke mobile accessories & parts – ek jagah, ek click mein.
           </p>
           <p className="text-gray-700 mb-6 text-center md:text-left">
-            🚚 Ghar baithe order karein aur <strong>Home Delivery</strong> payein
-            poore India mein.
+            🚚 Ghar baithe order karein aur{" "}
+            <strong>Home Delivery</strong> payein poore India mein.
           </p>
           <Link
             to="/products"
@@ -60,22 +89,17 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Right Column */}
+        {/* Right Side */}
         <div className="md:w-1/2 flex flex-col items-center md:items-start">
-          <h3
-            className="mb-4 font-bold text-xl"
-            style={{ color: "#00292d" }}
-          >
+          <h3 className="mb-4 font-bold text-xl" style={{ color: "#00292d" }}>
             Product Nahi Mila? WhatsApp Par Direct Mangwa Sakte Hain!
           </h3>
           <p className="text-gray-700 mb-6 text-center md:text-left">
-            Agar aapko hamari website par koi product nahi mil raha, to niche 
-            diye gaye WhatsApp button par click karke humein seedha message 
-            bhej sakte hain. Aap apni zarurat ka product humse WhatsApp par 
-            mangwa sakte hain. Hum aapki madad karenge aur aapke liye 
-            product arrange karenge.
+            Agar aapko hamari website par koi product nahi mil raha, to niche
+            diye gaye WhatsApp button par click karke humein seedha message
+            bhej sakte hain.
           </p>
-          
+
           <a
             href="https://wa.me/917050266383?text=Mujhe%20ek%20product%20chahiye%20jo%20website%20par%20nahi%20mil%20raha%20hai.%20Kripya%20mujhse%20contact%20kijiye."
             target="_blank"
@@ -92,21 +116,16 @@ export default function Home() {
             </svg>
             <span className="text-base">WhatsApp Par Message Karein</span>
           </a>
-
         </div>
       </div>
 
-      {/* Featured Products */}
+      {/* 🌟 Featured Products */}
       <div className="mt-16 px-4">
         <h3 className="text-2xl font-semibold mb-6 text-center text-gray-800">
           Featured Products
         </h3>
         <AllProducts />
-    
       </div>
     </div>
-
-
-
   );
 }
