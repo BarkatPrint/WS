@@ -15,10 +15,10 @@ import About from "./Pages/About";
 import Contact from "./Pages/Contact";
 import ProductsRoutes from "./Products/ProductsRoutes";
 
-// ✅ Vercel के लिए basename हटाया गया
+// Wrapper to enable useLocation with basename for GitHub Pages
 function AppWrapper() {
   return (
-    <Router>
+    <Router basename="/WS">
       <App />
     </Router>
   );
@@ -27,6 +27,8 @@ function AppWrapper() {
 function App() {
   const location = useLocation();
 
+  // Since basename is /WS, location.pathname will be relative to that
+  // So "/" means root inside /WS, which is landing page
   const isLanding = location.pathname === "/";
 
   return (
