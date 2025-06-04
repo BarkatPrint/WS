@@ -5,7 +5,7 @@ import AllProducts from "./AllProducts";
 import KeypadMobile from "./KeypadMobile/KeypadMobile";
 
 // import MobilePhones from "./Mobile/MobilePhones";
-import VivoPhones from "./Mobile/VivoPhones";
+// import VivoPhones from "./Mobile/VivoPhones";
 import Battery from "./Page/Battery";
 import Headphone from "./Page/Headphone";
 import Charger from "./Page/Charger";
@@ -65,7 +65,7 @@ export default function ProductsRoutes() {
         <Route path="mobile-parts-&-accessories" element={<MobilePartsAccessories />} />
         <Route path="keypad-mobile" element={<KeypadMobile />} />
         {/* <Route path="mobile-phones" element={<MobilePhones />} /> */}
-        <Route path="vivophones" element={<VivoPhones />} />
+        {/* <Route path="vivophones" element={<VivoPhones />} /> */}
         <Route path="battery" element={<Battery />} />
         <Route path="headphone" element={<Headphone />} />
         <Route path="charger" element={<Charger />} />

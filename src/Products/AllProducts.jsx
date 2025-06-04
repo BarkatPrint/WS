@@ -4,7 +4,7 @@ import MobilePartsAccessories from "./Page/MobilePartsAccessories"; // Corrected
 import Battery from "./Page/Battery";
 import Chargers from "./Page/Charger";
 import Headphone from "./Page/Headphone";
-import AllMobile from "./Mobile/AllMobile";
+// import AllMobile from "./Mobile/AllMobile";
 import KeypadMobile from "./KeypadMobile/KeypadMobile";
 
 import ChargingCable from "./Page/ChargingCable";
@@ -19,7 +19,7 @@ export default function AllProducts() {
   return (
     <>
       <MobilePartsAccessories />
-      <AllMobile />
+      {/* <AllMobile /> */}
       <KeypadMobile />
       <Battery />
       <Chargers />
