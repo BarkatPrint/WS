@@ -7,7 +7,7 @@ const LandingPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4 text-center">
       <h1 className="text-4xl font-bold mb-6 text-gray-800">
-        Welcome to Wholesale
+        Welcome to WS Bazaar
       </h1>
       <p className="text-lg mb-10 text-gray-700">
         Please select your role to continue

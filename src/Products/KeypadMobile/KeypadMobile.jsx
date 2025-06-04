@@ -174,14 +174,7 @@ const KeypadMobile = () => {
         })}
       </div>
 
-      <div className="text-center mt-4">
-        <button
-          onClick={() => navigate("/products/keypad-phones")}
-          className="underline text-blue-600 font-medium"
-        >
-          See All Keypad Models
-        </button>
-      </div>
+     
     </div>
   );
 };
