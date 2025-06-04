@@ -16,7 +16,7 @@ import TemperedGlass from "./Page/TemperedGlass";
 import Display from "./Page/Display";
 import Touch from "./Page/Touch";
 import ScreenCombo from "./Page/ScreenCombo";
-import MobileBody from "./Page/MobileBody";  // Correct import for MobileBody
+import MobileBody from "./Page/MobileBody";
 
 import MobilePartsAccessories from "./Page/MobilePartsAccessories";
 
@@ -24,7 +24,7 @@ const categories = [
   { name: "All", path: "all" },
   { name: "Mobile Parts Accessories", path: "mobile-parts-accessories" },
   // { name: "Mobile Phones", path: "mobile-phones" },
-  { name: "Keypad Mobile", path: "keypad-mobile" },  // lowercase for consistency
+  { name: "Keypad Mobile", path: "keypad-mobile" },
   { name: "Battery", path: "battery" },
   { name: "Headphone", path: "headphone" },
   { name: "Charger", path: "charger" },
@@ -34,7 +34,7 @@ const categories = [
   { name: "Display", path: "display" },
   { name: "Touch", path: "touch" },
   { name: "Screen Combo", path: "screen-combo" },
-  { name: "Mobile Body", path: "mobile-body" },   // new path for MobileBody
+  { name: "Mobile Body", path: "mobile-body" },
 ];
 
 export default function ProductsRoutes() {
@@ -75,7 +75,10 @@ export default function ProductsRoutes() {
         <Route path="display" element={<Display />} />
         <Route path="touch" element={<Touch />} />
         <Route path="screen-combo" element={<ScreenCombo />} />
-        <Route path="mobile-body" element={<MobileBody />} />  {/* Correct path */}
+        <Route path="mobile-body" element={<MobileBody />} />
+
+        {/* Catch all unmatched routes and redirect to 'all' */}
+        <Route path="*" element={<Navigate to="all" replace />} />
       </Routes>
     </div>
   );
