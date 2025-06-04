@@ -22,7 +22,7 @@ import MobilePartsAccessories from "./Page/MobilePartsAccessories";
 
 const categories = [
   { name: "All", path: "all" },
-  { name: "Mobile Parts & Accessories", path: "mobile-parts-&-accessories" },
+  { name: "Mobile Parts Accessories", path: "mobile-parts-accessories" },
   // { name: "Mobile Phones", path: "mobile-phones" },
   { name: "Keypad Mobile", path: "keypad-mobile" },  // lowercase for consistency
   { name: "Battery", path: "battery" },
@@ -62,7 +62,7 @@ export default function ProductsRoutes() {
       <Routes>
         <Route index element={<Navigate to="all" replace />} />
         <Route path="all" element={<AllProducts />} />
-        <Route path="mobile-parts-&-accessories" element={<MobilePartsAccessories />} />
+        <Route path="mobile-parts-accessories" element={<MobilePartsAccessories />} />
         <Route path="keypad-mobile" element={<KeypadMobile />} />
         {/* <Route path="mobile-phones" element={<MobilePhones />} /> */}
         {/* <Route path="vivophones" element={<VivoPhones />} /> */}
