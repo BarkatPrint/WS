@@ -1,6 +1,6 @@
 {
-  "short_name": "Wholesale",
-  "name": "WS Wholesale - Mobile & Electronics Wholesale Supplier",
+  "short_name": "WS Bazaar",
+  "name": "WS Bazaar - India's Wholesale Hub for Mobiles & Accessories",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,9 +18,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/WS/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "description": "WS Wholesale is a trusted supplier for mobile accessories, parts, and electronics at wholesale prices. Best quality and reliable service across India."
+  "description": "WS Bazaar is India's trusted wholesale platform for mobile accessories, phones, and electronics. Buy in bulk at factory prices with fast delivery and reliable service."
 }
