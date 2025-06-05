@@ -20,17 +20,22 @@ export default function AllProducts() {
     <>
       <MobilePartsAccessories />
       {/* <AllMobile /> */}
+     
+      <ChargingCable />
+      <Headphone />
+      <Chargers />
       <KeypadMobile />
       <Battery />
-      <Chargers />
-      <Headphone />
-      <ChargingCable />
-      <MobileCovers />
       <TemperedGlass />
+      <MobileBody />
+      <ScreenCombo />
+    
+      <MobileCovers />
+      
       <Display />
       <Touch />
-      <ScreenCombo />
-      <MobileBody />
+      
+      
     </>
   );
 }
