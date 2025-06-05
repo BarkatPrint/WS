@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function UploadToCloudinary() {
+  const [password, setPassword] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [authMessage, setAuthMessage] = useState("");
+
   const [form, setForm] = useState({
     name: "",
     price: "",
@@ -12,6 +16,18 @@ export default function UploadToCloudinary() {
   const [uploading, setUploading] = useState(false);
   const [uploadedProduct, setUploadedProduct] = useState(null);
   const [message, setMessage] = useState("");
+
+  const correctPassword = "admin123"; // इसे अपनी मर्ज़ी से बदलें
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (password === correctPassword) {
+      setIsAuthorized(true);
+      setAuthMessage("");
+    } else {
+      setAuthMessage("❌ गलत पासवर्ड! कृपया सही पासवर्ड डालें।");
+    }
+  };
 
   const handleUpload = async () => {
     if (!form.name || !form.price || !form.image) {
@@ -26,7 +42,7 @@ export default function UploadToCloudinary() {
     formData.append("file", form.image);
 
     // यहाँ अपना Cloudinary unsigned upload preset डालें:
-    formData.append("upload_preset", "your_actual_unsigned_preset");
+    formData.append("upload_preset", "unsigned_preset");  // अपनी actual preset डालें
 
     try {
       const res = await axios.post(
@@ -54,6 +70,32 @@ export default function UploadToCloudinary() {
     setUploading(false);
   };
 
+  // अगर authorized नहीं है, तो पासवर्ड फॉर्म दिखाओ
+  if (!isAuthorized) {
+    return (
+      <div className="max-w-md mx-auto p-6 bg-white rounded shadow mt-10">
+        <h2 className="text-2xl font-semibold mb-6 text-center">🔒 कृपया पासवर्ड डालें</h2>
+        <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-4">
+          <input
+            type="password"
+            placeholder="पासवर्ड"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border border-gray-300 p-2 rounded w-full"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
+          >
+            Submit
+          </button>
+          {authMessage && <p className="text-red-600 text-center">{authMessage}</p>}
+        </form>
+      </div>
+    );
+  }
+
+  // अगर authorized है तो upload फॉर्म दिखाओ
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-center">📦 Upload Product to Cloudinary</h2>
