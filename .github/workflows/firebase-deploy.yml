@@ -1,0 +1,29 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main  # अगर आपकी ब्रांच का नाम कुछ और है तो उसे बदलें
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Decode service account
+        run: echo "${{ secrets.GCP_SA_KEY }}" > $HOME/gcp-key.json
+
+      - name: Firebase Deploy
+        run: firebase deploy --only hosting --project ws-bazaar
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/gcp-key.json
