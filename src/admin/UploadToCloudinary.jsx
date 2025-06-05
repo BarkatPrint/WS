@@ -1,0 +1,128 @@
+import React, { useState } from "react";
+import axios from "axios";
+
+export default function UploadToCloudinary() {
+  const [form, setForm] = useState({
+    name: "",
+    price: "",
+    discount: "",
+    description: "",
+    image: null,
+  });
+  const [uploading, setUploading] = useState(false);
+  const [uploadedProduct, setUploadedProduct] = useState(null);
+  const [message, setMessage] = useState("");
+
+  const handleUpload = async () => {
+    if (!form.name || !form.price || !form.image) {
+      setMessage("❌ सभी आवश्यक फ़ील्ड भरें");
+      return;
+    }
+
+    setUploading(true);
+    setMessage("");
+
+    const formData = new FormData();
+    formData.append("file", form.image);
+
+    // यहाँ अपना Cloudinary unsigned upload preset डालें:
+    formData.append("upload_preset", "your_actual_unsigned_preset");
+
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/dmo7cymca/image/upload`,
+        formData
+      );
+
+      const imageUrl = res.data.secure_url;
+
+      // डिस्काउंट कैलकुलेशन
+      const discountAmount = form.price - (form.price * form.discount) / 100;
+
+      setUploadedProduct({
+        ...form,
+        imageUrl,
+        discountAmount,
+      });
+
+      setMessage("✅ Upload Successful!");
+      setForm({ name: "", price: "", discount: "", description: "", image: null });
+    } catch (err) {
+      setMessage("❌ Upload Failed: " + err.message);
+    }
+
+    setUploading(false);
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-10">
+      <h2 className="text-2xl font-semibold mb-6 text-center">📦 Upload Product to Cloudinary</h2>
+
+      <div className="flex flex-col gap-4 mb-4">
+        <input
+          type="text"
+          placeholder="Product Name"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          className="border border-gray-300 p-2 rounded w-full"
+        />
+        <input
+          type="number"
+          placeholder="Price"
+          value={form.price}
+          onChange={(e) => setForm({ ...form, price: e.target.value })}
+          className="border border-gray-300 p-2 rounded w-full"
+        />
+        <input
+          type="number"
+          placeholder="Discount (%)"
+          value={form.discount}
+          onChange={(e) => setForm({ ...form, discount: e.target.value })}
+          className="border border-gray-300 p-2 rounded w-full"
+        />
+        <textarea
+          placeholder="Description"
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          className="border border-gray-300 p-2 rounded w-full"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
+          className="border border-gray-300 p-2 rounded w-full"
+        />
+        <button
+          onClick={handleUpload}
+          disabled={uploading}
+          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
+        >
+          {uploading ? "Uploading..." : "Upload Product"}
+        </button>
+        {message && <p className="text-center mt-2">{message}</p>}
+      </div>
+
+      {uploadedProduct && (
+        <div className="border p-4 rounded shadow flex gap-4 items-start">
+          <img
+            src={uploadedProduct.imageUrl}
+            alt={uploadedProduct.name}
+            className="w-32 h-32 object-cover rounded"
+          />
+          <div>
+            <h3 className="text-xl font-bold">{uploadedProduct.name}</h3>
+            <p className="text-gray-700">Price: ₹{uploadedProduct.price}</p>
+            <p className="text-green-600">
+              Discount: {uploadedProduct.discount || 0}% (You Save ₹
+              {(uploadedProduct.price - uploadedProduct.discountAmount).toFixed(2)})
+            </p>
+            <p className="text-red-600 font-medium">
+              Final Price: ₹{uploadedProduct.discountAmount.toFixed(2)}
+            </p>
+            <p className="text-gray-600 mt-2">{uploadedProduct.description}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

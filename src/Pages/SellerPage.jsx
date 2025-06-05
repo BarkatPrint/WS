@@ -1,7 +1,9 @@
 import React from "react";
+import UploadProductWithPasscode from "../admin/UploadToCloudinary";
 
 export default function SellerPage() {
   return (
+    <>
     <div className="max-w-4xl mx-auto px-4 py-10">
 
       <h1 className="text-3xl font-bold text-center text-blue-700 mb-6">
@@ -90,5 +92,9 @@ export default function SellerPage() {
         </a>
       </form>
     </div>
+    <UploadProductWithPasscode />
+   
+    </>
+    
   );
 }

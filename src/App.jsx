@@ -15,6 +15,9 @@ import About from "./Pages/About";
 import Contact from "./Pages/Contact";
 import ProductsRoutes from "./Products/ProductsRoutes";
 
+import UploadProductWithPasscode from "./admin/UploadToCloudinary";
+import UploadToCloudinary from "./admin/UploadToCloudinary";  // नया import
+
 function AppWrapper() {
   return (
     <Router>
@@ -39,6 +42,12 @@ function App() {
         <Route path="/products/*" element={<ProductsRoutes />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+
+        {/* Admin upload page */}
+        <Route path="/admin" element={<UploadProductWithPasscode />} />
+
+        {/* नया Cloudinary upload page */}
+        <Route path="/upload-cloudinary" element={<UploadToCloudinary />} />
       </Routes>
 
       {!isLanding && <Footer />}
