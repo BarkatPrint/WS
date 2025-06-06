@@ -13,11 +13,12 @@ export default function UploadToCloudinary() {
     description: "",
     image: null,
   });
+
   const [uploading, setUploading] = useState(false);
   const [uploadedProduct, setUploadedProduct] = useState(null);
   const [message, setMessage] = useState("");
 
-  const correctPassword = "admin123"; // इसे अपनी मर्ज़ी से बदलें
+  const correctPassword = "admin123";
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
@@ -40,41 +41,73 @@ export default function UploadToCloudinary() {
 
     const formData = new FormData();
     formData.append("file", form.image);
-
-    // यहाँ अपना Cloudinary unsigned upload preset डालें:
-    formData.append("upload_preset", "unsigned_preset");  // अपनी actual preset डालें
+    formData.append("upload_preset", "unsigned_preset"); // ✅ Replace with your Cloudinary unsigned preset
 
     try {
+      console.log("📤 Uploading to Cloudinary...", form.image);
+
       const res = await axios.post(
-        `https://api.cloudinary.com/v1_1/dmo7cymca/image/upload`,
-        formData
+        "https://api.cloudinary.com/v1_1/dmo7cymca/image/upload",
+        formData,
+        { timeout: 20000 } // ⏱️ 20 seconds timeout
       );
 
       const imageUrl = res.data.secure_url;
+      console.log("✅ Cloudinary Upload Success:", imageUrl);
 
-      // डिस्काउंट कैलकुलेशन
-      const discountAmount = form.price - (form.price * form.discount) / 100;
+      const discountAmount =
+        form.price - (form.price * form.discount) / 100;
 
-      setUploadedProduct({
-        ...form,
-        imageUrl,
-        discountAmount,
-      });
+      try {
+        const backendResponse = await axios.post(
+          "http://localhost:5000/api/products", // ✅ Your backend endpoint
+          {
+            name: form.name,
+            price: form.price,
+            discount: form.discount,
+            discountAmount,
+            description: form.description,
+            imageUrl,
+          }
+        );
 
-      setMessage("✅ Upload Successful!");
-      setForm({ name: "", price: "", discount: "", description: "", image: null });
+        setUploadedProduct({
+          ...form,
+          imageUrl,
+          discountAmount,
+        });
+
+        setMessage(
+          "✅ Upload Successful! Backend Response: " +
+            backendResponse.data.message
+        );
+
+        setForm({
+          name: "",
+          price: "",
+          discount: "",
+          description: "",
+          image: null,
+        });
+      } catch (err) {
+        console.error("❌ Backend Error:", err);
+        setMessage("❌ Backend Upload Failed: " + err.message);
+      }
     } catch (err) {
+      console.error("❌ Cloudinary Upload Error:", err);
       setMessage("❌ Upload Failed: " + err.message);
     }
 
     setUploading(false);
   };
 
-  // अगर authorized नहीं है, तो पासवर्ड फॉर्म दिखाओ
+  // 🔐 Password Input
   if (!isAuthorized) {
     return (
       <div className="max-w-md mx-auto p-6 bg-white rounded shadow mt-10">
-        <h2 className="text-2xl font-semibold mb-6 text-center">🔒 कृपया पासवर्ड डालें</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          🔒 कृपया पासवर्ड डालें
+        </h2>
         <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-4">
           <input
             type="password"
@@ -89,16 +122,20 @@ export default function UploadToCloudinary() {
           >
             Submit
           </button>
-          {authMessage && <p className="text-red-600 text-center">{authMessage}</p>}
+          {authMessage && (
+            <p className="text-red-600 text-center">{authMessage}</p>
+          )}
         </form>
       </div>
     );
   }
 
-  // अगर authorized है तो upload फॉर्म दिखाओ
+  // 📦 Upload Form
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-10">
-      <h2 className="text-2xl font-semibold mb-6 text-center">📦 Upload Product to Cloudinary</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-center">
+        📦 Upload Product to Cloudinary
+      </h2>
 
       <div className="flex flex-col gap-4 mb-4">
         <input
@@ -131,7 +168,9 @@ export default function UploadToCloudinary() {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
+          onChange={(e) =>
+            setForm({ ...form, image: e.target.files[0] })
+          }
           className="border border-gray-300 p-2 rounded w-full"
         />
         <button
@@ -156,12 +195,17 @@ export default function UploadToCloudinary() {
             <p className="text-gray-700">Price: ₹{uploadedProduct.price}</p>
             <p className="text-green-600">
               Discount: {uploadedProduct.discount || 0}% (You Save ₹
-              {(uploadedProduct.price - uploadedProduct.discountAmount).toFixed(2)})
+              {(uploadedProduct.price - uploadedProduct.discountAmount).toFixed(
+                2
+              )}
+              )
             </p>
             <p className="text-red-600 font-medium">
               Final Price: ₹{uploadedProduct.discountAmount.toFixed(2)}
             </p>
-            <p className="text-gray-600 mt-2">{uploadedProduct.description}</p>
+            <p className="text-gray-600 mt-2">
+              {uploadedProduct.description}
+            </p>
           </div>
         </div>
       )}
