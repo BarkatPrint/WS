@@ -19,7 +19,7 @@ export default function AllProducts() {
   const [productData, setProductData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products") // ✅ Change endpoint as per your backend
+    fetch("https://ws-backend-r3in.onrender.com/api/products") // ✅ Change endpoint as per your backend
       .then((res) => res.json())
       .then((data) => {
         setProductData(data);
