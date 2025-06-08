@@ -3,30 +3,22 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-// Uncomment if using Cloudinary
-// const cloudinary = require("cloudinary").v2;
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY,
-//   api_secret: process.env.CLOUDINARY_API_SECRET,
-// });
-
 const app = express();
 
-// CORS middleware — अपने React या frontend का URL डालें
+// ✅ CORS Configuration (Allow both localhost and GitHub Pages frontend)
 app.use(cors({
-  origin: 'http://localhost:3000'   // अगर frontend अलग पोर्ट या डोमेन पर हो तो यहाँ बदलें
+  origin: ["http://localhost:3000", "https://barkatprint.github.io"]
 }));
 
 app.use(express.json());
 
-// MongoDB connection
+// ✅ MongoDB connection
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Product Schema and Model
+// ✅ Product Schema and Model
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -35,16 +27,15 @@ const productSchema = new mongoose.Schema(
     discountAmount: { type: Number, min: 0, default: 0 },
     description: { type: String, trim: true, default: "" },
     imageUrl: { type: String, required: true },
-    // cloudinaryPublicId: { type: String },
   },
-  { timestamps: true } // createdAt, updatedAt automatically managed
+  { timestamps: true }
 );
 
 const Product = mongoose.model("Product", productSchema);
 
-// Routes
+// ✅ Routes
 
-// GET all products
+// Get all products
 app.get("/api/products", async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
@@ -55,12 +46,11 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-// GET product by ID
+// Get product by ID
 app.get("/api/products/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product)
-      return res.status(404).json({ message: "Product not found" });
+    if (!product) return res.status(404).json({ message: "Product not found" });
     res.json(product);
   } catch (err) {
     console.error("GET /api/products/:id error:", err);
@@ -68,16 +58,13 @@ app.get("/api/products/:id", async (req, res) => {
   }
 });
 
-// POST create new product
+// Create new product
 app.post("/api/products", async (req, res) => {
   try {
-    const { name, price, discount, discountAmount, description, imageUrl } =
-      req.body;
+    const { name, price, discount, discountAmount, description, imageUrl } = req.body;
 
     if (!name || !price || !imageUrl) {
-      return res
-        .status(400)
-        .json({ message: "Name, Price and Image URL are required." });
+      return res.status(400).json({ message: "Name, Price and Image URL are required." });
     }
 
     const product = new Product({
@@ -97,54 +84,45 @@ app.post("/api/products", async (req, res) => {
   }
 });
 
-// PUT update existing product by ID
+// Update existing product
 app.put("/api/products/:id", async (req, res) => {
   try {
     const productId = req.params.id;
     const updateData = req.body;
 
     const product = await Product.findById(productId);
-    if (!product)
-      return res.status(404).json({ message: "Product not found" });
+    if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // Update only provided fields
     Object.keys(updateData).forEach((key) => {
       product[key] = updateData[key];
     });
 
     await product.save();
-    res.json({ message: "Product updated successfully", product });
-  } catch (error) {
-    console.error("PUT /api/products/:id error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.json({ message: "✅ Product updated successfully", product });
+  } catch (err) {
+    console.error("PUT /api/products/:id error:", err);
+    res.status(500).json({ message: "❌ Server error" });
   }
 });
 
-// DELETE product by ID
+// Delete product
 app.delete("/api/products/:id", async (req, res) => {
   try {
     const productId = req.params.id;
     const product = await Product.findById(productId);
-
-    if (!product)
-      return res.status(404).json({ message: "Product not found" });
-
-    // Uncomment if you want to delete from Cloudinary as well
-    // if (product.cloudinaryPublicId) {
-    //   await cloudinary.uploader.destroy(product.cloudinaryPublicId);
-    // }
+    if (!product) return res.status(404).json({ message: "Product not found" });
 
     await Product.findByIdAndDelete(productId);
-    res.json({ message: "Product deleted successfully" });
-  } catch (error) {
-    console.error("DELETE /api/products/:id error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.json({ message: "✅ Product deleted successfully" });
+  } catch (err) {
+    console.error("DELETE /api/products/:id error:", err);
+    res.status(500).json({ message: "❌ Server error" });
   }
 });
 
 // Health check route
 app.get("/", (req, res) => {
-  res.send("API is running...");
+  res.send("🚀 API is running...");
 });
 
 // Start server
