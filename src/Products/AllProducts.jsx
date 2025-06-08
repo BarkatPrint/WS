@@ -5,7 +5,6 @@ import MobilePartsAccessories from "./Page/MobilePartsAccessories";
 import Battery from "./Page/Battery";
 import Chargers from "./Page/Charger";
 import Headphone from "./Page/Headphone";
-// import AllMobile from "./Mobile/AllMobile";
 import KeypadMobile from "./KeypadMobile/KeypadMobile";
 import ChargingCable from "./Page/ChargingCable";
 import MobileCovers from "./Page/MobileCovers";
@@ -14,86 +13,59 @@ import Display from "./Page/Display";
 import Touch from "./Page/Touch";
 import ScreenCombo from "./Page/ScreenCombo";
 import MobileBody from "./Page/MobileBody";
-import CameraPage from "./Page/CameraPage"; // ✅ Import CameraPage
+import CameraPage from "./Page/CameraPage";
 
-// 🔗 Import ProductCard for backend product listing
+// 🔗 Import ProductCard for admin view (optional)
 import ProductCard from "../admin/ProductCard";
 
 export default function AllProducts() {
   const [productData, setProductData] = useState([]);
 
-  // ⬇️ Fetch all products from backend API
+  // ✅ Fetch all products from backend API
   useEffect(() => {
-    fetch("https://ws-backend-r3in.onrender.com/api/products")
-      .then((res) => res.json())
-      .then((data) => {
-        setProductData(data); // Store fetched products in state
+    const fetchData = async () => {
+      try {
+        const res = await fetch("https://ws-backend-r3in.onrender.com/api/products");
+        const data = await res.json();
+        setProductData(data);
         console.log("📦 Fetched data from backend:", data);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("❌ Error fetching data from backend:", err);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
+
+  // ✅ Filter utility function
+  const filterByCategory = (category) =>
+    productData.filter((item) => item.category === category);
 
   return (
     <>
-      {/* Static Section - Optional Hero Banner or Intro */}
+      {/* Hero / Intro Section */}
       <MobilePartsAccessories />
 
       {/* Product Sections by Category */}
-      <ChargingCable
-        products={productData.filter((item) => item.category === "chargingcable")}
-      />
-
-      <Headphone
-        products={productData.filter((item) => item.category === "headphone")}
-      />
-
-      <Chargers
-        products={productData.filter((item) => item.category === "charger")}
-      />
-
+      <ChargingCable products={filterByCategory("chargingcable")} />
+      <Headphone products={filterByCategory("headphone")} />
+      <Chargers products={filterByCategory("charger")} />
       <KeypadMobile />
+      <Battery products={filterByCategory("battery")} />
+      <TemperedGlass products={filterByCategory("temperedglass")} />
+      <MobileBody products={filterByCategory("mobilebody")} />
+      <ScreenCombo products={filterByCategory("screencombo")} />
+      <MobileCovers products={filterByCategory("mobilecover")} />
+      <Display products={filterByCategory("display")} />
+      <Touch products={filterByCategory("touch")} />
+      <CameraPage products={filterByCategory("camerapage")} />
 
-      <Battery
-        products={productData.filter((item) => item.category === "battery")}
-      />
-
-      <TemperedGlass
-        products={productData.filter((item) => item.category === "temperedglass")}
-      />
-
-      <MobileBody
-        products={productData.filter((item) => item.category === "mobilebody")}
-      />
-
-      <ScreenCombo
-        products={productData.filter((item) => item.category === "screencombo")}
-      />
-
-      <MobileCovers
-        products={productData.filter((item) => item.category === "mobilecover")}
-      />
-
-      <Display
-        products={productData.filter((item) => item.category === "display")}
-      />
-
-      <Touch
-        products={productData.filter((item) => item.category === "touch")}
-      />
-
-      {/* ✅ NEW Camera Page Section */}
-      <CameraPage
-        products={productData.filter((item) => item.category === "camerapage")}
-      />
-
-      {/* ✅ All Products Grid */}
+      {/* ✅ All Products Grid Section (for Admin View or Debug) */}
       <div className="p-5">
         <h2 className="text-2xl font-bold text-center mb-4">
           📦 All Uploaded Products
         </h2>
-        <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center gap-4">
           {productData.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
