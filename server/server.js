@@ -5,10 +5,11 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-// ✅ Improved CORS Setup (Dynamic origin check)
+// ✅ Improved CORS Setup (Add GitHub & Vercel frontends)
 const allowedOrigins = [
   "http://localhost:3000",
   "https://barkatprint.github.io",
+  "https://ws-indol-tau.vercel.app", // ✅ Add your Vercel domain here
 ];
 
 app.use(
@@ -17,7 +18,7 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("❌ Not allowed by CORS"));
+        callback(new Error("❌ Not allowed by CORS: " + origin));
       }
     },
     methods: ["GET", "POST", "PUT", "DELETE"],
