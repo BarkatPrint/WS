@@ -5,16 +5,21 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-// ✅ CORS Configuration (Allow both localhost and GitHub Pages frontend)
+// ✅ CORS Configuration - allow localhost and GitHub Pages
 app.use(cors({
-  origin: ["http://localhost:3000", "https://barkatprint.github.io"]
+  origin: ["http://localhost:3000", "https://barkatprint.github.io"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: false,
 }));
 
 app.use(express.json());
 
 // ✅ MongoDB connection
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
@@ -27,6 +32,7 @@ const productSchema = new mongoose.Schema(
     discountAmount: { type: Number, min: 0, default: 0 },
     description: { type: String, trim: true, default: "" },
     imageUrl: { type: String, required: true },
+    category: { type: String, trim: true }, // ✅ Add category field for filtering
   },
   { timestamps: true }
 );
@@ -61,10 +67,18 @@ app.get("/api/products/:id", async (req, res) => {
 // Create new product
 app.post("/api/products", async (req, res) => {
   try {
-    const { name, price, discount, discountAmount, description, imageUrl } = req.body;
+    const {
+      name,
+      price,
+      discount,
+      discountAmount,
+      description,
+      imageUrl,
+      category,
+    } = req.body;
 
     if (!name || !price || !imageUrl) {
-      return res.status(400).json({ message: "Name, Price and Image URL are required." });
+      return res.status(400).json({ message: "Name, Price, and Image URL are required." });
     }
 
     const product = new Product({
@@ -74,6 +88,7 @@ app.post("/api/products", async (req, res) => {
       discountAmount: discountAmount || 0,
       description: description || "",
       imageUrl,
+      category: category || "", // ✅ add category if provided
     });
 
     await product.save();
