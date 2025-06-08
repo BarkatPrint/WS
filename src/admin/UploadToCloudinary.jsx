@@ -12,6 +12,7 @@ export default function UploadToCloudinary() {
     discount: "",
     description: "",
     image: null,
+    category: "",   // Added category here
   });
 
   const [uploading, setUploading] = useState(false);
@@ -35,9 +36,9 @@ export default function UploadToCloudinary() {
 
   const handleUpload = async () => {
     // Validate required fields
-    if (!form.name.trim() || !form.price || !form.image) {
+    if (!form.name.trim() || !form.price || !form.image || !form.category) {
       setMessageType("error");
-      setMessage("❌ कृपया सभी आवश्यक फ़ील्ड भरें (नाम, कीमत, और फोटो)।");
+      setMessage("❌ कृपया सभी आवश्यक फ़ील्ड भरें (नाम, कीमत, फोटो, और कैटेगरी)।");
       return;
     }
 
@@ -64,7 +65,7 @@ export default function UploadToCloudinary() {
       const res = await axios.post(
         "https://api.cloudinary.com/v1_1/dmo7cymca/image/upload",
         formData,
-        { timeout: 30000 } // 30 seconds timeout
+        { timeout: 60000 } // 60 seconds timeout
       );
 
       const imageUrl = res.data.secure_url;
@@ -87,6 +88,7 @@ export default function UploadToCloudinary() {
             discountAmount,
             description: form.description.trim(),
             imageUrl,
+            category: form.category,   // send category to backend
           }
         );
 
@@ -110,6 +112,7 @@ export default function UploadToCloudinary() {
           discount: "",
           description: "",
           image: null,
+          category: "",    // reset category too
         });
       } catch (backendErr) {
         console.error("❌ Backend Error:", backendErr);
@@ -201,6 +204,32 @@ export default function UploadToCloudinary() {
           rows={4}
           disabled={uploading}
         />
+
+        {/* Category Select Dropdown */}
+        <select
+          value={form.category}
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
+          className="border border-gray-300 p-2 rounded w-full"
+          disabled={uploading}
+        >
+          <option value="" disabled>
+            Select Category
+          </option>
+          <option value="charger">Charger</option>
+          <option value="headphone">Headphone</option>
+          <option value="chargingcable">Charging Cable</option>
+          <option value="battery">Battery</option>
+          <option value="temperedglass">Tempered Glass</option>
+          <option value="mobilebody">Mobile Body</option>
+          <option value="screencombo">Screen Combo</option>
+          <option value="mobilecover">Mobile Cover</option>
+          <option value="display">Display</option>
+          <option value="touch">Touch</option>
+          <option value="Camera">Camera</option>
+
+          {/* Aur bhi categories agar chahiye to yahan add karein */}
+        </select>
+
         <input
           type="file"
           accept="image/*"
@@ -253,6 +282,9 @@ export default function UploadToCloudinary() {
               Final Price: ₹{uploadedProduct.discountAmount.toFixed(2)}
             </p>
             <p className="text-gray-600 mt-2">{uploadedProduct.description}</p>
+            <p className="text-gray-600 mt-2 font-semibold">
+              Category: {uploadedProduct.category}
+            </p>
           </div>
         </div>
       )}

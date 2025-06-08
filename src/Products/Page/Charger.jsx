@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 
+
+
 export default function Chargers() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [currentImages, setCurrentImages] = useState({});
@@ -194,6 +196,9 @@ export default function Chargers() {
   };
 
   return (
+
+    <>
+
     <div className="p-4 max-w-[1200px] mx-auto">
       <h2 className="text-3xl font-bold mb-4">🔌 Chargers</h2>
 
@@ -372,5 +377,10 @@ export default function Chargers() {
 </div>
 
     </div>
+   
+
+
+
+</>
   );
 }
