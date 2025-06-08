@@ -5,12 +5,25 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-// ✅ CORS Configuration - allow localhost and GitHub Pages
-app.use(cors({
-  origin: ["http://localhost:3000", "https://barkatprint.github.io"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: false,
-}));
+// ✅ Improved CORS Setup (Dynamic origin check)
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://barkatprint.github.io",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("❌ Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: false,
+  })
+);
 
 app.use(express.json());
 
@@ -32,7 +45,7 @@ const productSchema = new mongoose.Schema(
     discountAmount: { type: Number, min: 0, default: 0 },
     description: { type: String, trim: true, default: "" },
     imageUrl: { type: String, required: true },
-    category: { type: String, trim: true }, // ✅ Add category field for filtering
+    category: { type: String, trim: true },
   },
   { timestamps: true }
 );
@@ -88,7 +101,7 @@ app.post("/api/products", async (req, res) => {
       discountAmount: discountAmount || 0,
       description: description || "",
       imageUrl,
-      category: category || "", // ✅ add category if provided
+      category: category || "",
     });
 
     await product.save();
@@ -99,7 +112,7 @@ app.post("/api/products", async (req, res) => {
   }
 });
 
-// Update existing product
+// Update product
 app.put("/api/products/:id", async (req, res) => {
   try {
     const productId = req.params.id;
@@ -135,7 +148,7 @@ app.delete("/api/products/:id", async (req, res) => {
   }
 });
 
-// Health check route
+// Health check
 app.get("/", (req, res) => {
   res.send("🚀 API is running...");
 });
