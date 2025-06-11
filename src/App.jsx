@@ -16,7 +16,10 @@ import Contact from "./Pages/Contact";
 import ProductsRoutes from "./Products/ProductsRoutes";
 
 import UploadProductWithPasscode from "./admin/UploadToCloudinary";
-import UploadToCloudinary from "./admin/UploadToCloudinary";  // नया import
+import UploadToCloudinary from "./admin/UploadToCloudinary";
+
+// ✅ 🔥 New Products Page import (as requested)
+import ProductsPage from "./Pages/ProductsPage";
 
 function AppWrapper() {
   return (
@@ -39,14 +42,14 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/seller" element={<SellerPage />} />
+
+        {/* ✅ New Products Page Route */}
+        <Route path="/products" element={<ProductsPage />} />
+
         <Route path="/products/*" element={<ProductsRoutes />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-
-        {/* Admin upload page */}
         <Route path="/admin" element={<UploadProductWithPasscode />} />
-
-        {/* नया Cloudinary upload page */}
         <Route path="/upload-cloudinary" element={<UploadToCloudinary />} />
       </Routes>
 
