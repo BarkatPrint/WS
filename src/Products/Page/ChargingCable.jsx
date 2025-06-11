@@ -1,334 +1,238 @@
-import React, { useRef, useState } from "react";
-import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
+import React, { useEffect, useRef, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-export default function DataCable() {
-  const [paymentMethod, setPaymentMethod] = useState("cod");
-  const [cableType, setCableType] = useState("Type-C");
-  const [customCableType, setCustomCableType] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("Vivo");
-  const [customBrand, setCustomBrand] = useState("");
-  const [cart, setCart] = useState([]);
+const products = [
+  {
+    id: 1,
+    name: "Micro USB Cable",
+    model: "Micro USB",
+    quality: "Compatible | Fast Charging",
+    price: "₹60",
+    discountedPrice: "₹40",
+    images: [`${process.env.PUBLIC_URL}/image/DataCable/1.jpeg`],
+    description: "Good quality micro USB cable.",
+  },
+  {
+    id: 2,
+    name: "Type-C Cable",
+    model: "Type-C",
+    quality: "Compatible | Fast Charging",
+    price: "₹70",
+    discountedPrice: "₹50",
+    images: [`${process.env.PUBLIC_URL}/image/DataCable/4.jpg`],
+    description: "Durable Type-C fast charging cable.",
+  },
+  {
+    id: 3,
+    name: "iPhone Cable",
+    model: "iPhone Lightning",
+    quality: "Compatible | Fast Charging",
+    price: "₹100",
+    discountedPrice: "₹70",
+    images: [`${process.env.PUBLIC_URL}/image/DataCable/iPhoneCable.jpg`],
+    description: "Reliable iPhone lightning cable with fast charging support.",
+  },
+  {
+    id: 4,
+    name: "Original Micro USB Cable",
+    model: "Micro USB",
+    quality: "Original | 6 Month Warranty",
+    price: "₹150",
+    discountedPrice: "₹100",
+    images: [`${process.env.PUBLIC_URL}/image/DataCable/Original-MicroUSB.jpg`],
+    description: "Original micro USB cable with 6-month warranty.",
+  },
+  {
+    id: 5,
+    name: "Original Type-C Cable",
+    model: "Type-C",
+    quality: "Original | 6 Month Warranty",
+    price: "₹180",
+    discountedPrice: "₹120",
+    images: [`${process.env.PUBLIC_URL}/image/DataCable/5.jpg`],
+    description: "Original Type-C cable with fast charging and 6-month warranty.",
+  },
+  {
+    id: 6,
+    name: "Original iPhone Cable",
+    model: "iPhone Lightning",
+    quality: "Original | 6 Month Warranty",
+    price: "₹250",
+    discountedPrice: "₹150",
+    images: [`${process.env.PUBLIC_URL}/image/DataCable/Orignal-iPhoneCable.jpg`],
+    description: "Original iPhone lightning cable with 6-month warranty.",
+  },
+];
 
+const AccessoriesPage = () => {
   const scrollRef = useRef(null);
+  const autoScrollInterval = useRef(null);
+  const pauseTimeout = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [zoomImage, setZoomImage] = useState(null);
 
-  const products = [
-    {
-      id: 1,
-      name: "USB Data Cable",
-      model: "Type-C, Micro USB, iPhone Lightning",
-      quality: "Fast Charging Support",
-      price: "₹80",
-      discountedPrice: "₹40",
-      images: [
-        `${process.env.PUBLIC_URL}/image/DataCable/1.jpeg`,
-        `${process.env.PUBLIC_URL}/image/DataCable/2.jpeg`,
-        `${process.env.PUBLIC_URL}/image/DataCable/3.jpeg`,
-      ],
-      description: "Durable cable with high-speed charging and data sync.",
-    },
-    {
-      id: 2,
-      name: "Premium Data Cable",
-      model: "VOOC, DASH, Turbo, Super Charge",
-      quality: "Premium Quality",
-      price: "₹120",
-      discountedPrice: "₹60",
-      images: [
-         `${process.env.PUBLIC_URL}/image/DataCable/4.jpg`,
-        `${process.env.PUBLIC_URL}/image/DataCable/5.jpg`,
-        `${process.env.PUBLIC_URL}/image/DataCable/7.jpg`,
-      ],
-      description: "Supports all fast charging protocols and stable data transfer.",
-    },
-    {
-      id: 3,
-      name: "Super Fast Data Cable",
-      model: "Type-C, VOOC, QC 3.0",
-      quality: "High-Speed Charging & Data Transfer",
-      price: "₹200",
-      discountedPrice: "₹80",
-      images: [
-        `${process.env.PUBLIC_URL}/image/DataCable/8.jpg`,
-        `${process.env.PUBLIC_URL}/image/DataCable/9.jpg`,
-        `${process.env.PUBLIC_URL}/image/DataCable/10.jpg`,
-      ],
-      description: "Best for all fast charging Android phones like Realme, OnePlus, and Samsung.",
-    },
-    {
-      id: 4,
-      name: "iPhone Cable",
-      model: "Original Connector",
-      quality: "iPhone Compatible Fast Charging",
-      price: "₹250",
-      discountedPrice: "₹90",
-      images: [
-        `${process.env.PUBLIC_URL}/image/DataCable/iPhoneCable.jpg`,
-        `${process.env.PUBLIC_URL}/image/DataCable/iPhoneCable.jpg`,
-        `${process.env.PUBLIC_URL}/image/DataCable/iPhoneCable.jpg`,
-
-      ],
-      description: "Supports iPhone 5 to iPhone 14 models for charge & sync.",
-    },
-  ];
-
-  const [currentImages, setCurrentImages] = useState(() =>
-    products.reduce((acc, product) => {
-      acc[product.id] = 0;
-      return acc;
-    }, {})
-  );
-
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({ left: -200, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({ left: 200, behavior: "smooth" });
-  };
-
-  const nextImage = (productId) => {
-    setCurrentImages((prev) => {
-      const currentIndex = prev[productId];
-      const totalImages = products.find((p) => p.id === productId)?.images.length || 1;
-      return {
-        ...prev,
-        [productId]: (currentIndex + 1) % totalImages,
-      };
-    });
-  };
-
-  const prevImage = (productId) => {
-    setCurrentImages((prev) => {
-      const currentIndex = prev[productId];
-      const totalImages = products.find((p) => p.id === productId)?.images.length || 1;
-      return {
-        ...prev,
-        [productId]: (currentIndex - 1 + totalImages) % totalImages,
-      };
-    });
-  };
-
-  // Helper to calculate discount percent
-  const getDiscountPercent = (priceStr, discountedPriceStr) => {
-    const price = Number(priceStr.replace(/[₹,]/g, ""));
-    const discountedPrice = Number(discountedPriceStr.replace(/[₹,]/g, ""));
-    if (!price || !discountedPrice) return 0;
-    const discount = ((price - discountedPrice) / price) * 100;
-    return Math.round(discount);
-  };
-
-  const handleBuyNow = (product) => {
-    const finalCableType = cableType === "Other" ? customCableType || "Not specified" : cableType;
-    const finalBrand = selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
-
-    const message = `*Product Details:*
-🔌 Name: ${product.name}
-📦 Model: ${product.model}
-✅ Quality: ${product.quality}
-💸 Price: ${product.discountedPrice}
-🔌 Cable Type: ${finalCableType}
-🏷️ Preferred Brand: ${finalBrand}
-💳 Payment Method: ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}`;
-
+  const handleBuyNow = (name, price) => {
+    const message = `Hello, I want to buy ${name} for ${price}.`;
     const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
   };
 
-  const addToCart = (product) => {
-    const exists = cart.find((item) => item.id === product.id);
-    if (!exists) {
-      setCart([...cart, { ...product, quantity: 1 }]);
-      alert(`${product.name} added to cart.`);
-    } else {
-      alert(`${product.name} is already in cart.`);
+  const startAutoScroll = () => {
+    autoScrollInterval.current = setInterval(() => {
+      if (scrollRef.current && !isPaused) {
+        scrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+        }
+      }
+    }, 3000);
+  };
+
+  const stopAutoScroll = () => {
+    clearInterval(autoScrollInterval.current);
+  };
+
+  useEffect(() => {
+    startAutoScroll();
+    return () => stopAutoScroll();
+  }, [isPaused]);
+
+  const handleUserInteraction = () => {
+    setIsPaused(true);
+    stopAutoScroll();
+    clearTimeout(pauseTimeout.current);
+    pauseTimeout.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 10000);
+  };
+
+  const handleScrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+      handleUserInteraction();
     }
   };
 
+  const handleScrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+      handleUserInteraction();
+    }
+  };
+
+  const calculateDiscount = (originalPrice, price) => {
+    const original = parseInt(originalPrice.replace("₹", ""));
+    const current = parseInt(price.replace("₹", ""));
+    const discount = Math.round(((original - current) / original) * 100);
+    return discount;
+  };
+
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-3">🔌 Data Cables</h2>
+    <div className="px-4 py-10 max-w-6xl mx-auto relative">
+      <h2 className="text-3xl font-bold text-center mb-8 text-[#00292d]">
+        Mobile Data Cable
+      </h2>
 
-      {/* Selectors */}
-      <div className="flex gap-3 mb-5 flex-wrap">
-        <div className="flex-1 min-w-[130px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-xs">Select Cable Type:</label>
-          <select
-            value={cableType}
-            onChange={(e) => setCableType(e.target.value)}
-            className="border px-2 py-1 rounded w-full text-xs"
-          >
-            <option value="Type-C">Type-C</option>
-            <option value="Thin Pin">Thin Pin</option>
-            <option value="Wide Pin">Wide Pin</option>
-            <option value="Micro USB">Micro USB</option>
-            <option value="Lightning">Lightning (iPhone)</option>
-            <option value="Other">Other</option>
-          </select>
-          {cableType === "Other" && (
-            <input
-              type="text"
-              placeholder="Enter custom cable type"
-              className="mt-1 border px-2 py-1 rounded w-full text-xs"
-              value={customCableType}
-              onChange={(e) => setCustomCableType(e.target.value)}
-            />
-          )}
-        </div>
+      {/* Arrows */}
+      <button
+        className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200"
+        onClick={handleScrollLeft}
+      >
+        <FaChevronLeft size={20} />
+      </button>
 
-        <div className="flex-1 min-w-[130px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-xs">Select Mobile Brand:</label>
-          <select
-            value={selectedBrand}
-            onChange={(e) => setSelectedBrand(e.target.value)}
-            className="border px-2 py-1 rounded w-full text-xs"
-          >
-            <option value="None">None</option>
-            <option value="Normal">Normal</option>
-            <option value="Vivo">Vivo</option>
-            <option value="MI">MI</option>
-            <option value="Oppo">Oppo</option>
-            <option value="Realme">Realme</option>
-            <option value="Samsung">Samsung</option>
-            <option value="OnePlus">OnePlus</option>
-            <option value="Apple">Apple</option>
-            <option value="Infinix">Infinix</option>
-            <option value="Itel">Itel</option>
-            <option value="Lenovo">Lenovo</option>
-            <option value="Nokia">Nokia</option>
-            <option value="Motorola">Motorola</option>
-            <option value="Other">Other</option>
-          </select>
-          {selectedBrand === "Other" && (
-            <input
-              type="text"
-              placeholder="Enter custom brand name"
-              className="mt-1 border px-2 py-1 rounded w-full text-xs"
-              value={customBrand}
-              onChange={(e) => setCustomBrand(e.target.value)}
-            />
-          )}
-        </div>
-      </div>
+      <button
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200"
+        onClick={handleScrollRight}
+      >
+        <FaChevronRight size={20} />
+      </button>
 
-      {/* Payment */}
-      <div className="mb-5">
-        <label className="block mb-1 font-semibold text-gray-700 text-sm">Payment Method:</label>
-        <div className="flex gap-3 text-sm">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              value="cod"
-              checked={paymentMethod === "cod"}
-              onChange={() => setPaymentMethod("cod")}
-              className="mr-2 w-4 h-4"
-            />
-            Cash on Delivery
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              value="online"
-              checked={paymentMethod === "online"}
-              onChange={() => setPaymentMethod("online")}
-              className="mr-2 w-4 h-4"
-            />
-            Online Payment
-          </label>
-        </div>
-      </div>
+      {/* Scrollable Product List */}
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto no-scrollbar gap-4 pb-4 snap-x snap-mandatory"
+        onClick={handleUserInteraction}
+        onTouchStart={handleUserInteraction}
+        onMouseDown={handleUserInteraction}
+      >
+        {products.map((item) => {
+          const discount = calculateDiscount(item.price, item.discountedPrice);
+          const isOriginal = item.quality?.toLowerCase().includes("original");
 
-      {/* Product Carousel */}
-      <div className="relative flex items-center">
-        <button
-          onClick={scrollLeft}
-          className="absolute left-0 z-10 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
-          style={{ top: "45%", transform: "translateY(-50%)" }}
-        >
-          <MdArrowBackIos size={18} />
-        </button>
+          return (
+            <div
+              key={item.id}
+              className="flex-shrink-0 w-[180px] sm:w-[200px] bg-white shadow rounded-xl snap-start relative"
+            >
+              {/* Original Badge */}
+              {isOriginal && (
+                <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full shadow">
+                  6 MONTH WARRANTY
+                </div>
+              )}
 
-        <div
-          ref={scrollRef}
-          className="flex gap-3 overflow-x-auto pb-3 scroll-smooth scrollbar-hide"
-          style={{ scrollSnapType: "x mandatory" }}
-        >
-          {products.map((product) => {
-            const currentIndex = currentImages[product.id] || 0;
-            const currentImage = product.images[currentIndex];
-            const discountPercent = getDiscountPercent(product.price, product.discountedPrice);
-
-            return (
+              {/* Product Image */}
               <div
-                key={product.id}
-                className="flex-shrink-0 w-[180px] border rounded-md p-3 bg-white shadow-sm relative scroll-snap-align-start"
+                className="w-full h-36 sm:h-40 overflow-hidden rounded-t-xl bg-gray-50 cursor-pointer"
+                onClick={() => setZoomImage(item.images[0])}
               >
-                <div className="relative">
-                  <img
-                    src={currentImage}
-                    alt={product.name}
-                    className="w-full h-36 object-contain rounded-md"
-                    loading="lazy"
-                  />
-                  <button
-                    onClick={() => prevImage(product.id)}
-                    className="absolute top-1/2 left-1 bg-white rounded-full p-1 shadow-md -translate-y-1/2"
-                    aria-label="Previous Image"
-                  >
-                    <MdArrowBackIos size={16} />
-                  </button>
-                  <button
-                    onClick={() => nextImage(product.id)}
-                    className="absolute top-1/2 right-1 bg-white rounded-full p-1 shadow-md -translate-y-1/2"
-                    aria-label="Next Image"
-                  >
-                    <MdArrowForwardIos size={16} />
-                  </button>
+                <img
+                  src={item.images[0]}
+                  alt={item.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Product Info */}
+              <div className="p-3 flex flex-col items-center text-center">
+                <h3 className="font-semibold text-sm text-gray-800">{item.name}</h3>
+                <p className="text-xs text-gray-600">{item.description}</p>
+                <div className="my-1 text-sm">
+                  <span className="text-gray-500 line-through mr-1">{item.price}</span>
+                  <span className="text-green-600 font-bold">{item.discountedPrice}</span>
                 </div>
-                <h3 className="font-semibold text-sm mt-2">{product.name}</h3>
-                <p className="text-xs text-gray-600 mb-1">{product.model}</p>
-                <p className="text-xs text-gray-500 mb-1">{product.quality}</p>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-bold">{product.discountedPrice}</span>
-                  <span className="text-xs line-through text-gray-400">{product.price}</span>
-                  {discountPercent > 0 && (
-                    <span className="text-xs font-semibold text-green-600">({discountPercent}% OFF)</span>
-                  )}
-                </div>
-                
+                <div className="text-xs font-semibold text-red-600">{discount}% OFF</div>
                 <button
-                  onClick={() => handleBuyNow(product)}
-                  className="w-full bg-green-600 text-white py-1 rounded hover:bg-green-700 text-xs"
+                  onClick={() => handleBuyNow(item.name, item.discountedPrice)}
+                  className="mt-2 bg-green-600 hover:bg-green-700 text-white py-1 px-4 rounded text-sm"
                 >
-                  Buy Now
+                  Buy
                 </button>
               </div>
-            );
-          })}
-        </div>
-
-        <button
-          onClick={scrollRight}
-          className="absolute right-0 z-10 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
-          style={{ top: "45%", transform: "translateY(-50%)" }}
-        >
-          <MdArrowForwardIos size={18} />
-        </button>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Cart Summary */}
-      {cart.length > 0 && (
-        <div className="mt-6 border-t pt-4">
-          <h3 className="font-semibold text-lg mb-2">Cart Items</h3>
-          <ul>
-            {cart.map((item) => (
-              <li key={item.id} className="flex justify-between mb-1 text-sm">
-                <span>{item.name} (x{item.quantity})</span>
-                <span>{item.discountedPrice}</span>
-              </li>
-            ))}
-          </ul>
+      {/* Zoom Modal */}
+      {zoomImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
+          onClick={() => setZoomImage(null)}
+        >
+          <img
+            src={zoomImage}
+            alt="Zoomed"
+            className="max-h-[90%] max-w-[90%] object-contain"
+          />
+          <button
+            className="absolute top-4 right-4 text-white bg-red-600 px-3 py-1 rounded"
+            onClick={() => setZoomImage(null)}
+          >
+            Close
+          </button>
         </div>
       )}
+
+      {/* Hide Scrollbar */}
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
   );
-}
+};
+
+export default AccessoriesPage;

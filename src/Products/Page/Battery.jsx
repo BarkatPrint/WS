@@ -1,19 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import KeypadBatteries from "../Page/KeypadBatteries";
+import React, { useEffect, useRef, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-export default function Batteries() {
-  const navigate = useNavigate();
 
-  const [paymentMethod, setPaymentMethod] = useState("cod");
-  const [batteryType, setBatteryType] = useState("Li-ion");
+const AccessoriesPage = () => {
+  const scrollRef = useRef(null);
+  const autoScrollInterval = useRef(null);
+  const pauseTimeout = useRef(null);
+
+  const [isPaused, setIsPaused] = useState(false);
+  const [zoomImage, setZoomImage] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState("Vivo");
-  const [otherBrand, setOtherBrand] = useState("");
-  const [currentImages, setCurrentImages] = useState({});
-  const [paused, setPaused] = useState(false);
-
-  const sliderRef = useRef(null);
-  const autoSlideRef = useRef();
+  const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
+  const [customModel, setCustomModel] = useState("");
 
   const batteries = [
     {
@@ -26,6 +24,7 @@ export default function Batteries() {
       quality: "High Quality",
       price: "₹1650",
       discountedPrice: "₹850",
+      brand: "Vivo",
     },
     {
       id: 2,
@@ -37,6 +36,7 @@ export default function Batteries() {
       quality: "High Quality",
       price: "₹650",
       discountedPrice: "₹350",
+      brand: "Samsung",
     },
     {
       id: 3,
@@ -48,6 +48,7 @@ export default function Batteries() {
       quality: "High Quality",
       price: "₹850",
       discountedPrice: "₹450",
+      brand: "Redmi",
     },
     {
       id: 4,
@@ -59,6 +60,7 @@ export default function Batteries() {
       quality: "High Quality",
       price: "₹650",
       discountedPrice: "₹350",
+      brand: "Oppo",
     },
     {
       id: 5,
@@ -70,228 +72,216 @@ export default function Batteries() {
       quality: "High Quality",
       price: "₹650",
       discountedPrice: "₹350",
+      brand: "Realme",
     },
   ];
 
-  useEffect(() => {
-    autoSlideRef.current = setInterval(() => {
-      if (!paused) {
-        setCurrentImages((prev) => {
-          const updated = { ...prev };
-          batteries.forEach((product) => {
-            const currentIndex = prev[product.id] || 0;
-            updated[product.id] = (currentIndex + 1) % product.images.length;
-          });
-          return updated;
-        });
-      }
-    }, 3000);
-
-    return () => clearInterval(autoSlideRef.current);
-  }, [paused]);
-
-  const handleImageChange = (productId, direction, totalImages) => {
-    setPaused(true);
-    setTimeout(() => setPaused(false), 5000);
-
-    setCurrentImages((prev) => {
-      const currentIndex = prev[productId] || 0;
-      const newIndex =
-        direction === "next"
-          ? (currentIndex + 1) % totalImages
-          : (currentIndex - 1 + totalImages) % totalImages;
-      return { ...prev, [productId]: newIndex };
-    });
-  };
-
-  const scrollLeft = () => {
-    sliderRef.current?.scrollBy({ left: -720, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    sliderRef.current?.scrollBy({ left: 720, behavior: "smooth" });
-  };
-
-  const handleBuyNow = (product) => {
-    const message = `📱 *Battery Order* \n\n🔋 *${product.name}*\n💥 ${product.discountedPrice} (was ${product.price})\n⚡ ${product.capacity}, ${product.quality}\n💰 Payment: ${paymentMethod}\n\nPlease confirm the order.`;
-    const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(
-      message
-    )}`;
+  const handleBuyNow = (name, price) => {
+    const message = `Hello, I want to buy ${name} for ${price}.\nSelected Brand: ${selectedBrand}\nPayment Method: ${paymentMethod}`;
+    const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
   };
 
-  const calculateDiscount = (original, discounted) => {
-    const o = parseInt(original.replace("₹", ""));
-    const d = parseInt(discounted.replace("₹", ""));
-    const percent = Math.round(((o - d) / o) * 100);
-    return percent;
+  const startAutoScroll = () => {
+    autoScrollInterval.current = setInterval(() => {
+      if (scrollRef.current && !isPaused) {
+        scrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+        }
+      }
+    }, 3000);
   };
 
+  const stopAutoScroll = () => clearInterval(autoScrollInterval.current);
+
+  useEffect(() => {
+    startAutoScroll();
+    return () => stopAutoScroll();
+  }, [isPaused]);
+
+  const handleUserInteraction = () => {
+    setIsPaused(true);
+    stopAutoScroll();
+    clearTimeout(pauseTimeout.current);
+    pauseTimeout.current = setTimeout(() => setIsPaused(false), 10000);
+  };
+
+  const handleScrollLeft = () => {
+    scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
+    handleUserInteraction();
+  };
+
+  const handleScrollRight = () => {
+    scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" });
+    handleUserInteraction();
+  };
+
+  const calculateDiscount = (originalPrice, price) => {
+    const original = parseInt(originalPrice.replace("₹", ""));
+    const current = parseInt(price.replace("₹", ""));
+    return Math.round(((original - current) / original) * 100);
+  };
+
+  const filteredBatteries =
+    selectedBrand === "Other"
+      ? []
+      : batteries.filter((item) => item.brand === selectedBrand);
+
   return (
-    <div className="p-4">
-      <h2 className="text-3xl font-bold mb-4">🔋 Battery</h2>
+    <>
+      <div className="px-4 py-10 max-w-6xl mx-auto relative">
+        <h2 className="text-3xl font-bold text-center mb-8 text-[#00292d]">Battery</h2>
 
-      {/* Dropdown Filters */}
-      <div className="flex flex-wrap gap-4 mb-4">
-        <select
-          value={batteryType}
-          onChange={(e) => setBatteryType(e.target.value)}
-          className="border rounded px-3 py-2"
-        >
-          <option value="Li-ion">Li-ion</option>
-          <option value="Li-Poly">Li-Poly</option>
-        </select>
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-6">
+          <div>
+            <label className="font-medium mr-2">Select Mobile Brand:</label>
+            <select
+              value={selectedBrand}
+              onChange={(e) => setSelectedBrand(e.target.value)}
+              className="border border-gray-300 rounded px-3 py-1"
+            >
+              <option value="Vivo">Vivo</option>
+              <option value="Oppo">Oppo</option>
+              <option value="Realme">Realme</option>
+              <option value="Redmi">Redmi</option>
+              <option value="Samsung">Samsung</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-        <select
-          value={selectedBrand}
-          onChange={(e) => {
-            setSelectedBrand(e.target.value);
-            if (e.target.value !== "Other") setOtherBrand("");
-          }}
-          className="border rounded px-3 py-2"
-        >
-          <option value="Vivo">Vivo</option>
-          <option value="Samsung">Samsung</option>
-          <option value="MI">MI</option>
-          <option value="Oppo">Oppo</option>
-          <option value="Realme">Realme</option>
-          <option value="Lava">Lava</option>
-          <option value="Nokia">Nokia</option>
-          <option value="Other">Other</option>
-        </select>
+          
+        </div>
 
-        {selectedBrand === "Other" && (
-          <input
-            type="text"
-            value={otherBrand}
-            onChange={(e) => setOtherBrand(e.target.value)}
-            placeholder="Enter brand name"
-            className="border rounded px-3 py-2"
-          />
-        )}
-
-        <select
-          value={paymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value)}
-          className="border rounded px-3 py-2"
-        >
-          <option value="cod">Cash on Delivery</option>
-          <option value="prepaid">Prepaid</option>
-        </select>
-      </div>
-
-      {/* Product Carousel */}
-      <div className="relative">
+        {/* Arrows */}
         <button
-          onClick={scrollLeft}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-300 hover:bg-gray-400 rounded-full p-2 shadow"
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200"
+          onClick={handleScrollLeft}
         >
-          &#8592;
+          <FaChevronLeft size={20} />
+        </button>
+        <button
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200"
+          onClick={handleScrollRight}
+        >
+          <FaChevronRight size={20} />
         </button>
 
+        {/* Product List */}
         <div
-          ref={sliderRef}
-          className="flex overflow-x-auto space-x-4 scrollbar-hide px-8"
+          ref={scrollRef}
+          className="flex overflow-x-auto no-scrollbar gap-4 pb-4 snap-x snap-mandatory"
+          onClick={handleUserInteraction}
+          onTouchStart={handleUserInteraction}
+          onMouseDown={handleUserInteraction}
         >
-          {batteries.map((product) => {
-            const currentIndex = currentImages[product.id] || 0;
-            const discount = calculateDiscount(
-              product.price,
-              product.discountedPrice
-            );
+          {filteredBatteries.map((item) => {
+            const discount = calculateDiscount(item.price, item.discountedPrice);
+            const isOriginal = item.quality?.toLowerCase().includes("original");
+
             return (
               <div
-                key={product.id}
-                className="min-w-[240px] flex-shrink-0 bg-white border rounded-xl shadow p-4"
+                key={item.id}
+                className="flex-shrink-0 w-[180px] sm:w-[200px] bg-white shadow rounded-xl snap-start relative"
               >
-                <div className="relative w-full aspect-square mb-4 overflow-hidden rounded bg-gray-100">
-                  <img
-                    src={product.images[currentIndex]}
-                    alt={product.name}
-                    className="absolute inset-0 w-full h-full object-contain md:object-cover"
-                  />
-                  <button
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-1 py-0.5 rounded shadow"
-                    onClick={() =>
-                      handleImageChange(
-                        product.id,
-                        "prev",
-                        product.images.length
-                      )
-                    }
-                  >
-                    ‹
-                  </button>
-                  <button
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-1 py-0.5 rounded shadow"
-                    onClick={() =>
-                      handleImageChange(
-                        product.id,
-                        "next",
-                        product.images.length
-                      )
-                    }
-                  >
-                    ›
-                  </button>
-                </div>
-                <h3 className="font-bold text-gray-800">{product.name}</h3>
-                <p className="text-sm text-gray-600 mb-1">
-                  {product.description}
-                </p>
-                <ul className="text-sm mb-2">
-                  <li>
-                    <b>Model:</b> {product.model}
-                  </li>
-                  <li>
-                    <b>Capacity:</b> {product.capacity}
-                  </li>
-                  <li>
-                    <b>Quality:</b> {product.quality}
-                  </li>
-                </ul>
-                <div className="mb-2">
-                  <span className="text-green-600 font-bold mr-2">
-                    {product.discountedPrice}
-                  </span>
-                  <span className="line-through text-sm text-gray-500">
-                    {product.price}
-                  </span>
-                  <span className="ml-2 text-red-600 font-semibold">
-                    ({discount}% OFF)
-                  </span>
-                </div>
-                <button
-                  onClick={() => handleBuyNow(product)}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-1.5 rounded"
+                {isOriginal && (
+                  <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full shadow">
+                    6 MONTH WARRANTY
+                  </div>
+                )}
+                <div
+                  className="w-full h-36 sm:h-40 overflow-hidden rounded-t-xl bg-gray-50 cursor-pointer"
+                  onClick={() => setZoomImage(item.images[0])}
                 >
-                  Buy Now
-                </button>
+                  <img
+                    src={item.images[0]}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                <div className="p-3 flex flex-col items-center text-center">
+                  <h3 className="font-semibold text-sm text-gray-800">{item.name}</h3>
+                  <p className="text-xs text-gray-600">{item.description}</p>
+                  <div className="my-1 text-sm">
+                    <span className="text-gray-500 line-through mr-1">{item.price}</span>
+                    <span className="text-green-600 font-bold">{item.discountedPrice}</span>
+                  </div>
+                  <div className="text-xs font-semibold text-red-600">{discount}% OFF</div>
+                  <button
+                    onClick={() => handleBuyNow(item.name, item.discountedPrice)}
+                    className="bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded text-xs mt-2"
+                  >
+                    Buy
+                  </button>
+                </div>
               </div>
             );
           })}
+
+          {/* Only show custom model input when "Other" is selected */}
+          {selectedBrand === "Other" && (
+            <div className="flex-shrink-0 w-[180px] sm:w-[200px] bg-white shadow rounded-xl snap-start p-3 flex flex-col justify-between">
+              <div className="text-center">
+                <h3 className="font-semibold text-sm text-gray-800 mb-1">Can't Find Your Battery?</h3>
+                <p className="text-xs text-gray-600 mb-2">
+                  Send your mobile name on WhatsApp to get the battery photo.
+                </p>
+
+                <input
+                  type="text"
+                  placeholder="Enter Mobile Name"
+                  value={customModel}
+                  onChange={(e) => setCustomModel(e.target.value)}
+                  className="w-full border text-xs px-2 py-1 mb-2 rounded"
+                />
+
+                <button
+                  onClick={() => {
+                    const message = `Hello, I need a battery for my ${customModel} (${selectedBrand}). My payment method is ${paymentMethod}. Please send the battery photo.`;
+                    const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappURL, "_blank");
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded text-xs mt-1 w-full"
+                  disabled={!customModel}
+                >
+                  Request Battery
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
-        <button
-          onClick={scrollRight}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-300 hover:bg-gray-400 rounded-full p-2 shadow"
-        >
-          &#8594;
-        </button>
+        {/* Zoom Image Modal */}
+        {zoomImage && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
+            onClick={() => setZoomImage(null)}
+          >
+            <img
+              src={zoomImage}
+              alt="Zoomed"
+              className="max-h-[90%] max-w-[90%] object-contain"
+            />
+            <button
+              className="absolute top-4 right-4 text-white bg-red-600 px-3 py-1 rounded"
+              onClick={() => setZoomImage(null)}
+            >
+              Close
+            </button>
+          </div>
+        )}
+
+        <style>{`
+          .no-scrollbar::-webkit-scrollbar { display: none; }
+          .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        `}</style>
       </div>
 
-      {/* See All Link */}
-      <div className="text-center mt-6">
-        <button
-          onClick={() => navigate("/products/battery")}
-          className="text-blue-600 underline"
-        >
-          See All Batteries
-        </button>
-      </div>
-
-      {/* Keypad Battery Section */}
-      <KeypadBatteries />
-    </div>
+ 
+    </>
   );
-}
+};
+
+export default AccessoriesPage;

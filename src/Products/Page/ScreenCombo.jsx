@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function ScreenCombo() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -7,6 +8,9 @@ export default function ScreenCombo() {
   const [customDefaultComboType, setCustomDefaultComboType] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("Samsung");
   const [customBrand, setCustomBrand] = useState("");
+
+  const [fullScreenImage, setFullScreenImage] = useState(null);
+  const [fullScreenIndex, setFullScreenIndex] = useState(0);
 
   const products = [
     {
@@ -66,6 +70,26 @@ export default function ScreenCombo() {
     });
   };
 
+  const handleImageClick = (images, index) => {
+    setFullScreenImage(images);
+    setFullScreenIndex(index);
+  };
+
+  const closeFullScreen = () => {
+    setFullScreenImage(null);
+    setFullScreenIndex(0);
+  };
+
+  const navigateFullScreen = (direction) => {
+    if (!fullScreenImage) return;
+    const total = fullScreenImage.length;
+    const newIndex =
+      direction === "next"
+        ? (fullScreenIndex + 1) % total
+        : (fullScreenIndex - 1 + total) % total;
+    setFullScreenIndex(newIndex);
+  };
+
   const calculateDiscount = (original, discounted) => {
     const clean = (s) => parseInt(s.replace(/[₹,]/g, ""), 10);
     const orig = clean(original);
@@ -105,9 +129,7 @@ export default function ScreenCombo() {
       <div className="flex gap-4 mb-6 flex-wrap">
         {/* Combo Type */}
         <div className="flex-1 min-w-[140px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-sm">
-            Default Combo Type:
-          </label>
+          <label className="block mb-1 font-semibold text-gray-700 text-sm">Default Combo Type:</label>
           <select
             value={defaultComboType}
             onChange={(e) => setDefaultComboType(e.target.value)}
@@ -132,9 +154,7 @@ export default function ScreenCombo() {
 
         {/* Mobile Brand */}
         <div className="flex-1 min-w-[140px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-sm">
-            Select Mobile Brand:
-          </label>
+          <label className="block mb-1 font-semibold text-gray-700 text-sm">Select Mobile Brand:</label>
           <select
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
@@ -200,32 +220,16 @@ export default function ScreenCombo() {
           const discountText = calculateDiscount(product.price, product.discountedPrice);
 
           return (
-            <div
-              key={product.id}
-              className="border rounded-xl shadow-lg p-4 bg-white flex flex-col"
-            >
-              <div className="relative w-full pb-[100%] mb-4 overflow-hidden rounded bg-gray-100">
+            <div key={product.id} className="border rounded-xl shadow-lg p-4 bg-white flex flex-col">
+              <div
+                className="relative w-full pb-[100%] mb-4 overflow-hidden rounded bg-gray-100 cursor-pointer"
+                onClick={() => handleImageClick(product.images, currentIndex)}
+              >
                 <img
                   src={product.images[currentIndex]}
                   alt={product.name}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-                <button
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                  onClick={() =>
-                    handleImageChange(product.id, "prev", product.images.length)
-                  }
-                >
-                  ‹
-                </button>
-                <button
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                  onClick={() =>
-                    handleImageChange(product.id, "next", product.images.length)
-                  }
-                >
-                  ›
-                </button>
               </div>
 
               <h2 className="text-lg font-bold text-gray-800">{product.name}</h2>
@@ -251,6 +255,35 @@ export default function ScreenCombo() {
           );
         })}
       </div>
+
+      {/* Full Screen Image Viewer */}
+      {fullScreenImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
+          <button
+            className="absolute top-4 right-4 text-white text-2xl"
+            onClick={closeFullScreen}
+          >
+            <FaTimes />
+          </button>
+          <button
+            className="absolute left-4 text-white text-3xl"
+            onClick={() => navigateFullScreen("prev")}
+          >
+            <FaChevronLeft />
+          </button>
+          <img
+            src={fullScreenImage[fullScreenIndex]}
+            alt="Full Screen"
+            className="max-w-full max-h-full object-contain"
+          />
+          <button
+            className="absolute right-4 text-white text-3xl"
+            onClick={() => navigateFullScreen("next")}
+          >
+            <FaChevronRight />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

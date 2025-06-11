@@ -10,6 +10,11 @@ export default function MobileCovers() {
   const scrollContainerRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
 
+  // Fullscreen modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalProductImages, setModalProductImages] = useState([]);
+  const [modalImageIndex, setModalImageIndex] = useState(0);
+
   const products = [
     {
       id: 1,
@@ -85,20 +90,17 @@ export default function MobileCovers() {
     },
   ];
 
-  // Handle next/prev image carousel logic per product
   const handleImageChange = (productId, direction, totalImages) => {
     setCurrentImages((prev) => {
       const currentIndex = prev[productId] || 0;
-      const newIndex =
-        direction === "next"
-          ? (currentIndex + 1) % totalImages
-          : (currentIndex - 1 + totalImages) % totalImages;
+      const newIndex = direction === "next"
+        ? (currentIndex + 1) % totalImages
+        : (currentIndex - 1 + totalImages) % totalImages;
       return { ...prev, [productId]: newIndex };
     });
-    setIsPaused(true); // Pause auto-scroll on manual nav
+    setIsPaused(true);
   };
 
-  // Buy Now button triggers WhatsApp with product + custom options + payment method
   const handleBuyNow = (product) => {
     const finalCoverType = coverType === "Other" ? customCoverType.trim() || "Not specified" : coverType;
     const finalBrand = selectedBrand === "Other" ? customBrand.trim() || "Not specified" : selectedBrand;
@@ -117,15 +119,12 @@ export default function MobileCovers() {
     setIsPaused(true);
   };
 
-  // Auto-scroll carousel every 3 seconds unless paused
   useEffect(() => {
     if (isPaused) return;
-
     const interval = setInterval(() => {
       if (scrollContainerRef.current) {
-        const scrollStep = 260; // approx width of a card + gap
+        const scrollStep = 260;
         const maxScrollLeft = scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth;
-
         if (scrollContainerRef.current.scrollLeft + scrollStep >= maxScrollLeft) {
           scrollContainerRef.current.scrollTo({ left: 0, behavior: "smooth" });
         } else {
@@ -133,14 +132,30 @@ export default function MobileCovers() {
         }
       }
     }, 3000);
-
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  // Pause auto-scroll on hover and clicks
-  const handleMouseEnter = () => setIsPaused(true);
-  const handleMouseLeave = () => setIsPaused(false);
-  const handleClickInside = () => setIsPaused(true);
+  const handleOpenModal = (images, index) => {
+    setModalProductImages(images);
+    setModalImageIndex(index);
+    setModalOpen(true);
+    setIsPaused(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setModalProductImages([]);
+    setModalImageIndex(0);
+    setIsPaused(false);
+  };
+
+  const handlePrevModalImage = () => {
+    setModalImageIndex((prev) => (prev - 1 + modalProductImages.length) % modalProductImages.length);
+  };
+
+  const handleNextModalImage = () => {
+    setModalImageIndex((prev) => (prev + 1) % modalProductImages.length);
+  };
 
   return (
     <div className="p-4 max-w-[1100px] mx-auto">
@@ -149,10 +164,11 @@ export default function MobileCovers() {
         All types of mobile covers available — Back, Flip, Transparent, iPhone, Girls Covers & more!
       </p>
 
-      {/* Cover Type & Brand Selectors */}
+      {/* Selectors */}
       <div className="flex gap-6 flex-wrap mb-8">
+        {/* Cover Type Selector */}
         <div className="flex-1 min-w-[140px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-sm">Select Cover Type:</label>
+          <label className="block mb-1 font-semibold text-sm text-gray-700">Select Cover Type:</label>
           <select
             value={coverType}
             onChange={(e) => setCoverType(e.target.value)}
@@ -173,16 +189,17 @@ export default function MobileCovers() {
           {coverType === "Other" && (
             <input
               type="text"
-              placeholder="Enter custom cover type"
               className="mt-2 border px-2 py-1 rounded w-full text-sm"
               value={customCoverType}
               onChange={(e) => setCustomCoverType(e.target.value)}
+              placeholder="Enter custom cover type"
             />
           )}
         </div>
 
+        {/* Brand Selector */}
         <div className="flex-1 min-w-[140px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-sm">Select Mobile Brand:</label>
+          <label className="block mb-1 font-semibold text-sm text-gray-700">Select Mobile Brand:</label>
           <select
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
@@ -205,108 +222,116 @@ export default function MobileCovers() {
           {selectedBrand === "Other" && (
             <input
               type="text"
-              placeholder="Enter custom brand name"
               className="mt-2 border px-2 py-1 rounded w-full text-sm"
               value={customBrand}
               onChange={(e) => setCustomBrand(e.target.value)}
+              placeholder="Enter custom brand name"
             />
           )}
         </div>
       </div>
 
-      {/* Carousel container */}
+      {/* Product Cards Scroll */}
       <div
         ref={scrollContainerRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleClickInside}
         className="flex overflow-x-auto gap-4 pb-4 no-scrollbar cursor-pointer"
-        style={{ scrollSnapType: "x mandatory" }}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
       >
         {products.map((product) => {
           const currentIndex = currentImages[product.id] || 0;
           return (
             <div
               key={product.id}
-              className="min-w-[250px] max-w-[250px] border rounded shadow hover:shadow-lg flex-shrink-0 bg-white scroll-snap-align-start"
-              style={{ cursor: "pointer" }}
-              onClick={() => setIsPaused(true)} // pause on card click
+              className="min-w-[250px] max-w-[250px] border rounded shadow hover:shadow-lg bg-white flex-shrink-0"
             >
-              {/* Image section with navigation buttons */}
               <div className="relative h-44 w-full overflow-hidden rounded-t">
                 <img
                   src={product.images[currentIndex]}
-                  alt={`${product.name} - Image ${currentIndex + 1}`}
-                  className="object-contain w-full h-full transition-transform duration-300"
-                  draggable={false}
+                  alt={product.name}
+                  className="object-contain w-full h-full"
+                  onClick={() => handleOpenModal(product.images, currentIndex)}
                 />
                 {product.images.length > 1 && (
                   <>
                     <button
+                      className="absolute left-1 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-1 rounded-full"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleImageChange(product.id, "prev", product.images.length);
                       }}
-                      aria-label="Previous image"
-                      className="absolute left-1 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-1 rounded-full"
                     >
-                      &#10094;
+                      ❮
                     </button>
                     <button
+                      className="absolute right-1 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-1 rounded-full"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleImageChange(product.id, "next", product.images.length);
                       }}
-                      aria-label="Next image"
-                      className="absolute right-1 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-1 rounded-full"
                     >
-                      &#10095;
+                      ❯
                     </button>
                   </>
                 )}
               </div>
 
-              {/* Product details */}
               <div className="p-3">
                 <h3 className="text-lg font-semibold mb-1">{product.name}</h3>
-                <p className="text-xs text-gray-600 mb-1">{product.description}</p>
-                <p className="text-sm text-gray-700">
-                  Model: <span className="font-medium">{product.model}</span>
+                <p className="text-xs text-gray-600">{product.description}</p>
+                <p className="text-sm mt-1">
+                  <b>Model:</b> {product.model}
                 </p>
-                <p className="text-sm text-gray-700">
-                  Quality: <span className="font-medium">{product.quality}</span>
+                <p className="text-sm">
+                  <b>Quality:</b> {product.quality}
                 </p>
                 <p className="text-sm text-red-600 font-bold my-2">
                   ₹{product.discountedPrice}
                   <span className="line-through text-gray-400 ml-2">{product.price}</span>
                 </p>
 
-                {/* Payment method selector */}
-                <div className="mb-3">
-                  <label className="block text-sm font-medium mb-1 text-gray-700">
-                    Payment Method:
-                  </label>
-                  <select
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="border rounded px-2 py-1 w-full text-sm"
-                  >
-                    <option value="cod">Cash on Delivery</option>
-                    <option value="online">Online Payment</option>
-                  </select>
-                </div>
+                
 
                 <button
                   onClick={() => handleBuyNow(product)}
-                  className="bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded transition"
+                  className="bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded"
                 >
-                  Buy Now via WhatsApp
+                  Buy Now 
                 </button>
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* Fullscreen Image Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <img
+            src={modalProductImages[modalImageIndex]}
+            alt="Zoomed Cover"
+            className="max-w-full max-h-full"
+          />
+          <button
+            className="absolute top-5 right-5 text-white text-3xl bg-black bg-opacity-70 rounded-full px-3 py-1"
+            onClick={handleCloseModal}
+          >
+            ❌
+          </button>
+          <button
+            className="absolute left-5 text-white text-3xl"
+            onClick={handlePrevModalImage}
+          >
+            ❮
+          </button>
+          <button
+            className="absolute right-5 text-white text-3xl"
+            onClick={handleNextModalImage}
+          >
+            ❯
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const keypadMobiles = [
@@ -46,10 +46,10 @@ const keypadMobiles = [
   },
 ];
 
-
 const KeypadMobile = () => {
   const navigate = useNavigate();
   const sliderRef = useRef(null);
+  const [zoomedIndex, setZoomedIndex] = useState(null);
 
   const CARD_WIDTH = 192;
   const SCROLL_AMOUNT = 2 * CARD_WIDTH;
@@ -109,6 +109,7 @@ const KeypadMobile = () => {
     <div className="p-4 relative">
       <h2 className="text-3xl font-bold mb-4">📞 Popular Keypad Mobiles</h2>
 
+      {/* ⬅️ Scroll Left Button */}
       <button
         onClick={scrollLeft}
         className="absolute top-1/2 -left-3 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 rounded-full p-2 shadow-md z-10"
@@ -117,6 +118,7 @@ const KeypadMobile = () => {
         &#8592;
       </button>
 
+      {/* ➡️ Scroll Right Button */}
       <button
         onClick={scrollRight}
         className="absolute top-1/2 -right-3 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 rounded-full p-2 shadow-md z-10"
@@ -125,12 +127,13 @@ const KeypadMobile = () => {
         &#8594;
       </button>
 
+      {/* 🖼️ Product Slider */}
       <div
         ref={sliderRef}
         className="flex space-x-4 overflow-x-hidden scrollbar-hide scroll-smooth"
         style={{ scrollSnapType: "x mandatory" }}
       >
-        {keypadMobiles.map((brand) => {
+        {keypadMobiles.map((brand, index) => {
           const discountedPrice = Math.round(
             brand.price - (brand.price * brand.discount) / 100
           );
@@ -142,7 +145,8 @@ const KeypadMobile = () => {
               <img
                 src={brand.image}
                 alt={brand.name}
-                className="w-24 h-32 object-cover rounded-md mb-2"
+                className="w-24 h-32 object-cover rounded-md mb-2 cursor-pointer"
+                onClick={() => setZoomedIndex(index)}
               />
               <div className="text-sm font-semibold text-center mb-1">
                 {brand.name}
@@ -174,7 +178,58 @@ const KeypadMobile = () => {
         })}
       </div>
 
-     
+      {/* 🖼️ Fullscreen Zoom Modal with Close and Navigation */}
+      {zoomedIndex !== null && (
+        <div
+          onClick={() => setZoomedIndex(null)}
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+        >
+          {/* ❌ Close Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomedIndex(null);
+            }}
+            className="absolute top-4 right-4 text-white text-3xl font-bold bg-red-600 rounded-full px-3 py-1 hover:bg-red-700 shadow-lg"
+            aria-label="Close"
+          >
+            ×
+          </button>
+
+          {/* ← Left Navigation */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomedIndex((prev) =>
+                prev > 0 ? prev - 1 : keypadMobiles.length - 1
+              );
+            }}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-4xl font-bold"
+          >
+            ‹
+          </button>
+
+          {/* Zoomed Image */}
+          <img
+            src={keypadMobiles[zoomedIndex].image}
+            alt="Zoomed"
+            className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-lg"
+          />
+
+          {/* → Right Navigation */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomedIndex((prev) =>
+                prev < keypadMobiles.length - 1 ? prev + 1 : 0
+              );
+            }}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-4xl font-bold"
+          >
+            ›
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import AllProducts from "./AllProducts";
 import KeypadMobile from "./KeypadMobile/KeypadMobile";
 import Battery from "./Page/Battery";
+import KeypadBatteries from "./KeypadMobile/BatteryKeypad"; // ✅ Imported
 import Headphone from "./Page/Headphone";
 import Charger from "./Page/Charger";
 import ChargingCable from "./Page/ChargingCable";
@@ -21,6 +22,7 @@ const categories = [
   { name: "Mobile Parts Accessories", path: "mobile-parts-accessories" },
   { name: "Keypad Mobile", path: "keypad-mobile" },
   { name: "Battery", path: "battery" },
+  { name: "Keypad Battery", path: "battery-keypad" }, // ✅ Added here
   { name: "Headphone", path: "headphone" },
   { name: "Charger", path: "charger" },
   { name: "Charging Cable", path: "charging-cable" },
@@ -76,23 +78,18 @@ export default function ProductsRoutes() {
         />
         <Route path="keypad-mobile" element={<KeypadMobile products={products} />} />
         <Route path="battery" element={<Battery products={products} />} />
+        <Route path="battery-keypad" element={<KeypadBatteries />} /> {/* ✅ Route added */}
+
         <Route path="headphone" element={<Headphone products={products} />} />
         <Route path="charger" element={<Charger products={products} />} />
-        <Route
-          path="charging-cable"
-          element={<ChargingCable products={products} />}
-        />
+        <Route path="charging-cable" element={<ChargingCable products={products} />} />
         <Route path="mobile-covers" element={<MobileCovers products={products} />} />
         <Route path="tempered-glass" element={<TemperedGlass products={products} />} />
         <Route path="display" element={<Display products={products} />} />
         <Route path="touch" element={<Touch products={products} />} />
         <Route path="screen-combo" element={<ScreenCombo products={products} />} />
         <Route path="mobile-body" element={<MobileBody products={products} />} />
-
-        {/* Camera category ke liye products prop pass karna */}
         <Route path="camera" element={<CameraPage products={products} />} />
-
-
         <Route path="*" element={<Navigate to="all" replace />} />
       </Routes>
     </div>

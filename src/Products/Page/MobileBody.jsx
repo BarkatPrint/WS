@@ -6,6 +6,32 @@ export default function MobileBody() {
   const [selectedBrand, setSelectedBrand] = useState("Samsung");
   const [customBrand, setCustomBrand] = useState("");
 
+  // 🖼️ Zoom Modal State
+  const [zoomedImage, setZoomedImage] = useState(null);
+  const [zoomIndex, setZoomIndex] = useState(0);
+  const [zoomImages, setZoomImages] = useState([]);
+
+  const openZoomModal = (images, index = 0) => {
+    setZoomImages(images);
+    setZoomIndex(index);
+    setZoomedImage(images[index]);
+  };
+
+  const closeZoomModal = () => {
+    setZoomedImage(null);
+    setZoomIndex(0);
+    setZoomImages([]);
+  };
+
+  const handleZoomNav = (direction) => {
+    const newIndex =
+      direction === "next"
+        ? (zoomIndex + 1) % zoomImages.length
+        : (zoomIndex - 1 + zoomImages.length) % zoomImages.length;
+    setZoomIndex(newIndex);
+    setZoomedImage(zoomImages[newIndex]);
+  };
+
   const bigMobileBodies = [
     {
       id: "big1",
@@ -62,9 +88,7 @@ export default function MobileBody() {
       originalPrice: "₹250",
       discountedPrice: "₹150",
       discountPercent: "40% OFF",
-      images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Nokia-105-Body.jpg`,
-      ],
+      images: [`${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Nokia-105-Body.jpg`],
       description: "Replacement plastic body for Nokia 105 keypad phone.",
     },
     {
@@ -75,9 +99,7 @@ export default function MobileBody() {
       originalPrice: "₹250",
       discountedPrice: "₹150",
       discountPercent: "40% OFF",
-      images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Samsung-Guru-Body.jpg`,
-      ],
+      images: [`${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Samsung-Guru-Body.jpg`],
       description: "Samsung Guru keypad phone replacement back panel.",
     },
     {
@@ -88,9 +110,7 @@ export default function MobileBody() {
       originalPrice: "₹250",
       discountedPrice: "₹150",
       discountPercent: "40% OFF",
-      images: [
-        `${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Jio-Keypad-Body.jpg`,
-      ],
+      images: [`${process.env.PUBLIC_URL}/image/MobileBody/KeypadBody/Jio-Keypad-Body.jpg`],
       description: "Keypad mobile back body for Jio brand phones.",
     },
   ];
@@ -199,41 +219,32 @@ export default function MobileBody() {
         </div>
       </div>
 
-      {/* Big Mobile Bodies Section */}
+      {/* Big Mobile Bodies */}
       <section className="mb-10">
         <h3 className="text-2xl font-semibold mb-4">Bada Mobile Bodies</h3>
-
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
           {bigMobileBodies.map((product) => {
             const currentIndex = currentImages[product.id] || 0;
             return (
-              <div
-                key={product.id}
-                className="border rounded-xl shadow-lg p-4 bg-white flex flex-col"
-              >
-                <div className="relative">
+              <div key={product.id} className="border rounded-xl shadow-lg p-4 bg-white flex flex-col">
+                <div className="relative cursor-pointer">
                   <img
                     src={product.images[currentIndex]}
                     alt={product.name}
+                    onClick={() => openZoomModal(product.images, currentIndex)}
                     className="rounded-lg mb-3 h-48 object-contain w-full"
                   />
                   {product.images.length > 1 && (
                     <>
                       <button
-                        onClick={() =>
-                          handleImageChange(product.id, "prev", product.images.length)
-                        }
+                        onClick={() => handleImageChange(product.id, "prev", product.images.length)}
                         className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
-                        aria-label="Previous Image"
                       >
                         ‹
                       </button>
                       <button
-                        onClick={() =>
-                          handleImageChange(product.id, "next", product.images.length)
-                        }
+                        onClick={() => handleImageChange(product.id, "next", product.images.length)}
                         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
-                        aria-label="Next Image"
                       >
                         ›
                       </button>
@@ -244,58 +255,11 @@ export default function MobileBody() {
                 <p className="text-sm text-gray-600">{product.model}</p>
                 <p className="text-sm text-gray-600 mb-2">{product.quality}</p>
                 <p className="text-sm mb-2">{product.description}</p>
-
-                <div className="mt-auto">
-                  <p className="text-sm line-through text-gray-400">
-                    {product.price}
-                  </p>
-                  <p className="text-lg font-bold text-green-600">
-                    {product.discountedPrice}{" "}
-                    <span className="text-sm text-red-500">({product.discountPercent})</span>
-                  </p>
-                  <button
-                    onClick={() => handleBuyNow(product)}
-                    className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
-                  >
-                    Buy Now
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Keypad Mobile Bodies Section */}
-      <section>
-        <h3 className="text-2xl font-semibold mb-4">Keypad Mobile Bodies</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
-          {keypadMobileBodies.map((product) => {
-            const currentIndex = currentImages[product.id] || 0;
-            return (
-              <div
-                key={product.id}
-                className="border rounded-xl shadow-lg p-4 bg-white flex flex-col"
-              >
-                <img
-                  src={product.images[currentIndex]}
-                  alt={product.name}
-                  className="rounded-lg mb-3 h-48 object-contain w-full"
-                />
-                <h4 className="text-lg font-semibold">{product.name}</h4>
-                <p className="text-sm text-gray-600">{product.model}</p>
-                <p className="text-sm text-gray-600 mb-2">{product.quality}</p>
-                <p className="text-sm mb-1">{product.description}</p>
-
-                <p className="text-sm line-through text-gray-400">
-                  {product.originalPrice}
-                </p>
+                <p className="text-sm line-through text-gray-400">{product.price}</p>
                 <p className="text-lg font-bold text-green-600">
                   {product.discountedPrice}{" "}
                   <span className="text-sm text-red-500">({product.discountPercent})</span>
                 </p>
-
                 <button
                   onClick={() => handleBuyNow(product)}
                   className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
@@ -307,6 +271,67 @@ export default function MobileBody() {
           })}
         </div>
       </section>
+
+      {/* Keypad Mobile Bodies */}
+      <section>
+        <h3 className="text-2xl font-semibold mb-4">Keypad Mobile Bodies</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
+          {keypadMobileBodies.map((product) => (
+            <div key={product.id} className="border rounded-xl shadow-lg p-4 bg-white flex flex-col">
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                onClick={() => openZoomModal(product.images, 0)}
+                className="rounded-lg mb-3 h-48 object-contain w-full cursor-pointer"
+              />
+              <h4 className="text-lg font-semibold">{product.name}</h4>
+              <p className="text-sm text-gray-600">{product.model}</p>
+              <p className="text-sm text-gray-600 mb-2">{product.quality}</p>
+              <p className="text-sm mb-1">{product.description}</p>
+              <p className="text-sm line-through text-gray-400">{product.originalPrice}</p>
+              <p className="text-lg font-bold text-green-600">
+                {product.discountedPrice}{" "}
+                <span className="text-sm text-red-500">({product.discountPercent})</span>
+              </p>
+              <button
+                onClick={() => handleBuyNow(product)}
+                className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
+              >
+                Buy Now
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 🔍 Zoom Modal */}
+      {zoomedImage && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center">
+          <button
+            onClick={closeZoomModal}
+            className="absolute top-5 right-5 text-white text-3xl font-bold"
+          >
+            ✖
+          </button>
+          <button
+            onClick={() => handleZoomNav("prev")}
+            className="absolute left-5 text-white text-4xl"
+          >
+            ‹
+          </button>
+          <img
+            src={zoomedImage}
+            alt="Zoomed"
+            className="max-h-[90%] max-w-[90%] object-contain"
+          />
+          <button
+            onClick={() => handleZoomNav("next")}
+            className="absolute right-5 text-white text-4xl"
+          >
+            ›
+          </button>
+        </div>
+      )}
     </div>
   );
 }

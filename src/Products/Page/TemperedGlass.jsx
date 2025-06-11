@@ -7,6 +7,9 @@ export default function TemperedGlass() {
   const [customBrand, setCustomBrand] = useState("");
   const [isPaused, setIsPaused] = useState(false);
 
+  const [zoomedProduct, setZoomedProduct] = useState(null);
+  const [zoomedIndex, setZoomedIndex] = useState(0);
+
   const scrollRef = useRef(null);
   const scrollIntervalRef = useRef(null);
 
@@ -149,6 +152,25 @@ export default function TemperedGlass() {
     scrollRef.current?.scrollBy({ left: 250, behavior: "smooth" });
   };
 
+  const openZoom = (product, index) => {
+    setZoomedProduct(product);
+    setZoomedIndex(index);
+  };
+
+  const closeZoom = () => {
+    setZoomedProduct(null);
+    setZoomedIndex(0);
+  };
+
+  const handleZoomNav = (direction) => {
+    const images = zoomedProduct.images;
+    const newIndex =
+      direction === "next"
+        ? (zoomedIndex + 1) % images.length
+        : (zoomedIndex - 1 + images.length) % images.length;
+    setZoomedIndex(newIndex);
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-3xl font-bold mb-4">🛡️ Tempered Glass</h2>
@@ -210,73 +232,39 @@ export default function TemperedGlass() {
         <h2 className="text-3xl font-bold mb-4">📱 Mobile Products</h2>
 
         <div className="relative flex items-center">
-          <button
-            onClick={scrollLeft}
-            className="absolute z-10 left-0 bg-white border shadow p-2 rounded-full hover:bg-gray-200"
-          >
-            ‹
-          </button>
+          <button onClick={scrollLeft} className="absolute z-10 left-0 bg-white border shadow p-2 rounded-full hover:bg-gray-200">‹</button>
 
-          <div
-            ref={scrollRef}
-            className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4 px-8 snap-x snap-mandatory"
-          >
+          <div ref={scrollRef} className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4 px-8 snap-x snap-mandatory">
             {products.map((product) => {
               const currentIndex = currentImages[product.id] || 0;
               const discount = calculateDiscount(product.price, product.discountedPrice);
               return (
-                <div
-                  key={product.id}
-                  className="min-w-[220px] max-w-[220px] snap-start border rounded-xl shadow-lg p-4 bg-white flex flex-col"
-                >
+                <div key={product.id} className="min-w-[220px] max-w-[220px] snap-start border rounded-xl shadow-lg p-4 bg-white flex flex-col">
                   <div className="relative w-full pb-[100%] mb-4 overflow-hidden rounded bg-gray-100">
                     <img
                       src={product.images[currentIndex]}
                       alt={product.name}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover cursor-pointer"
+                      onClick={() => openZoom(product, currentIndex)}
                     />
-                    <button
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleImageChange(product.id, "prev", product.images.length);
-                      }}
-                    >
-                      ‹
-                    </button>
-                    <button
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleImageChange(product.id, "next", product.images.length);
-                      }}
-                    >
-                      ›
-                    </button>
+                    <button className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
+                      onClick={(e) => { e.stopPropagation(); handleImageChange(product.id, "prev", product.images.length); }}>‹</button>
+                    <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 px-2 py-1 rounded shadow"
+                      onClick={(e) => { e.stopPropagation(); handleImageChange(product.id, "next", product.images.length); }}>›</button>
                   </div>
-
                   <h2 className="text-lg font-bold text-gray-800">{product.name}</h2>
                   <p className="text-sm text-gray-600 mb-2">{product.description}</p>
                   <ul className="text-sm text-gray-700 mb-3 space-y-1">
                     <li><strong>Model:</strong> {product.model}</li>
                     <li><strong>Quality:</strong> {product.quality}</li>
                   </ul>
-
                   <div className="mb-2">
                     <span className="text-gray-500 line-through text-sm mr-2">{product.price}</span>
                     <span className="text-green-700 font-bold text-lg">{product.discountedPrice}</span>
                   </div>
-                  <div className="text-red-600 text-sm mb-3 font-semibold">
-                    {discount}% OFF
-                  </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleBuyNow(product);
-                    }}
-                    className="mt-auto bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
-                  >
+                  <div className="text-red-600 text-sm mb-3 font-semibold">{discount}% OFF</div>
+                  <button onClick={(e) => { e.stopPropagation(); handleBuyNow(product); }}
+                    className="mt-auto bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
                     Buy Now
                   </button>
                 </div>
@@ -284,17 +272,23 @@ export default function TemperedGlass() {
             })}
           </div>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              scrollRight();
-            }}
-            className="absolute z-10 right-0 bg-white border shadow p-2 rounded-full hover:bg-gray-200"
-          >
-            ›
-          </button>
+          <button onClick={scrollRight} className="absolute z-10 right-0 bg-white border shadow p-2 rounded-full hover:bg-gray-200">›</button>
         </div>
       </div>
+
+      {/* Zoom Modal */}
+      {zoomedProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
+          <button className="absolute top-4 right-4 text-white text-3xl font-bold" onClick={closeZoom}>×</button>
+          <button className="absolute left-4 text-white text-4xl" onClick={() => handleZoomNav("prev")}>‹</button>
+          <img
+            src={zoomedProduct.images[zoomedIndex]}
+            alt="Zoomed"
+            className="max-w-full max-h-full object-contain"
+          />
+          <button className="absolute right-4 text-white text-4xl" onClick={() => handleZoomNav("next")}>›</button>
+        </div>
+      )}
     </div>
   );
 }
