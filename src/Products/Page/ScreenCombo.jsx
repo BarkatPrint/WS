@@ -2,13 +2,8 @@ import React, { useState } from "react";
 import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function ScreenCombo() {
-  const [paymentMethod, setPaymentMethod] = useState("cod");
   const [currentImages, setCurrentImages] = useState({});
-  const [defaultComboType, setDefaultComboType] = useState("Touch + Display");
-  const [customDefaultComboType, setCustomDefaultComboType] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("Samsung");
-  const [customBrand, setCustomBrand] = useState("");
-
+  const [brandSelections, setBrandSelections] = useState({});
   const [fullScreenImage, setFullScreenImage] = useState(null);
   const [fullScreenIndex, setFullScreenIndex] = useState(0);
 
@@ -97,23 +92,23 @@ export default function ScreenCombo() {
     return `${Math.round(((orig - disc) / orig) * 100)}% off`;
   };
 
-  const handleBuyNow = (product) => {
-    const comboType =
-      defaultComboType === "Other"
-        ? customDefaultComboType || "Not specified"
-        : defaultComboType;
+  const handleBrandChange = (productId, selection) => {
+    setBrandSelections((prev) => ({ ...prev, [productId]: selection }));
+  };
 
-    const finalBrand =
-      selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
+  const handleBuyNow = (product) => {
+    const selection = brandSelections[product.id];
+    const selectedBrand =
+      selection?.brand === "Other"
+        ? selection.custom || "Not specified"
+        : selection?.brand || "Not specified";
 
     const message = `*Product Details:*
 📱 Name: ${product.name}
 📦 Model: ${product.model}
 ✅ Quality: ${product.quality}
 💸 Price: ${product.discountedPrice}
-🔧 Combo Type: ${comboType}
-🏷️ Mobile Brand: ${finalBrand}
-💳 Payment Method: ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}`;
+🏷️ Mobile Brand: ${selectedBrand}`;
 
     const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
@@ -122,96 +117,9 @@ export default function ScreenCombo() {
   return (
     <div className="p-4">
       <h2 className="text-3xl font-bold mb-4">📱 Screen Combo Replacement</h2>
-      <p className="text-green-700 font-medium text-sm mb-4">
+      <p className="text-green-700 font-medium text-sm mb-6">
         High-Quality Touch + Display Combos Available for All Mobile Brands.
       </p>
-
-      <div className="flex gap-4 mb-6 flex-wrap">
-        {/* Combo Type */}
-        <div className="flex-1 min-w-[140px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-sm">Default Combo Type:</label>
-          <select
-            value={defaultComboType}
-            onChange={(e) => setDefaultComboType(e.target.value)}
-            className="border px-2 py-1 rounded w-full text-sm"
-          >
-            <option value="">-- Choose Combo Type --</option>
-            <option value="Touch + Display">Touch + Display</option>
-            <option value="Touch + LCD Display">Touch + LCD Display</option>
-            <option value="Touch + Display Repair Kit">Touch + Display Repair Kit</option>
-            <option value="Other">Other</option>
-          </select>
-          {defaultComboType === "Other" && (
-            <input
-              type="text"
-              placeholder="Enter custom combo type"
-              className="mt-2 border px-2 py-1 rounded w-full text-sm"
-              value={customDefaultComboType}
-              onChange={(e) => setCustomDefaultComboType(e.target.value)}
-            />
-          )}
-        </div>
-
-        {/* Mobile Brand */}
-        <div className="flex-1 min-w-[140px]">
-          <label className="block mb-1 font-semibold text-gray-700 text-sm">Select Mobile Brand:</label>
-          <select
-            value={selectedBrand}
-            onChange={(e) => setSelectedBrand(e.target.value)}
-            className="border px-2 py-1 rounded w-full text-sm"
-          >
-            <option value="Samsung">Samsung</option>
-            <option value="Vivo">Vivo</option>
-            <option value="MI">MI</option>
-            <option value="Oppo">Oppo</option>
-            <option value="Realme">Realme</option>
-            <option value="OnePlus">OnePlus</option>
-            <option value="Apple">Apple</option>
-            <option value="Infinix">Infinix</option>
-            <option value="Itel">Itel</option>
-            <option value="Lenovo">Lenovo</option>
-            <option value="Nokia">Nokia</option>
-            <option value="Motorola">Motorola</option>
-            <option value="Other">Other</option>
-          </select>
-          {selectedBrand === "Other" && (
-            <input
-              type="text"
-              placeholder="Enter custom brand name"
-              className="mt-2 border px-2 py-1 rounded w-full text-sm"
-              value={customBrand}
-              onChange={(e) => setCustomBrand(e.target.value)}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Payment Method */}
-      <div className="mb-6">
-        <label className="block mb-2 font-semibold text-gray-700">Payment Method:</label>
-        <div className="flex gap-4">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              value="cod"
-              checked={paymentMethod === "cod"}
-              onChange={() => setPaymentMethod("cod")}
-              className="mr-2"
-            />
-            Cash on Delivery
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              value="online"
-              checked={paymentMethod === "online"}
-              onChange={() => setPaymentMethod("online")}
-              className="mr-2"
-            />
-            Online Payment
-          </label>
-        </div>
-      </div>
 
       {/* Product Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -238,6 +146,50 @@ export default function ScreenCombo() {
                 <li><strong>Model:</strong> {product.model}</li>
                 <li><strong>Quality:</strong> {product.quality}</li>
               </ul>
+
+              {/* Brand Selection */}
+              <div className="mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Select Mobile Brand:</label>
+                <select
+                  value={brandSelections[product.id]?.brand || ""}
+                  onChange={(e) =>
+                    handleBrandChange(product.id, {
+                      brand: e.target.value,
+                      custom: "",
+                    })
+                  }
+                  className="border px-2 py-1 rounded w-full text-sm"
+                >
+                  <option value="">-- Choose Brand --</option>
+                  <option value="Samsung">Samsung</option>
+                  <option value="Vivo">Vivo</option>
+                  <option value="MI">MI</option>
+                  <option value="Oppo">Oppo</option>
+                  <option value="Realme">Realme</option>
+                  <option value="OnePlus">OnePlus</option>
+                  <option value="Apple">Apple</option>
+                  <option value="Infinix">Infinix</option>
+                  <option value="Itel">Itel</option>
+                  <option value="Lenovo">Lenovo</option>
+                  <option value="Nokia">Nokia</option>
+                  <option value="Motorola">Motorola</option>
+                  <option value="Other">Other</option>
+                </select>
+                {brandSelections[product.id]?.brand === "Other" && (
+                  <input
+                    type="text"
+                    value={brandSelections[product.id]?.custom || ""}
+                    onChange={(e) =>
+                      handleBrandChange(product.id, {
+                        ...brandSelections[product.id],
+                        custom: e.target.value,
+                      })
+                    }
+                    placeholder="Enter your brand"
+                    className="mt-2 border px-2 py-1 rounded w-full text-sm"
+                  />
+                )}
+              </div>
 
               <div className="mb-3">
                 <span className="text-gray-500 line-through text-sm mr-2">{product.price}</span>

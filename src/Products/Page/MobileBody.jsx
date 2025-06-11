@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 
 export default function MobileBody() {
-  const [paymentMethod, setPaymentMethod] = useState("cod");
   const [currentImages, setCurrentImages] = useState({});
-  const [selectedBrand, setSelectedBrand] = useState("Samsung");
-  const [customBrand, setCustomBrand] = useState("");
-
-  // 🖼️ Zoom Modal State
+  const [customBrandInputs, setCustomBrandInputs] = useState({});
+  const [selectedBrands, setSelectedBrands] = useState({});
   const [zoomedImage, setZoomedImage] = useState(null);
   const [zoomIndex, setZoomIndex] = useState(0);
   const [zoomImages, setZoomImages] = useState([]);
@@ -126,20 +123,109 @@ export default function MobileBody() {
     });
   };
 
+  const handleBrandChange = (productId, value) => {
+    setSelectedBrands((prev) => ({ ...prev, [productId]: value }));
+  };
+
+  const handleCustomBrandChange = (productId, value) => {
+    setCustomBrandInputs((prev) => ({ ...prev, [productId]: value }));
+  };
+
   const handleBuyNow = (product) => {
+    const brandValue = selectedBrands[product.id] || "Not selected";
     const finalBrand =
-      selectedBrand === "Other" ? customBrand.trim() || "Not specified" : selectedBrand;
+      brandValue === "Other"
+        ? customBrandInputs[product.id]?.trim() || "Not specified"
+        : brandValue;
 
     const message = `*Mobile Body Order:*
 📱 Product: ${product.name}
 📦 Model: ${product.model}
 ✅ Quality: ${product.quality}
 💰 Price: ${product.discountedPrice}
-🏷️ Brand: ${finalBrand}
-💳 Payment: ${paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"}`;
+🏷️ Brand: ${finalBrand}`;
 
     const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
+  };
+
+  const renderCard = (product) => {
+    const currentIndex = currentImages[product.id] || 0;
+
+    return (
+      <div key={product.id} className="border rounded-xl shadow-lg p-4 bg-white flex flex-col">
+        <div className="relative cursor-pointer">
+          <img
+            src={product.images[currentIndex]}
+            alt={product.name}
+            onClick={() => openZoomModal(product.images, currentIndex)}
+            className="rounded-lg mb-3 h-48 object-contain w-full"
+          />
+          {product.images.length > 1 && (
+            <>
+              <button
+                onClick={() => handleImageChange(product.id, "prev", product.images.length)}
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
+              >
+                ‹
+              </button>
+              <button
+                onClick={() => handleImageChange(product.id, "next", product.images.length)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
+              >
+                ›
+              </button>
+            </>
+          )}
+        </div>
+        <h4 className="text-lg font-semibold">{product.name}</h4>
+        <p className="text-sm text-gray-600">{product.model}</p>
+        <p className="text-sm text-gray-600">{product.quality}</p>
+        <p className="text-sm mb-2">{product.description}</p>
+        <p className="text-sm line-through text-gray-400">{product.price || product.originalPrice}</p>
+        <p className="text-lg font-bold text-green-600">
+          {product.discountedPrice}{" "}
+          <span className="text-sm text-red-500">({product.discountPercent})</span>
+        </p>
+
+        <select
+          value={selectedBrands[product.id] || "Samsung"}
+          onChange={(e) => handleBrandChange(product.id, e.target.value)}
+          className="mt-2 border px-2 py-1 rounded text-sm"
+        >
+          <option value="Samsung">Samsung</option>
+          <option value="Vivo">Vivo</option>
+          <option value="MI">MI</option>
+          <option value="Oppo">Oppo</option>
+          <option value="Realme">Realme</option>
+          <option value="OnePlus">OnePlus</option>
+          <option value="Apple">Apple</option>
+          <option value="Infinix">Infinix</option>
+          <option value="Itel">Itel</option>
+          <option value="Lenovo">Lenovo</option>
+          <option value="Nokia">Nokia</option>
+          <option value="Motorola">Motorola</option>
+          <option value="Other">Other</option>
+        </select>
+
+        {selectedBrands[product.id] === "Other" && (
+          <input
+            type="text"
+            placeholder="Enter custom brand"
+            value={customBrandInputs[product.id] || ""}
+            onChange={(e) => handleCustomBrandChange(product.id, e.target.value)}
+            className="mt-2 border px-2 py-1 rounded text-sm"
+          />
+        )}
+
+        <button
+          onClick={() => handleBuyNow(product)}
+          className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
+        >
+          Buy Now
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -158,153 +244,20 @@ export default function MobileBody() {
         </a>
       </p>
 
-      {/* Brand Selector */}
-      <div className="mb-6 max-w-sm">
-        <label className="block mb-2 font-semibold text-gray-700 text-sm">Select Mobile Brand:</label>
-        <select
-          value={selectedBrand}
-          onChange={(e) => setSelectedBrand(e.target.value)}
-          className="border px-3 py-2 rounded w-full text-sm"
-        >
-          <option value="Samsung">Samsung</option>
-          <option value="Vivo">Vivo</option>
-          <option value="MI">MI</option>
-          <option value="Oppo">Oppo</option>
-          <option value="Realme">Realme</option>
-          <option value="OnePlus">OnePlus</option>
-          <option value="Apple">Apple</option>
-          <option value="Infinix">Infinix</option>
-          <option value="Itel">Itel</option>
-          <option value="Lenovo">Lenovo</option>
-          <option value="Nokia">Nokia</option>
-          <option value="Motorola">Motorola</option>
-          <option value="Other">Other</option>
-        </select>
-
-        {selectedBrand === "Other" && (
-          <input
-            type="text"
-            placeholder="Enter custom brand name"
-            className="mt-2 border px-3 py-2 rounded w-full text-sm"
-            value={customBrand}
-            onChange={(e) => setCustomBrand(e.target.value)}
-          />
-        )}
-      </div>
-
-      {/* Payment Method */}
-      <div className="mb-6 max-w-sm">
-        <label className="block mb-2 font-semibold text-gray-700 text-sm">Payment Method:</label>
-        <div className="flex gap-6">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              value="cod"
-              checked={paymentMethod === "cod"}
-              onChange={() => setPaymentMethod("cod")}
-              className="mr-2"
-            />
-            Cash on Delivery
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              value="online"
-              checked={paymentMethod === "online"}
-              onChange={() => setPaymentMethod("online")}
-              className="mr-2"
-            />
-            Online Payment
-          </label>
-        </div>
-      </div>
-
-      {/* Big Mobile Bodies */}
       <section className="mb-10">
         <h3 className="text-2xl font-semibold mb-4">Bada Mobile Bodies</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
-          {bigMobileBodies.map((product) => {
-            const currentIndex = currentImages[product.id] || 0;
-            return (
-              <div key={product.id} className="border rounded-xl shadow-lg p-4 bg-white flex flex-col">
-                <div className="relative cursor-pointer">
-                  <img
-                    src={product.images[currentIndex]}
-                    alt={product.name}
-                    onClick={() => openZoomModal(product.images, currentIndex)}
-                    className="rounded-lg mb-3 h-48 object-contain w-full"
-                  />
-                  {product.images.length > 1 && (
-                    <>
-                      <button
-                        onClick={() => handleImageChange(product.id, "prev", product.images.length)}
-                        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
-                      >
-                        ‹
-                      </button>
-                      <button
-                        onClick={() => handleImageChange(product.id, "next", product.images.length)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
-                      >
-                        ›
-                      </button>
-                    </>
-                  )}
-                </div>
-                <h4 className="text-lg font-semibold">{product.name}</h4>
-                <p className="text-sm text-gray-600">{product.model}</p>
-                <p className="text-sm text-gray-600 mb-2">{product.quality}</p>
-                <p className="text-sm mb-2">{product.description}</p>
-                <p className="text-sm line-through text-gray-400">{product.price}</p>
-                <p className="text-lg font-bold text-green-600">
-                  {product.discountedPrice}{" "}
-                  <span className="text-sm text-red-500">({product.discountPercent})</span>
-                </p>
-                <button
-                  onClick={() => handleBuyNow(product)}
-                  className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
-                >
-                  Buy Now
-                </button>
-              </div>
-            );
-          })}
+          {bigMobileBodies.map(renderCard)}
         </div>
       </section>
 
-      {/* Keypad Mobile Bodies */}
       <section>
         <h3 className="text-2xl font-semibold mb-4">Keypad Mobile Bodies</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
-          {keypadMobileBodies.map((product) => (
-            <div key={product.id} className="border rounded-xl shadow-lg p-4 bg-white flex flex-col">
-              <img
-                src={product.images[0]}
-                alt={product.name}
-                onClick={() => openZoomModal(product.images, 0)}
-                className="rounded-lg mb-3 h-48 object-contain w-full cursor-pointer"
-              />
-              <h4 className="text-lg font-semibold">{product.name}</h4>
-              <p className="text-sm text-gray-600">{product.model}</p>
-              <p className="text-sm text-gray-600 mb-2">{product.quality}</p>
-              <p className="text-sm mb-1">{product.description}</p>
-              <p className="text-sm line-through text-gray-400">{product.originalPrice}</p>
-              <p className="text-lg font-bold text-green-600">
-                {product.discountedPrice}{" "}
-                <span className="text-sm text-red-500">({product.discountPercent})</span>
-              </p>
-              <button
-                onClick={() => handleBuyNow(product)}
-                className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
-              >
-                Buy Now
-              </button>
-            </div>
-          ))}
+          {keypadMobileBodies.map(renderCard)}
         </div>
       </section>
 
-      {/* 🔍 Zoom Modal */}
       {zoomedImage && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center">
           <button
