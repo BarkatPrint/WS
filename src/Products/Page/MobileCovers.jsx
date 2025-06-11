@@ -22,8 +22,8 @@ export default function MobileCovers() {
       name: "Silicone Back Cover",
       model: "Soft, Matte Finish",
       quality: "Shockproof, Slim Fit",
-      price: "₹150",
-      discountedPrice: "₹99",
+      price: "₹120",
+      discountedPrice: "₹60",
       coverType: "Back Cover",
       images: [
         `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/1.jpg`,
@@ -31,6 +31,9 @@ export default function MobileCovers() {
         `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/3.jpg`,
         `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/4.jpg`,
         `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/5.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/6.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/7.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileCovers/SiliconeBackCover/8.jpg`,
       ],
       description: "Flexible silicone case with anti-slip grip.",
     },
@@ -39,13 +42,16 @@ export default function MobileCovers() {
       name: "Transparent Cover",
       model: "Clear TPU",
       quality: "Slim and Flexible",
-      price: "₹120",
-      discountedPrice: "₹85",
+      price: "₹80",
+      discountedPrice: "₹40",
       coverType: "Transparent",
       images: [
         `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/1.jpg`,
         `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/2.jpg`,
         `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/3.jpg`,
+         `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/4.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/5.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileCovers/TransparentCover/6.jpg`,
       ],
       description: "Crystal-clear protection with flexible edges.",
     },
@@ -76,6 +82,7 @@ export default function MobileCovers() {
         `${process.env.PUBLIC_URL}/image/MobileCovers/iPhoneCover/1.jpg`,
         `${process.env.PUBLIC_URL}/image/MobileCovers/iPhoneCover/2.jpg`,
         `${process.env.PUBLIC_URL}/image/MobileCovers/iPhoneCover/3.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileCovers/iPhoneCover/4.jpg`,
       ],
       description: "Premium hard shell cover designed exclusively for iPhones.",
     },
@@ -85,12 +92,13 @@ export default function MobileCovers() {
       model: "Magnetic Closure",
       quality: "Premium PU Leather, Card Slots",
       price: "₹300",
-      discountedPrice: "₹199",
+      discountedPrice: "₹150",
       coverType: "Leather Flip Cover",
       images: [
         `${process.env.PUBLIC_URL}/image/MobileCovers/LeatherFlipCover/1.jpg`,
         `${process.env.PUBLIC_URL}/image/MobileCovers/LeatherFlipCover/2.jpg`,
         `${process.env.PUBLIC_URL}/image/MobileCovers/LeatherFlipCover/3.jpg`,
+        `${process.env.PUBLIC_URL}/image/MobileCovers/LeatherFlipCover/4.jpg`,
       ],
       description: "Elegant leather flip cover with magnetic lock and storage for cards.",
     },
@@ -151,12 +159,11 @@ export default function MobileCovers() {
           <option value="Back Cover">Back Cover</option>
           <option value="Flip Cover">Flip Cover</option>
           <option value="Transparent">Transparent</option>
-          <option value="Hard Cover">Hard Cover</option>
+        
           <option value="Girls Mobile Cover">Girls Mobile Cover</option>
           <option value="iPhone Cover">iPhone Cover</option>
           <option value="Leather Flip Cover">Leather Flip Cover</option>
-          <option value="Silicone Cover">Silicone Cover</option>
-          <option value="Designer Cover">Designer Cover</option>
+        
           <option value="Other">Other</option>
         </select>
         {coverType === "Other" && (

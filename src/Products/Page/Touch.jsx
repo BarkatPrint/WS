@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { FaTimes } from "react-icons/fa";
 
 export default function Touch() {
-  const [paymentMethod, setPaymentMethod] = useState("cod");
-  const [touchType, setTouchType] = useState("Original");
-  const [customTouchType, setCustomTouchType] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("Vivo");
-  const [customBrand, setCustomBrand] = useState("");
+  const [selectedBrandMap, setSelectedBrandMap] = useState({});
+  const [customBrandMap, setCustomBrandMap] = useState({});
   const [isAutoSliding, setIsAutoSliding] = useState(true);
+  const [fullscreen, setFullscreen] = useState({ visible: false, images: [], index: 0 });
 
   const sliderRef = useRef(null);
   const autoSlideInterval = useRef(null);
@@ -44,31 +43,25 @@ export default function Touch() {
     },
   ];
 
-  const calculateDiscountPercent = (price, discountedPrice) => {
-    const p = Number(price.replace(/[₹,]/g, ""));
-    const dp = Number(discountedPrice.replace(/[₹,]/g, ""));
-    if (p && dp && p > dp) {
-      return Math.round(((p - dp) / p) * 100);
-    }
-    return 0;
+  const handleBrandChange = (id, value) => {
+    setSelectedBrandMap((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleCustomBrandChange = (id, value) => {
+    setCustomBrandMap((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleBuyNow = (product) => {
-    const finalTouchType =
-      touchType === "Other" ? customTouchType || "Not specified" : touchType;
-    const finalBrand =
-      selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
+    const selectedBrand = selectedBrandMap[product.id] || "Vivo";
+    const customBrand = customBrandMap[product.id] || "";
+    const finalBrand = selectedBrand === "Other" ? customBrand || "Not specified" : selectedBrand;
 
     const message = `*Product Details:*
 📱 Name: ${product.name}
 📦 Model: ${product.model}
 ✅ Quality: ${product.quality}
 💸 Price: ${product.discountedPrice}
-🧩 Touch Type: ${finalTouchType}
-🏷️ Mobile Brand: ${finalBrand}
-💳 Payment Method: ${
-      paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment"
-    }`;
+🏷️ Mobile Brand: ${finalBrand}`;
 
     const whatsappURL = `https://wa.me/917050266383?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
@@ -77,22 +70,37 @@ export default function Touch() {
   const slide = (direction) => {
     if (!sliderRef.current) return;
     setIsAutoSliding(false);
-
     const scrollAmount = sliderRef.current.clientWidth / 2;
-    if (direction === "left") {
-      sliderRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    } else {
-      sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
+    sliderRef.current.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+  };
+
+  const openFullscreen = (images) => {
+    setFullscreen({ visible: true, images, index: 0 });
+  };
+
+  const closeFullscreen = () => {
+    setFullscreen({ visible: false, images: [], index: 0 });
+  };
+
+  const prevImage = () => {
+    setFullscreen((prev) => ({
+      ...prev,
+      index: prev.index === 0 ? prev.images.length - 1 : prev.index - 1,
+    }));
+  };
+
+  const nextImage = () => {
+    setFullscreen((prev) => ({
+      ...prev,
+      index: (prev.index + 1) % prev.images.length,
+    }));
   };
 
   useEffect(() => {
     if (!sliderRef.current) return;
-
     if (isAutoSliding) {
       autoSlideInterval.current = setInterval(() => {
-        const maxScrollLeft =
-          sliderRef.current.scrollWidth - sliderRef.current.clientWidth;
+        const maxScrollLeft = sliderRef.current.scrollWidth - sliderRef.current.clientWidth;
         if (sliderRef.current.scrollLeft >= maxScrollLeft) {
           sliderRef.current.scrollTo({ left: 0, behavior: "smooth" });
         } else {
@@ -100,7 +108,6 @@ export default function Touch() {
         }
       }, 3000);
     }
-
     return () => {
       if (autoSlideInterval.current) clearInterval(autoSlideInterval.current);
     };
@@ -113,6 +120,12 @@ export default function Touch() {
     }
   }, [isAutoSliding]);
 
+  const calculateDiscountPercent = (price, discountedPrice) => {
+    const p = Number(price.replace(/[₹,]/g, ""));
+    const dp = Number(discountedPrice.replace(/[₹,]/g, ""));
+    return p && dp && p > dp ? Math.round(((p - dp) / p) * 100) : 0;
+  };
+
   return (
     <div className="p-6 max-w-6xl mx-auto relative">
       <h2 className="text-4xl font-bold mb-4 text-center">
@@ -122,107 +135,12 @@ export default function Touch() {
         All types of touch screens available — Original, Premium, Universal & more!
       </p>
 
-      {/* Selectors */}
-      <div className="flex flex-col md:flex-row gap-6 mb-8">
-        <div className="flex-1">
-          <label className="block mb-2 font-semibold">Select Touch Type:</label>
-          <select
-            value={touchType}
-            onChange={(e) => setTouchType(e.target.value)}
-            className="border px-3 py-2 rounded w-full"
-          >
-            <option value="">-- Choose Touch Type --</option>
-            <option value="Original">Original</option>
-            <option value="Premium">Premium</option>
-            <option value="Universal">Universal</option>
-            <option value="DIY Digitizer">DIY Digitizer</option>
-            <option value="Other">Other</option>
-          </select>
-          {touchType === "Other" && (
-            <input
-              type="text"
-              placeholder="Enter custom touch type"
-              className="mt-2 border px-3 py-2 rounded w-full"
-              value={customTouchType}
-              onChange={(e) => setCustomTouchType(e.target.value)}
-            />
-          )}
-        </div>
-
-        <div className="flex-1">
-          <label className="block mb-2 font-semibold">Select Mobile Brand:</label>
-          <select
-            value={selectedBrand}
-            onChange={(e) => setSelectedBrand(e.target.value)}
-            className="border px-3 py-2 rounded w-full"
-          >
-            <option value="Vivo">Vivo</option>
-            <option value="MI">MI</option>
-            <option value="Oppo">Oppo</option>
-            <option value="Realme">Realme</option>
-            <option value="Samsung">Samsung</option>
-            <option value="OnePlus">OnePlus</option>
-            <option value="Apple">Apple</option>
-            <option value="Infinix">Infinix</option>
-            <option value="Itel">Itel</option>
-            <option value="Lenovo">Lenovo</option>
-            <option value="Nokia">Nokia</option>
-            <option value="Motorola">Motorola</option>
-            <option value="Other">Other</option>
-          </select>
-          {selectedBrand === "Other" && (
-            <input
-              type="text"
-              placeholder="Enter custom brand name"
-              className="mt-2 border px-3 py-2 rounded w-full"
-              value={customBrand}
-              onChange={(e) => setCustomBrand(e.target.value)}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Payment Method */}
-      <div className="mb-10">
-        <label className="block mb-3 font-semibold">Payment Method:</label>
-        <div className="flex gap-8 flex-wrap">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              value="cod"
-              checked={paymentMethod === "cod"}
-              onChange={() => setPaymentMethod("cod")}
-              className="mr-2"
-            />
-            Cash on Delivery
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              value="online"
-              checked={paymentMethod === "online"}
-              onChange={() => setPaymentMethod("online")}
-              className="mr-2"
-            />
-            Online Payment
-          </label>
-        </div>
-      </div>
-
-      {/* Slider Container with Centered Arrows */}
+      {/* Slider with arrows */}
       <div className="relative">
-        <button
-          onClick={() => slide("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-gray-200 hover:bg-gray-300 rounded-full shadow"
-          aria-label="Slide Left"
-        >
+        <button onClick={() => slide("left")} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-gray-200 hover:bg-gray-300 rounded-full shadow">
           ‹
         </button>
-        <button
-          onClick={() => slide("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-gray-200 hover:bg-gray-300 rounded-full shadow"
-          aria-label="Slide Right"
-        >
+        <button onClick={() => slide("right")} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-gray-200 hover:bg-gray-300 rounded-full shadow">
           ›
         </button>
 
@@ -233,23 +151,13 @@ export default function Touch() {
           onMouseLeave={() => setIsAutoSliding(true)}
         >
           {products.map((product) => {
-            const discountPercent = calculateDiscountPercent(
-              product.price,
-              product.discountedPrice
-            );
+            const discountPercent = calculateDiscountPercent(product.price, product.discountedPrice);
+            const brandValue = selectedBrandMap[product.id] || "Vivo";
 
             return (
-              <div
-                key={product.id}
-                className="min-w-[280px] max-w-[280px] border rounded-xl shadow-md p-4 bg-white flex-shrink-0 flex flex-col"
-              >
-                <div className="aspect-square rounded overflow-hidden bg-gray-100 mb-4">
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                    draggable={false}
-                  />
+              <div key={product.id} className="min-w-[280px] max-w-[280px] border rounded-xl shadow-md p-4 bg-white flex-shrink-0 flex flex-col">
+                <div className="aspect-square rounded overflow-hidden bg-gray-100 mb-4 cursor-pointer" onClick={() => openFullscreen(product.images)}>
+                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" draggable={false} />
                 </div>
 
                 <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
@@ -262,13 +170,34 @@ export default function Touch() {
 
                 <div className="mb-4 flex items-center gap-2">
                   <span className="line-through text-gray-500">{product.price}</span>
-                  <span className="text-green-700 font-bold text-lg">
-                    {product.discountedPrice}
-                  </span>
+                  <span className="text-green-700 font-bold text-lg">{product.discountedPrice}</span>
                   {discountPercent > 0 && (
                     <span className="text-red-600 font-semibold ml-1">
                       ({discountPercent}% off)
                     </span>
+                  )}
+                </div>
+
+                {/* Mobile Brand Selection */}
+                <div className="mb-4">
+                  <label className="block mb-2 text-sm font-semibold">Select Mobile Brand:</label>
+                  <select
+                    value={brandValue}
+                    onChange={(e) => handleBrandChange(product.id, e.target.value)}
+                    className="border px-3 py-1 rounded w-full"
+                  >
+                    {["Vivo", "MI", "Oppo", "Realme", "Samsung", "OnePlus", "Apple", "Infinix", "Itel", "Lenovo", "Nokia", "Motorola", "Other"].map((brand) => (
+                      <option key={brand} value={brand}>{brand}</option>
+                    ))}
+                  </select>
+                  {brandValue === "Other" && (
+                    <input
+                      type="text"
+                      placeholder="Enter custom brand"
+                      className="mt-2 border px-3 py-1 rounded w-full"
+                      value={customBrandMap[product.id] || ""}
+                      onChange={(e) => handleCustomBrandChange(product.id, e.target.value)}
+                    />
                   )}
                 </div>
 
@@ -283,6 +212,18 @@ export default function Touch() {
           })}
         </div>
       </div>
+
+      {/* Fullscreen Image Modal */}
+      {fullscreen.visible && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
+          <button onClick={closeFullscreen} className="absolute top-4 right-4 text-white text-3xl">
+            <FaTimes />
+          </button>
+          <button onClick={prevImage} className="absolute left-4 text-white text-4xl">‹</button>
+          <img src={fullscreen.images[fullscreen.index]} alt="Product" className="max-h-[80%] max-w-[90%] object-contain" />
+          <button onClick={nextImage} className="absolute right-4 text-white text-4xl">›</button>
+        </div>
+      )}
     </div>
   );
 }

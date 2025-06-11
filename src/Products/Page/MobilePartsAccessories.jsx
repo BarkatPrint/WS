@@ -1,98 +1,174 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
 
 const accessories = [
   {
     id: 1,
     name: "Memory Card (8GB)",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/memory-8GB.jpg`,
-    originalPrice: "₹200",
-    price: "₹150",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/memory-8GB.jpg`,
+    ],
+    originalPrice: "₹250",
+    price: "₹180",
   },
   {
     id: 2,
     name: "Memory Card (16GB)",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/memory-16GB.jpg`,
-    originalPrice: "₹250",
-    price: "₹200",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/memory-16GB.jpg`,
+    ],
+    originalPrice: "₹300",
+    price: "₹220",
   },
   {
     id: 3,
     name: "Memory Card (4GB SanDisk)",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/memory-4GB.jpg`,
-    originalPrice: "₹180",
-    price: "₹120",
-  },
-  {
-    id: 4,
-    name: "Samsung A06 Board",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/board.jpg`,
-    originalPrice: "₹500",
-    price: "₹350",
-  },
-  {
-    id: 5,
-    name: "Charging Pin Set",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/chargerpin.jpg`,
-    originalPrice: "₹50",
-    price: "₹10",
-  },
-  {
-    id: 6,
-    name: "Memory Card (128GB)",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/memory-128GB.jpg`,
-    originalPrice: "₹600",
-    price: "₹450",
-  },
-  {
-    id: 7,
-    name: "Mic Piece",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/mic.jpg`,
-    originalPrice: "₹80",
-    price: "₹50",
-  },
-  {
-    id: 8,
-    name: "Patta",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/patta.jpg`,
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/memory-4GB.jpg`,
+    ],
     originalPrice: "₹200",
     price: "₹150",
   },
   {
-    id: 10,
-    name: "Pendrive 16GB",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/pendrive.jpg`,
-    originalPrice: "₹850",
-    price: "₹550",
+    id: 4,
+    name: "Memory Card (128GB)",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/memory-128GB.jpg`,
+    ],
+    originalPrice: "₹600",
+    price: "₹450",
   },
   {
-    id: 11,
+    id: 5,
+    name: "Pendrive 16GB",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/pendrive.jpg`,
+    ],
+    originalPrice: "₹500",
+    price: "₹250",
+  },
+  {
+    id: 6,
     name: "SIM Tray",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/simtray.jpg`,
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/simtray.jpg`,
+    ],
     originalPrice: "₹120",
     price: "₹80",
   },
   {
-    id: 12,
+    id: 7,
     name: "SIM Tray (Type 2)",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/simtray2.jpg`,
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/simtray2.jpg`,
+    ],
     originalPrice: "₹150",
     price: "₹100",
   },
   {
+    id: 8,
+    name: "Micro USB Data Cable",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/new/micro-usb-cable.jpg`,
+    ],
+    originalPrice: "₹80",
+    price: "₹50",
+  },
+  {
+    id: 9,
+    name: "8K HDMI Male to Male Adapter",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/new/hdmi-8k-adapter.jpg`,
+    ],
+    originalPrice: "₹150",
+    price: "₹100",
+  },
+  {
+    id: 10,
+    name: "A.M.R Gold OTG Cloth Wire (10pcs Pack)",
+    model: "Imported Metal OTG",
+    quality: "Cloth wire | Metal build | Pata packing",
+    variants: [
+      { type: "V8", price: "₹30" },
+      { type: "Type-C", price: "₹40" }
+    ],
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/new/amr-gold-otg.jpg`,
+    ],
+    description: "Imported A.M.R Gold OTG with strong cloth wire and durable metal connector. 10pcs pata packing.",
+  },
+  {
+    id: 11,
+    name: "Mic Piece",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/mic.jpg`,
+    ],
+    originalPrice: "₹80",
+    price: "₹50",
+  },
+  {
+    id: 12,
+    name: "Patta",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/patta.jpg`,
+    ],
+    originalPrice: "₹200",
+    price: "₹150",
+  },
+  {
     id: 13,
     name: "Charging Board",
-    image: `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/chargingboard.jpg`,
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/chargingboard.jpg`,
+    ],
     originalPrice: "₹350",
     price: "₹250",
   },
+  {
+    id: 14,
+    name: "Samsung A06 Board",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/board.jpg`,
+    ],
+    originalPrice: "₹500",
+    price: "₹350",
+  },
+  {
+    id: 15,
+    name: "Charging Pin Set",
+    images: [
+      `${process.env.PUBLIC_URL}/image/mobile-parts-&-accessories/chargerpin.jpg`,
+    ],
+    originalPrice: "₹50",
+    price: "₹10",
+  },
 ];
+
 
 const AccessoriesPage = () => {
   const scrollRef = useRef(null);
   const autoScrollInterval = useRef(null);
   const pauseTimeout = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeImages, setActiveImages] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const openImageModal = (images) => {
+    setActiveImages(images);
+    setCurrentImageIndex(0);
+    setModalOpen(true);
+    setIsPaused(true);
+    stopAutoScroll();
+  };
+
+  const closeImageModal = () => {
+    setModalOpen(false);
+    setActiveImages([]);
+    setIsPaused(false);
+    startAutoScroll();
+  };
 
   const handleBuyNow = (name, price) => {
     const message = `Hello, I want to buy ${name} for ${price}.`;
@@ -119,7 +195,7 @@ const AccessoriesPage = () => {
   useEffect(() => {
     startAutoScroll();
     return () => stopAutoScroll();
-  }, [isPaused]);
+  }, []);
 
   const handleUserInteraction = () => {
     setIsPaused(true);
@@ -149,6 +225,18 @@ const AccessoriesPage = () => {
     const current = parseInt(price.replace("₹", ""));
     const discount = Math.round(((original - current) / original) * 100);
     return discount;
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? activeImages.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) =>
+      prev === activeImages.length - 1 ? 0 : prev + 1
+    );
   };
 
   return (
@@ -185,9 +273,12 @@ const AccessoriesPage = () => {
               key={item.id}
               className="flex-shrink-0 w-[180px] sm:w-[200px] bg-white shadow rounded-xl snap-start"
             >
-              <div className="w-full h-36 sm:h-40 overflow-hidden rounded-t-xl bg-gray-50">
+              <div
+                className="w-full h-36 sm:h-40 overflow-hidden rounded-t-xl bg-gray-50 cursor-pointer"
+                onClick={() => openImageModal(item.images)}
+              >
                 <img
-                  src={item.image}
+                  src={item.images[0]}
                   alt={item.name}
                   className="w-full h-full object-cover"
                 />
@@ -222,6 +313,38 @@ const AccessoriesPage = () => {
           🚧 Other mobile parts are coming soon. Stay tuned!
         </p>
       </div>
+
+      {/* Full Screen Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
+          <button
+            onClick={closeImageModal}
+            className="absolute top-4 right-4 text-white text-2xl"
+          >
+            <FaTimes />
+          </button>
+
+          <button
+            onClick={handlePrevImage}
+            className="absolute left-4 text-white text-3xl"
+          >
+            <FaChevronLeft />
+          </button>
+
+          <img
+            src={activeImages[currentImageIndex]}
+            alt="Zoom"
+            className="max-h-[80vh] max-w-full object-contain rounded"
+          />
+
+          <button
+            onClick={handleNextImage}
+            className="absolute right-4 text-white text-3xl"
+          >
+            <FaChevronRight />
+          </button>
+        </div>
+      )}
 
       <style>{`
         .no-scrollbar::-webkit-scrollbar {

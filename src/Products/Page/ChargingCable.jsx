@@ -9,7 +9,12 @@ const products = [
     quality: "Compatible | Fast Charging",
     price: "₹60",
     discountedPrice: "₹40",
-    images: [`${process.env.PUBLIC_URL}/image/DataCable/1.jpeg`],
+    images: [
+      `${process.env.PUBLIC_URL}/image/DataCable/MicroUSB/Local/1.jpeg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/MicroUSB/Local/2.jpeg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/MicroUSB/Local/3.jpeg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/MicroUSB/Local/4.jpg`,
+    ],
     description: "Good quality micro USB cable.",
   },
   {
@@ -19,7 +24,13 @@ const products = [
     quality: "Compatible | Fast Charging",
     price: "₹70",
     discountedPrice: "₹50",
-    images: [`${process.env.PUBLIC_URL}/image/DataCable/4.jpg`],
+    images: [
+      `${process.env.PUBLIC_URL}/image/DataCable/TypeC/Local/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/TypeC/Local/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/TypeC/Local/3.jpg`,
+      
+
+    ],
     description: "Durable Type-C fast charging cable.",
   },
   {
@@ -29,7 +40,10 @@ const products = [
     quality: "Compatible | Fast Charging",
     price: "₹100",
     discountedPrice: "₹70",
-    images: [`${process.env.PUBLIC_URL}/image/DataCable/iPhoneCable.jpg`],
+    images: [
+      `${process.env.PUBLIC_URL}/image/DataCable/Iphone/Local/iPhoneCable.jpg`,
+    
+    ],
     description: "Reliable iPhone lightning cable with fast charging support.",
   },
   {
@@ -39,7 +53,11 @@ const products = [
     quality: "Original | 6 Month Warranty",
     price: "₹150",
     discountedPrice: "₹100",
-    images: [`${process.env.PUBLIC_URL}/image/DataCable/Original-MicroUSB.jpg`],
+    images: [
+      `${process.env.PUBLIC_URL}/image/DataCable/MicroUSB/Orignal/Original-MicroUSB.jpg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/MicroUSB/Orignal/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/MicroUSB/Orignal/3.jpg`,
+    ],
     description: "Original micro USB cable with 6-month warranty.",
   },
   {
@@ -49,7 +67,13 @@ const products = [
     quality: "Original | 6 Month Warranty",
     price: "₹180",
     discountedPrice: "₹120",
-    images: [`${process.env.PUBLIC_URL}/image/DataCable/5.jpg`],
+    images: [
+      `${process.env.PUBLIC_URL}/image/DataCable/TypeC/Orignal/1.jpg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/TypeC/Orignal/2.jpg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/TypeC/Orignal/3.jpg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/TypeC/Orignal/4.jpg`,
+      `${process.env.PUBLIC_URL}/image/DataCable/TypeC/Orignal/5.jpg`,
+    ],
     description: "Original Type-C cable with fast charging and 6-month warranty.",
   },
   {
@@ -59,7 +83,10 @@ const products = [
     quality: "Original | 6 Month Warranty",
     price: "₹250",
     discountedPrice: "₹150",
-    images: [`${process.env.PUBLIC_URL}/image/DataCable/Orignal-iPhoneCable.jpg`],
+    images: [
+      `${process.env.PUBLIC_URL}/image/DataCable//Iphone/Orignal/Orignal-iPhoneCable.jpg`,
+      
+    ],
     description: "Original iPhone lightning cable with 6-month warranty.",
   },
 ];
@@ -69,7 +96,8 @@ const AccessoriesPage = () => {
   const autoScrollInterval = useRef(null);
   const pauseTimeout = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [zoomImage, setZoomImage] = useState(null);
+  const [zoomImages, setZoomImages] = useState([]);
+  const [zoomIndex, setZoomIndex] = useState(0);
 
   const handleBuyNow = (name, price) => {
     const message = `Hello, I want to buy ${name} for ${price}.`;
@@ -89,9 +117,7 @@ const AccessoriesPage = () => {
     }, 3000);
   };
 
-  const stopAutoScroll = () => {
-    clearInterval(autoScrollInterval.current);
-  };
+  const stopAutoScroll = () => clearInterval(autoScrollInterval.current);
 
   useEffect(() => {
     startAutoScroll();
@@ -102,30 +128,28 @@ const AccessoriesPage = () => {
     setIsPaused(true);
     stopAutoScroll();
     clearTimeout(pauseTimeout.current);
-    pauseTimeout.current = setTimeout(() => {
-      setIsPaused(false);
-    }, 10000);
+    pauseTimeout.current = setTimeout(() => setIsPaused(false), 10000);
   };
 
   const handleScrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
-      handleUserInteraction();
-    }
+    scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
+    handleUserInteraction();
   };
 
   const handleScrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
-      handleUserInteraction();
-    }
+    scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" });
+    handleUserInteraction();
   };
 
   const calculateDiscount = (originalPrice, price) => {
     const original = parseInt(originalPrice.replace("₹", ""));
     const current = parseInt(price.replace("₹", ""));
-    const discount = Math.round(((original - current) / original) * 100);
-    return discount;
+    return Math.round(((original - current) / original) * 100);
+  };
+
+  const openZoomModal = (images, index) => {
+    setZoomImages(images);
+    setZoomIndex(index);
   };
 
   return (
@@ -134,22 +158,14 @@ const AccessoriesPage = () => {
         Mobile Data Cable
       </h2>
 
-      {/* Arrows */}
-      <button
-        className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200"
-        onClick={handleScrollLeft}
-      >
+      <button className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200" onClick={handleScrollLeft}>
         <FaChevronLeft size={20} />
       </button>
 
-      <button
-        className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200"
-        onClick={handleScrollRight}
-      >
+      <button className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md p-2 rounded-full hover:bg-gray-200" onClick={handleScrollRight}>
         <FaChevronRight size={20} />
       </button>
 
-      {/* Scrollable Product List */}
       <div
         ref={scrollRef}
         className="flex overflow-x-auto no-scrollbar gap-4 pb-4 snap-x snap-mandatory"
@@ -162,30 +178,25 @@ const AccessoriesPage = () => {
           const isOriginal = item.quality?.toLowerCase().includes("original");
 
           return (
-            <div
-              key={item.id}
-              className="flex-shrink-0 w-[180px] sm:w-[200px] bg-white shadow rounded-xl snap-start relative"
-            >
-              {/* Original Badge */}
+            <div key={item.id} className="flex-shrink-0 w-[180px] sm:w-[200px] bg-white shadow rounded-xl snap-start relative">
               {isOriginal && (
                 <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full shadow">
                   6 MONTH WARRANTY
                 </div>
               )}
 
-              {/* Product Image */}
-              <div
-                className="w-full h-36 sm:h-40 overflow-hidden rounded-t-xl bg-gray-50 cursor-pointer"
-                onClick={() => setZoomImage(item.images[0])}
-              >
-                <img
-                  src={item.images[0]}
-                  alt={item.name}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-full h-36 sm:h-40 overflow-hidden rounded-t-xl bg-gray-50 flex">
+                {item.images.slice(0, 3).map((img, i) => (
+                  <img
+                    key={i}
+                    src={img}
+                    onClick={() => openZoomModal(item.images, i)}
+                    alt={item.name}
+                    className="w-full object-cover cursor-pointer"
+                  />
+                ))}
               </div>
 
-              {/* Product Info */}
               <div className="p-3 flex flex-col items-center text-center">
                 <h3 className="font-semibold text-sm text-gray-800">{item.name}</h3>
                 <p className="text-xs text-gray-600">{item.description}</p>
@@ -206,22 +217,22 @@ const AccessoriesPage = () => {
         })}
       </div>
 
-      {/* Zoom Modal */}
-      {zoomImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
-          onClick={() => setZoomImage(null)}
-        >
-          <img
-            src={zoomImage}
-            alt="Zoomed"
-            className="max-h-[90%] max-w-[90%] object-contain"
-          />
+      {/* Zoom Image Viewer Modal */}
+      {zoomImages.length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+          <button onClick={() => setZoomImages([])} className="absolute top-4 right-4 text-white bg-red-600 px-3 py-1 rounded">Close</button>
           <button
-            className="absolute top-4 right-4 text-white bg-red-600 px-3 py-1 rounded"
-            onClick={() => setZoomImage(null)}
+            onClick={() => setZoomIndex((prev) => (prev - 1 + zoomImages.length) % zoomImages.length)}
+            className="absolute left-5 text-white text-2xl"
           >
-            Close
+            ‹
+          </button>
+          <img src={zoomImages[zoomIndex]} alt="Zoomed" className="max-h-[90%] max-w-[90%] object-contain" />
+          <button
+            onClick={() => setZoomIndex((prev) => (prev + 1) % zoomImages.length)}
+            className="absolute right-5 text-white text-2xl"
+          >
+            ›
           </button>
         </div>
       )}

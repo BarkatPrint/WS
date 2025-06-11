@@ -11,7 +11,7 @@ import KeypadMobile from "./KeypadMobile/KeypadMobile";
 import ChargingCable from "./Page/ChargingCable";
 import MobileCovers from "./Page/MobileCovers";
 import TemperedGlass from "./Page/TemperedGlass";
-import Display from "./Page/Display";
+
 import Touch from "./Page/Touch";
 import ScreenCombo from "./Page/ScreenCombo";
 import MobileBody from "./Page/MobileBody";
@@ -31,7 +31,7 @@ export default function AllProducts() {
       <MobileBody />
       <ScreenCombo />
       <MobileCovers />
-      <Display />
+      
       <Touch />
       <CameraPage />
     </>
