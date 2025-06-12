@@ -1,11 +1,12 @@
 import React from "react";
 import {
-  HashRouter as Router,
+  HashRouter as Router, // ✅ Use HashRouter for GitHub Pages
   Routes,
   Route,
   useLocation,
 } from "react-router-dom";
 
+// Pages
 import Header from "./Pages/Header";
 import Footer from "./Pages/Footer";
 import LandingPage from "./Pages/LandingPage";
@@ -17,11 +18,12 @@ import ProductsRoutes from "./Products/ProductsRoutes";
 import UploadProductWithPasscode from "./admin/UploadToCloudinary";
 import UploadToCloudinary from "./admin/UploadToCloudinary";
 import ProductsPage from "./Pages/ProductsPage";
-import TeamPage from "./Pages/TeamPage"; // ✅ Added Team Page
+import TeamPage from "./Pages/TeamPage"; // ✅ New Team Page
 
-// ✅ Install icon component
-import InstallPWAIcon from "./App/InstallPWAIcon";
+// Components
+import InstallPWAIcon from "./App/InstallPWAIcon"; // ✅ PWA Install Icon
 
+// ✅ Wrapper for using useLocation inside Routes
 function AppWrapper() {
   return (
     <Router>
@@ -36,6 +38,7 @@ function App() {
 
   return (
     <>
+      {/* ✅ Show Header except on Landing Page */}
       {!isLanding && <Header />}
 
       <Routes>
@@ -48,12 +51,13 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/admin" element={<UploadProductWithPasscode />} />
         <Route path="/upload-cloudinary" element={<UploadToCloudinary />} />
-        <Route path="/team" element={<TeamPage />} /> {/* ✅ New Route */}
+        <Route path="/team" element={<TeamPage />} /> {/* ✅ New Team Route */}
       </Routes>
 
+      {/* ✅ Show Footer except on Landing Page */}
       {!isLanding && <Footer />}
 
-      {/* ✅ Install PWA Icon always visible */}
+      {/* ✅ Always show install icon */}
       <InstallPWAIcon />
     </>
   );
