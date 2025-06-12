@@ -42,16 +42,18 @@ const Header = () => {
     },
   ];
 
+  // 🔽 Add Team or any new page here
   const navLinks = [
     { path: "/", label: "Home" },
     { label: "Products", subRoutes: productSubRoutes },
     { path: "/about", label: "About" },
     { path: "/contact", label: "Contact" },
+    { path: "/team", label: "Team" }, // ✅ Team Page Added
+    // 👉 Add more links like this: { path: "/newpage", label: "New Page" }
   ];
 
   return (
     <>
-      {/* Header Bar */}
       <header className="bg-white text-black px-6 md:px-12 py-6 flex items-center justify-between flex-wrap relative z-[1100] shadow-md">
         <div className="flex items-center flex-1 min-w-[150px] gap-3">
           <img
@@ -66,7 +68,7 @@ const Header = () => {
           </h2>
         </div>
 
-        {/* Nav - Desktop */}
+        {/* Desktop Nav */}
         <nav className="hidden md:flex flex-1 justify-center gap-6">
           {navLinks.map((item, i) =>
             item.subRoutes ? (
@@ -80,7 +82,6 @@ const Header = () => {
                 </button>
                 {productsOpen && (
                   <div className="absolute top-full left-0 bg-white text-black shadow-md flex flex-col min-w-[260px] z-50 mt-2 rounded max-h-[60vh] overflow-y-auto">
-                    {/* 🔗 All Products */}
                     <Link
                       to="/products"
                       onClick={closeMenu}
@@ -88,7 +89,6 @@ const Header = () => {
                     >
                       🛒 All Products
                     </Link>
-
                     {item.subRoutes.map((group, groupIndex) => (
                       <div key={groupIndex}>
                         <h4 className="px-4 pt-2 pb-1 text-xs font-bold uppercase text-gray-500">
@@ -124,13 +124,13 @@ const Header = () => {
           )}
         </nav>
 
-        {/* Info - Desktop */}
+        {/* Desktop Info */}
         <div className="hidden md:flex items-center gap-6 font-semibold text-sm">
           <span>📦 Free Delivery</span>
           <span>📞 7050266383</span>
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Toggle */}
         <button
           className="md:hidden text-black text-2xl"
           onClick={toggleMenu}
@@ -154,7 +154,6 @@ const Header = () => {
           ×
         </button>
 
-        {/* Mobile Navigation */}
         <nav className="flex flex-col gap-4">
           {navLinks.map((item, i) =>
             item.subRoutes ? (
@@ -168,7 +167,6 @@ const Header = () => {
                 </button>
                 {productsOpen && (
                   <div className="ml-2 mt-2 flex flex-col gap-2 max-h-72 overflow-y-auto">
-                    {/* 🔗 All Products */}
                     <Link
                       to="/products"
                       onClick={closeMenu}
@@ -176,7 +174,6 @@ const Header = () => {
                     >
                       🛒 All Products
                     </Link>
-
                     {item.subRoutes.map((group, groupIndex) => (
                       <div key={groupIndex}>
                         <h4 className="text-xs font-bold uppercase text-gray-500 pl-2 pb-1">
@@ -212,7 +209,6 @@ const Header = () => {
           )}
         </nav>
 
-        {/* Info */}
         <div className="pt-4 border-t border-gray-300 text-[#00292d] font-semibold mt-auto">
           📦 Free Delivery <br />
           📞 7050266383

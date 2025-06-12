@@ -17,9 +17,10 @@ import ProductsRoutes from "./Products/ProductsRoutes";
 import UploadProductWithPasscode from "./admin/UploadToCloudinary";
 import UploadToCloudinary from "./admin/UploadToCloudinary";
 import ProductsPage from "./Pages/ProductsPage";
+import TeamPage from "./Pages/TeamPage"; // ✅ Added Team Page
 
-// ✅ Install icon component in same folder (src/)
-import InstallPWAIcon from "./App/InstallPWAIcon"; // Because App.jsx is in src/
+// ✅ Install icon component
+import InstallPWAIcon from "./App/InstallPWAIcon";
 
 function AppWrapper() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/admin" element={<UploadProductWithPasscode />} />
         <Route path="/upload-cloudinary" element={<UploadToCloudinary />} />
+        <Route path="/team" element={<TeamPage />} /> {/* ✅ New Route */}
       </Routes>
 
       {!isLanding && <Footer />}
