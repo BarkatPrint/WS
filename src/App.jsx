@@ -18,12 +18,12 @@ import ProductsRoutes from "./Products/ProductsRoutes";
 import UploadProductWithPasscode from "./admin/UploadToCloudinary";
 import UploadToCloudinary from "./admin/UploadToCloudinary";
 import ProductsPage from "./Pages/ProductsPage";
-import TeamPage from "./Pages/TeamPage"; // ✅ New Team Page
+import TeamPage from "./Pages/TeamPage";
 
 // Components
-import InstallPWAIcon from "./App/InstallPWAIcon"; // ✅ PWA Install Icon
+import InstallPWAIcon from "./App/InstallPWAIcon";
 
-// ✅ Wrapper for using useLocation inside Routes
+// ✅ AppWrapper for Router setup
 function AppWrapper() {
   return (
     <Router>
@@ -32,14 +32,15 @@ function AppWrapper() {
   );
 }
 
+// ✅ Main App with conditional header/footer
 function App() {
   const location = useLocation();
-  const isLanding = location.pathname === "/";
+  const isLandingPage = location.pathname === "/";
 
   return (
     <>
-      {/* ✅ Show Header except on Landing Page */}
-      {!isLanding && <Header />}
+      {/* ✅ Show Header on all pages except Landing */}
+      {!isLandingPage && <Header />}
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -51,13 +52,13 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/admin" element={<UploadProductWithPasscode />} />
         <Route path="/upload-cloudinary" element={<UploadToCloudinary />} />
-        <Route path="/team" element={<TeamPage />} /> {/* ✅ New Team Route */}
+        <Route path="/team" element={<TeamPage />} />
       </Routes>
 
-      {/* ✅ Show Footer except on Landing Page */}
-      {!isLanding && <Footer />}
+      {/* ✅ Show Footer on all pages except Landing */}
+      {!isLandingPage && <Footer />}
 
-      {/* ✅ Always show install icon */}
+      {/* ✅ Show PWA install icon always */}
       <InstallPWAIcon />
     </>
   );

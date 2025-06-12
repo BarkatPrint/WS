@@ -10,23 +10,21 @@ const isLocalhost = Boolean(
 
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-    const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-    if (publicUrl.origin !== window.location.origin) return;
+    // ✅ FIXED: Always point to root for service-worker
+    const swUrl = `/service-worker.js`;
 
-    window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-
-      if (isLocalhost) {
-        // This is running on localhost. Check if a service worker still exists or not.
-        checkValidServiceWorker(swUrl, config);
-        navigator.serviceWorker.ready.then(() => {
-          console.log('This web app is being served cache-first by a service worker.');
-        });
-      } else {
-        // Register service worker
-        registerValidSW(swUrl, config);
-      }
-    });
+    if (isLocalhost) {
+      // Running on localhost – validate if service worker exists
+      checkValidServiceWorker(swUrl, config);
+      navigator.serviceWorker.ready.then(() => {
+        console.log(
+          'This web app is being served cache-first by a service worker on localhost.'
+        );
+      });
+    } else {
+      // ✅ Register service worker for production/live domain
+      registerValidSW(swUrl, config);
+    }
   }
 }
 
@@ -37,6 +35,7 @@ function registerValidSW(swUrl, config) {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (!installingWorker) return;
+
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
@@ -71,7 +70,6 @@ function checkValidServiceWorker(swUrl, config) {
           });
         });
       } else {
-        registerValidSW(swUrl, config);
       }
     })
     .catch(() => {

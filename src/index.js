@@ -2,12 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-// ✅ Correct import if App.jsx is inside src/App/
-import AppWrapper from "./App"; 
+import AppWrapper from "./App"; // Your main App component with Router
 import reportWebVitals from "./reportWebVitals";
 
-// ✅ Correct import for PWA service worker
-import * as serviceWorkerRegistration from "./App/serviceWorkerRegistration";
+// ✅ Register PWA service worker
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,8 +15,8 @@ root.render(
   </React.StrictMode>
 );
 
-// ✅ Register service worker to enable PWA (offline & installable)
+// ✅ Enable offline and install features
 serviceWorkerRegistration.register();
 
-// Optional: Web Vitals for performance monitoring
+// Optional: performance monitoring
 reportWebVitals();
