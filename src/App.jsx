@@ -14,12 +14,12 @@ import SellerPage from "./Pages/SellerPage";
 import About from "./Pages/About";
 import Contact from "./Pages/Contact";
 import ProductsRoutes from "./Products/ProductsRoutes";
-
 import UploadProductWithPasscode from "./admin/UploadToCloudinary";
 import UploadToCloudinary from "./admin/UploadToCloudinary";
-
-// ✅ 🔥 New Products Page import (as requested)
 import ProductsPage from "./Pages/ProductsPage";
+
+// ✅ Install icon component in same folder (src/)
+import InstallPWAIcon from "./InstallPWAIcon"; // Because App.jsx is in src/
 
 function AppWrapper() {
   return (
@@ -31,7 +31,6 @@ function AppWrapper() {
 
 function App() {
   const location = useLocation();
-
   const isLanding = location.pathname === "/";
 
   return (
@@ -42,10 +41,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/seller" element={<SellerPage />} />
-
-        {/* ✅ New Products Page Route */}
         <Route path="/products" element={<ProductsPage />} />
-
         <Route path="/products/*" element={<ProductsRoutes />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -54,6 +50,9 @@ function App() {
       </Routes>
 
       {!isLanding && <Footer />}
+
+      {/* ✅ Install PWA Icon always visible */}
+      <InstallPWAIcon />
     </>
   );
 }
