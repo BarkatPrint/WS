@@ -3,54 +3,46 @@ import { FaDownload } from "react-icons/fa";
 
 const InstallPWAIcon = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [show, setShow] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     const handler = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setShow(true);
+      setShowButton(true);
     };
 
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
-  const handleInstall = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === "accepted") {
-      console.log("✅ App Installed");
-    } else {
-      console.log("❌ Install dismissed");
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice.outcome === "accepted") {
+        console.log("✅ User installed the app");
+      }
+      setDeferredPrompt(null);
+      setShowButton(false);
     }
-    setDeferredPrompt(null);
-    setShow(false);
   };
 
-  if (!show) return null;
+  if (!showButton) return null;
 
   return (
-    <button
-      onClick={handleInstall}
-      style={{
-        position: "fixed",
-        right: "20px",
-        bottom: "90px",
-        backgroundColor: "#007bff",
-        color: "white",
-        padding: "12px",
-        borderRadius: "50%",
-        border: "none",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-        cursor: "pointer",
-        zIndex: 9999,
-      }}
-      title="Install App"
-    >
-      <FaDownload size={20} />
-    </button>
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-center">
+      <button
+        onClick={handleInstallClick}
+        className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg transition duration-300 ease-in-out"
+        title="Install App"
+      >
+        <FaDownload size={24} />
+      </button>
+      <span className="text-sm text-white bg-gray-800 mt-1 px-2 py-1 rounded shadow">
+        Install App
+      </span>
+    </div>
   );
 };
 

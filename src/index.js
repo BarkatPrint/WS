@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 
 // ✅ Correct import if App.jsx is inside src/App/
-import AppWrapper from "./App/App"; 
+import AppWrapper from "./App"; 
 import reportWebVitals from "./reportWebVitals";
 
 // ✅ Correct import for PWA service worker

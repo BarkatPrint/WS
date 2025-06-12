@@ -19,7 +19,7 @@ import UploadToCloudinary from "./admin/UploadToCloudinary";
 import ProductsPage from "./Pages/ProductsPage";
 
 // ✅ Install icon component in same folder (src/)
-import InstallPWAIcon from "./InstallPWAIcon"; // Because App.jsx is in src/
+import InstallPWAIcon from "./App/InstallPWAIcon"; // Because App.jsx is in src/
 
 function AppWrapper() {
   return (
