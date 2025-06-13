@@ -2,9 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-import AppWrapper from "./App"; // Your main App component
+import AppWrapper from "./App";
 import reportWebVitals from "./reportWebVitals";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration"; // PWA Support
+
+// ✅ Use unregister instead of register
+import { unregister } from "./serviceWorkerRegistration";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,8 +15,8 @@ root.render(
   </React.StrictMode>
 );
 
-// ✅ Register service worker (now disabled inside file)
-serviceWorkerRegistration.register();
+// ✅ Unregister any previous service worker
+unregister();
 
-// 📊 Optional: measure app performance
+// Optional performance measuring
 reportWebVitals();

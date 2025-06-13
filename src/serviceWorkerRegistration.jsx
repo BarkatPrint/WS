@@ -1,10 +1,10 @@
-// ❌ Disable service worker registration
+// serviceWorkerRegistration.js
+
 export function register() {
-  // Do nothing — offline caching disabled
+  // Skipped registration — offline caching is disabled.
   console.log('[SW] Skipped registration — offline caching is disabled.');
 }
 
-// ✅ Unregister existing service worker (if any)
 export function unregister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready
