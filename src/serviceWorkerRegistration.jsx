@@ -5,21 +5,19 @@ const isLocalhost = Boolean(
 );
 
 export function register(config) {
-  if ('serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
-      if (process.env.NODE_ENV === 'production') {
-        if (isLocalhost) {
-          // ✅ Localhost: Validate service-worker
-          checkValidServiceWorker(swUrl, config);
-          navigator.serviceWorker.ready.then(() => {
-            console.log('[SW] App is served by a service worker (localhost)');
-          });
-        } else {
-          // ✅ Production: Register service-worker
-          registerValidSW(swUrl, config);
-        }
+      if (isLocalhost) {
+        // ✅ Localhost: Validate service worker
+        checkValidServiceWorker(swUrl, config);
+        navigator.serviceWorker.ready.then(() => {
+          console.log('[SW] App is being served by a service worker (localhost)');
+        });
+      } else {
+        // ✅ Production: Register directly
+        registerValidSW(swUrl, config);
       }
     });
   }
@@ -38,11 +36,15 @@ function registerValidSW(swUrl, config) {
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
-              console.log('[SW] New content is available, will be used after reload.');
-              if (config?.onUpdate) config.onUpdate(registration);
+              console.log('[SW] New content available, will be used after reload.');
+              if (config && config.onUpdate) {
+                config.onUpdate(registration);
+              }
             } else {
-              console.log('[SW] Content is cached for offline use.');
-              if (config?.onSuccess) config.onSuccess(registration);
+              console.log('[SW] Content cached for offline use.');
+              if (config && config.onSuccess) {
+                config.onSuccess(registration);
+              }
             }
           }
         };
@@ -61,14 +63,14 @@ function checkValidServiceWorker(swUrl, config) {
         response.status === 404 ||
         (contentType && !contentType.includes('javascript'))
       ) {
-        // No valid service-worker: Unregister and reload
+        // ❌ Invalid SW: Unregister & Reload
         navigator.serviceWorker.ready.then((registration) => {
           registration.unregister().then(() => {
             window.location.reload();
           });
         });
       } else {
-        // Valid: Register
+        // ✅ Valid SW: Register it
         registerValidSW(swUrl, config);
       }
     })
@@ -81,7 +83,9 @@ export function unregister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready
       .then((registration) => {
-        registration.unregister();
+        registration.unregister().then(() => {
+          console.log('[SW] Unregistered');
+        });
       })
       .catch((error) => {
         console.error('[SW] Unregister error:', error);

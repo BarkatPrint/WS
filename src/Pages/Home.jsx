@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import AllProducts from "../Products/AllProducts";
 
@@ -7,12 +7,13 @@ const bannerImages = [
   `${process.env.PUBLIC_URL}/Home.jpg`,
   `${process.env.PUBLIC_URL}/WS Bazaar.jpg`,
   `${process.env.PUBLIC_URL}/WS Bazaar 2.jpg`,
-  // `${process.env.PUBLIC_URL}/NewBanner.jpg`, // ← Add more banners here
 ];
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -20,13 +21,24 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 🔄 Auto slide change
+  // 🔄 Auto slide effect with pause logic
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % bannerImages.length);
-    }, 3000); // every 3 seconds
-    return () => clearInterval(interval);
-  }, []);
+    if (!isPaused) {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % bannerImages.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [isPaused]);
+
+  // 🖱️ Pause on image click, resume after 5 seconds
+  const handleBannerClick = () => {
+    setIsPaused(true);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 5000);
+  };
 
   return (
     <div className="w-full h-full overflow-hidden">
@@ -35,7 +47,8 @@ export default function Home() {
         <img
           src={bannerImages[currentSlide]}
           alt={`Banner ${currentSlide + 1}`}
-          className="w-full h-auto transition-all duration-700"
+          onClick={handleBannerClick}
+          className="w-full h-auto transition-all duration-700 cursor-pointer"
           style={{ objectFit: isMobile ? "contain" : "cover" }}
         />
 
@@ -44,7 +57,14 @@ export default function Home() {
           {bannerImages.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => {
+                setCurrentSlide(index);
+                setIsPaused(true);
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = setTimeout(() => {
+                  setIsPaused(false);
+                }, 5000);
+              }}
               className={`w-3 h-3 rounded-full ${
                 currentSlide === index ? "bg-blue-600" : "bg-gray-400"
               }`}
@@ -55,10 +75,7 @@ export default function Home() {
       </div>
 
       {/* 🏷️ Main Heading */}
-      <h2
-        className="mt-8 mb-10 font-extrabold text-4xl text-center"
-        style={{ color: "#00292d" }}
-      >
+      <h2 className="mt-8 mb-10 font-extrabold text-4xl text-center" style={{ color: "#00292d" }}>
         Welcome to Our WS Bazaar
       </h2>
 
@@ -67,19 +84,16 @@ export default function Home() {
         {/* Left Side */}
         <div className="md:w-1/2 flex flex-col items-center md:items-start">
           <p className="text-gray-800 text-lg mb-4 text-center md:text-left">
-            1 Piece ho ya 100 Piece – Sabko Milega{" "}
-            <strong>Wholesale Rate</strong>!
+            1 Piece ho ya 100 Piece – Sabko Milega <strong>Wholesale Rate</strong>!
           </p>
           <p className="text-gray-700 mb-4 text-center md:text-left">
-            Shopkeeper ho ya Customer – ab sabko saman milega direct factory
-            price par.
+            Shopkeeper ho ya Customer – ab sabko saman milega direct factory price par.
           </p>
           <p className="text-gray-700 mb-4 text-center md:text-left">
             Har tarah ke mobile accessories & parts – ek jagah, ek click mein.
           </p>
           <p className="text-gray-700 mb-6 text-center md:text-left">
-            🚚 Ghar baithe order karein aur{" "}
-            <strong>Home Delivery</strong> payein poore India mein.
+            🚚 Ghar baithe order karein aur <strong>Home Delivery</strong> payein poore India mein.
           </p>
           <Link
             to="/products"
@@ -95,11 +109,9 @@ export default function Home() {
             Product Nahi Mila? WhatsApp Par Direct Mangwa Sakte Hain!
           </h3>
           <p className="text-gray-700 mb-6 text-center md:text-left">
-            Agar aapko hamari website par koi product nahi mil raha, to niche
-            diye gaye WhatsApp button par click karke humein seedha message
-            bhej sakte hain.
+            Agar aapko hamari website par koi product nahi mil raha, to niche diye gaye WhatsApp
+            button par click karke humein seedha message bhej sakte hain.
           </p>
-
           <a
             href="https://wa.me/917050266383?text=Mujhe%20ek%20product%20chahiye%20jo%20website%20par%20nahi%20mil%20raha%20hai.%20Kripya%20mujhse%20contact%20kijiye."
             target="_blank"
