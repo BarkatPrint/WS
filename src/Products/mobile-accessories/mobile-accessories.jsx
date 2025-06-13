@@ -15,7 +15,7 @@ import TemperedGlass from "./Page/TemperedGlass";
 import Touch from "./Page/Touch";
 import ScreenCombo from "./Page/ScreenCombo";
 import MobileBody from "./Page/MobileBody";
-import CameraPage from "./Page/CameraPage";
+
 
 export default function AllProducts() {
   return (
@@ -33,7 +33,7 @@ export default function AllProducts() {
       <MobileCovers />
       
       <Touch />
-      <CameraPage />
+     
     </>
   );
 }

@@ -16,40 +16,22 @@ const Header = () => {
   const productSubRoutes = [
     {
       category: "Mobile Accessories",
-      items: [
-        { path: "/products/mobile-parts-accessories", label: "Mobile Parts & Accessories", icon: "🛠️" },
-        { path: "/products/mobile-phones", label: "Mobile Phones", icon: "📱" },
-        { path: "/products/keypad-mobile", label: "Keypad Mobile", icon: "📱" },
-        { path: "/products/battery", label: "Battery", icon: "🔋" },
-        { path: "/products/keypad-battery", label: "Keypad Battery", icon: "🔌" },
-        { path: "/products/headphone", label: "Headphone", icon: "🎧" },
-        { path: "/products/charger", label: "Charger", icon: "⚡" },
-        { path: "/products/charging-cable", label: "Charging Cable", icon: "🔌" },
-        { path: "/products/mobile-covers", label: "Mobile Covers", icon: "📱" },
-        { path: "/products/tempered-glass", label: "Tempered Glass", icon: "🛡️" },
-        { path: "/products/display", label: "Display", icon: "📱" },
-        { path: "/products/touch", label: "Touch", icon: "🤏" },
-        { path: "/products/screen-combo", label: "Screen Combo", icon: "📱🔧" },
-      ],
+      path: "/products/mobile-accessories",
+      icon: ""
     },
     {
       category: "Electronics",
-      items: [
-        { path: "/products/camera", label: "Camera", icon: "📷" },
-        { path: "/products/printers", label: "Printers", icon: "🖨️" },
-        { path: "/products/laptops", label: "Laptops", icon: "💻" },
-      ],
+      path: "/products/electronics/AllElectronic",
+      icon: ""
     },
   ];
 
-  // 🔽 Add Team or any new page here
   const navLinks = [
     { path: "/", label: "Home" },
     { label: "Products", subRoutes: productSubRoutes },
     { path: "/about", label: "About" },
     { path: "/contact", label: "Contact" },
-    { path: "/team", label: "Team" }, // ✅ Team Page Added
-    // 👉 Add more links like this: { path: "/newpage", label: "New Page" }
+    { path: "/team", label: "Team" },
   ];
 
   return (
@@ -81,30 +63,16 @@ const Header = () => {
                   <span className="text-sm">{productsOpen ? "▲" : "▼"}</span>
                 </button>
                 {productsOpen && (
-                  <div className="absolute top-full left-0 bg-white text-black shadow-md flex flex-col min-w-[260px] z-50 mt-2 rounded max-h-[60vh] overflow-y-auto">
-                    <Link
-                      to="/products"
-                      onClick={closeMenu}
-                      className="px-4 py-2 hover:bg-gray-200 text-sm no-underline flex items-center gap-2 font-semibold border-b"
-                    >
-                      🛒 All Products
-                    </Link>
-                    {item.subRoutes.map((group, groupIndex) => (
-                      <div key={groupIndex}>
-                        <h4 className="px-4 pt-2 pb-1 text-xs font-bold uppercase text-gray-500">
-                          {group.category}
-                        </h4>
-                        {group.items.map((sub, j) => (
-                          <Link
-                            key={j}
-                            to={sub.path}
-                            className="px-4 py-2 hover:bg-gray-200 text-sm no-underline flex items-center gap-2"
-                            onClick={closeMenu}
-                          >
-                            <span>{sub.icon}</span> {sub.label}
-                          </Link>
-                        ))}
-                      </div>
+                  <div className="absolute top-full left-0 bg-white text-black shadow-md flex flex-col min-w-[220px] z-50 mt-2 rounded">
+                    {item.subRoutes.map((sub, j) => (
+                      <Link
+                        key={j}
+                        to={sub.path}
+                        className="px-4 py-2 hover:bg-gray-200 text-sm no-underline flex items-center gap-2"
+                        onClick={closeMenu}
+                      >
+                        <span>{sub.icon}</span> {sub.category}
+                      </Link>
                     ))}
                   </div>
                 )}
@@ -166,30 +134,16 @@ const Header = () => {
                   <span>{productsOpen ? "▲" : "▼"}</span>
                 </button>
                 {productsOpen && (
-                  <div className="ml-2 mt-2 flex flex-col gap-2 max-h-72 overflow-y-auto">
-                    <Link
-                      to="/products"
-                      onClick={closeMenu}
-                      className="text-[#00292d] text-base font-semibold flex items-center gap-2 pl-2 py-1 border-b"
-                    >
-                      🛒 All Products
-                    </Link>
-                    {item.subRoutes.map((group, groupIndex) => (
-                      <div key={groupIndex}>
-                        <h4 className="text-xs font-bold uppercase text-gray-500 pl-2 pb-1">
-                          {group.category}
-                        </h4>
-                        {group.items.map((sub, j) => (
-                          <Link
-                            key={j}
-                            to={sub.path}
-                            onClick={closeMenu}
-                            className="text-[#00292d] text-base font-normal flex items-center gap-2 pl-4 py-1"
-                          >
-                            <span>{sub.icon}</span> {sub.label}
-                          </Link>
-                        ))}
-                      </div>
+                  <div className="ml-2 mt-2 flex flex-col gap-2">
+                    {item.subRoutes.map((sub, j) => (
+                      <Link
+                        key={j}
+                        to={sub.path}
+                        onClick={closeMenu}
+                        className="text-[#00292d] text-base font-normal flex items-center gap-2 pl-4 py-1"
+                      >
+                        <span>{sub.icon}</span> {sub.category}
+                      </Link>
                     ))}
                   </div>
                 )}
@@ -219,3 +173,6 @@ const Header = () => {
 };
 
 export default Header;
+
+// 📌 To add more sub-categories in future, update `productSubRoutes` array with:
+// { category: "New Category", path: "/products/new-category", icon: "🔧" }

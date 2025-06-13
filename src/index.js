@@ -4,7 +4,7 @@ import "./index.css";
 
 import AppWrapper from "./App"; // Your main App component
 import reportWebVitals from "./reportWebVitals";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration"; // ✅ PWA Support
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration"; // PWA Support
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,7 +13,7 @@ root.render(
   </React.StrictMode>
 );
 
-// ✅ Register service worker for offline/PWA support
+// ✅ Register service worker (now disabled inside file)
 serviceWorkerRegistration.register();
 
 // 📊 Optional: measure app performance

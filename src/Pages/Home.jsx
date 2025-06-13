@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import AllProducts from "../Products/AllProducts";
 
-// 🔽 Add or remove banner images from this array
 const bannerImages = [
   `${process.env.PUBLIC_URL}/Home.jpg`,
   `${process.env.PUBLIC_URL}/WS Bazaar.jpg`,
@@ -21,7 +19,6 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 🔄 Auto slide effect with pause logic
   useEffect(() => {
     if (!isPaused) {
       const interval = setInterval(() => {
@@ -31,7 +28,6 @@ export default function Home() {
     }
   }, [isPaused]);
 
-  // 🖱️ Pause on image click, resume after 5 seconds
   const handleBannerClick = () => {
     setIsPaused(true);
     clearTimeout(timeoutRef.current);
@@ -51,8 +47,6 @@ export default function Home() {
           className="w-full h-auto transition-all duration-700 cursor-pointer"
           style={{ objectFit: isMobile ? "contain" : "cover" }}
         />
-
-        {/* 🔘 Slider Dots */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
           {bannerImages.map((_, index) => (
             <button
@@ -74,7 +68,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 🏷️ Main Heading */}
+      {/* 🏷️ Heading */}
       <h2 className="mt-8 mb-10 font-extrabold text-4xl text-center" style={{ color: "#00292d" }}>
         Welcome to Our WS Bazaar
       </h2>
@@ -136,7 +130,7 @@ export default function Home() {
         <h3 className="text-2xl font-semibold mb-6 text-center text-gray-800">
           Featured Products
         </h3>
-        <AllProducts />
+   
       </div>
     </div>
   );

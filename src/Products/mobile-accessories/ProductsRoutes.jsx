@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 
-import AllProducts from "./AllProducts";
+// ✅ Corrected relative imports (all inside same folder)
+import MobileAccessories from "./mobile-accessories";
 import KeypadMobile from "./KeypadMobile/KeypadMobile";
 import Battery from "./Page/Battery";
-import KeypadBatteries from "./KeypadMobile/BatteryKeypad"; // ✅ Imported
+import KeypadBatteries from "./KeypadMobile/BatteryKeypad";
 import Headphone from "./Page/Headphone";
 import Charger from "./Page/Charger";
 import ChargingCable from "./Page/ChargingCable";
@@ -15,14 +16,13 @@ import Touch from "./Page/Touch";
 import ScreenCombo from "./Page/ScreenCombo";
 import MobileBody from "./Page/MobileBody";
 import MobilePartsAccessories from "./Page/MobilePartsAccessories";
-import CameraPage from "./Page/CameraPage";
 
 const categories = [
   { name: "All", path: "all" },
   { name: "Mobile Parts Accessories", path: "mobile-parts-accessories" },
   { name: "Keypad Mobile", path: "keypad-mobile" },
   { name: "Battery", path: "battery" },
-  { name: "Keypad Battery", path: "battery-keypad" }, // ✅ Added here
+  { name: "Keypad Battery", path: "battery-keypad" },
   { name: "Headphone", path: "headphone" },
   { name: "Charger", path: "charger" },
   { name: "Charging Cable", path: "charging-cable" },
@@ -32,7 +32,6 @@ const categories = [
   { name: "Touch", path: "touch" },
   { name: "Screen Combo", path: "screen-combo" },
   { name: "Mobile Body", path: "mobile-body" },
-  { name: "Camera", path: "camera" },
 ];
 
 export default function ProductsRoutes() {
@@ -45,7 +44,7 @@ export default function ProductsRoutes() {
         setProducts(data);
         console.log("Fetched products in ProductsRoutes:", data);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Product fetch error:", err));
   }, []);
 
   return (
@@ -71,15 +70,14 @@ export default function ProductsRoutes() {
 
       <Routes>
         <Route index element={<Navigate to="all" replace />} />
-        <Route path="all" element={<AllProducts products={products} />} />
+        <Route path="all" element={<MobileAccessories products={products} />} />
         <Route
           path="mobile-parts-accessories"
           element={<MobilePartsAccessories products={products} />}
         />
         <Route path="keypad-mobile" element={<KeypadMobile products={products} />} />
         <Route path="battery" element={<Battery products={products} />} />
-        <Route path="battery-keypad" element={<KeypadBatteries />} /> {/* ✅ Route added */}
-
+        <Route path="battery-keypad" element={<KeypadBatteries products={products} />} />
         <Route path="headphone" element={<Headphone products={products} />} />
         <Route path="charger" element={<Charger products={products} />} />
         <Route path="charging-cable" element={<ChargingCable products={products} />} />
@@ -89,7 +87,6 @@ export default function ProductsRoutes() {
         <Route path="touch" element={<Touch products={products} />} />
         <Route path="screen-combo" element={<ScreenCombo products={products} />} />
         <Route path="mobile-body" element={<MobileBody products={products} />} />
-        <Route path="camera" element={<CameraPage products={products} />} />
         <Route path="*" element={<Navigate to="all" replace />} />
       </Routes>
     </div>
