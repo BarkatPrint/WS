@@ -1,6 +1,7 @@
+// src/App.js
 import React from "react";
 import {
-  HashRouter as Router, // For GitHub Pages hosting
+  HashRouter as Router, // ✅ GitHub Pages ke liye
   Routes,
   Route,
   useLocation,
@@ -19,13 +20,13 @@ import UploadProductWithPasscode from "./admin/UploadToCloudinary";
 import UploadToCloudinary from "./admin/UploadToCloudinary";
 import ProductsPage from "./Pages/ProductsPage";
 import TeamPage from "./Pages/TeamPage";
-import MobileAccessories from "./Products/mobile-accessories/mobile-accessories"; // ✅ Accessories page
-import AllElectronic from "./Products/Electronics/AllElectronic"; // ✅ Electronics page
+import MobileAccessories from "./Products/mobile-accessories/mobile-accessories";
+import AllElectronic from "./Products/Electronics/AllElectronic";
 
 // Components
 import InstallPWAIcon from "./App/InstallPWAIcon";
 
-// ✅ Wrapper component to use <Router>
+// Wrapper for router
 function AppWrapper() {
   return (
     <Router>
@@ -34,7 +35,7 @@ function AppWrapper() {
   );
 }
 
-// ✅ Main App with routes and conditional layout
+// Main app
 function App() {
   const location = useLocation();
   const isLandingPage = location.pathname === "/";
@@ -49,7 +50,7 @@ function App() {
         <Route path="/seller" element={<SellerPage />} />
         <Route path="/all-mobile-accessories" element={<MobileAccessories />} />
         <Route path="/products/*" element={<ProductsRoutes />} />
-        <Route path="/products/electronics/AllElectronic" element={<AllElectronic />} /> {/* ✅ NEW Electronics Route */}
+        <Route path="/products/electronics/AllElectronic" element={<AllElectronic />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/admin" element={<UploadProductWithPasscode />} />
@@ -58,7 +59,6 @@ function App() {
       </Routes>
 
       {!isLandingPage && <Footer />}
-
       <InstallPWAIcon />
     </>
   );

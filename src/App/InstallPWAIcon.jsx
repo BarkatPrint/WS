@@ -1,3 +1,4 @@
+// src/App/InstallPWAIcon.js
 import React, { useEffect, useState } from "react";
 import { FaDownload } from "react-icons/fa";
 
