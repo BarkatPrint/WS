@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import MobileAccessories from "../Products/mobile-accessories/mobile-accessories";
+
+
 
 const bannerImages = [
   `${process.env.PUBLIC_URL}/Home.jpg`,
@@ -130,7 +133,7 @@ export default function Home() {
         <h3 className="text-2xl font-semibold mb-6 text-center text-gray-800">
           Featured Products
         </h3>
-   
+       <MobileAccessories />
       </div>
     </div>
   );
